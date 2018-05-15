@@ -1,13 +1,16 @@
 'use strict';
 
-const Composer = require('./index');
+const express = require('express');
 
-Composer((err, server) => {
-  if (err) {
-    throw err;
-  }
+// Constants
+const PORT = 8080;
+const HOST = '0.0.0.0';
 
-  server.start(() => {
-    console.log('Started the plot device on port ' + server.info.port);
-  });
+// App
+const app = express();
+app.get('/', (req, res) => {
+    res.send('Hello world\n');
 });
+
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);

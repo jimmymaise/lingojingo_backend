@@ -1,21 +1,33 @@
-image: node:latest
-
 stages:
-  - build
-  - test
+#  - test
+  - deploy
 
-cache:
-  paths:
-    - node_modules/
-
-install_dependencies:
-  stage: build
-  script:
-    - npm install
-  artifacts:
-    paths:
-      - node_modules/
-
-#test_with_lab:
+#
+#unit_test:
+#  image: node:latest
+#
 #  stage: test
-#  script: npm test
+#  script:
+#    - npm install
+##    - npm test
+#  artifacts:
+#    paths:
+#      - node_modules/
+
+#Deploy for releasing to production
+deploy_staging:
+  stage: deploy
+  tags:
+    - runner1
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+  - master
+  before_script:
+    - docker info
+  script:
+    - docker stop $(docker ps -a -q) || true
+    - docker rm $(docker ps -a -q)  || true
+    - docker build -t my-docker-image .
+    - docker run -t -d -p 8080:8080 my-docker-image
