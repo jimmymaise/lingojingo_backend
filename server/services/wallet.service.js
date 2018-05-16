@@ -6,12 +6,10 @@ const internals = {};
 let WalletCategory;
 let WalletTransaction;
 
-internals.init = function (server, next) {
+internals.init = function (server) {
   const mongoModels = server.plugins['hapi-mongo-models'];
   WalletCategory = mongoModels.WalletCategory;
   WalletTransaction = mongoModels.WalletTransaction;
-
-  next();
 };
 
 internals.getAllCategory = (firebase_uid, callback) => {
@@ -123,7 +121,7 @@ internals.totalAmount = (firebase_uid, fromDate, toDate, callback) => {
   }, callback);
 }
 
-exports.register = function (server, options, next) {
+exports.register = function (server, options) {
   server.dependency(['hapi-mongo-models'], internals.init);
 
   server.expose('createCategory', internals.createCategory);
@@ -135,7 +133,7 @@ exports.register = function (server, options, next) {
   server.expose('deleteCategory', internals.deleteCategory);
   server.expose('deleteTransaction', internals.deleteTransaction);
 
-  next();
+  return;
 };
 
 exports.createCategory = internals.createCategory;
@@ -147,6 +145,4 @@ exports.totalAmount = internals.totalAmount;
 exports.deleteCategory = internals.deleteCategory;
 exports.deleteTransaction = internals.deleteTransaction;
 
-exports.register.attributes = {
-  name: 'wallet-service'
-};
+exports.name = 'wallet-service';

@@ -25,7 +25,7 @@ internals.applyRoutes = function (server, next) {
         }
       }
     },
-    handler: function (request, reply) {
+    handler: function (request) {
       const { description, transactionDate, amount } = request.payload;
       WalletService.createTransaction(request.auth.credentials.uid, {
         description,
@@ -34,13 +34,13 @@ internals.applyRoutes = function (server, next) {
         amount
       }, (err, result) => {
         if (err) {
-          return reply(Boom.internal('create new transaction error'));
+          return Boom.internal('create new transaction error');
         } else {
-          return reply({
+          return {
             success: true,
             message: 'successfully',
             data: result[0]
-          });
+          };
         }
       });
     }
@@ -62,7 +62,7 @@ internals.applyRoutes = function (server, next) {
         }
       }
     },
-    handler: function (request, reply) {
+    handler: function (request) {
       const { limit, page, fromDate, toDate } = request.query;
       WalletService.getTransactionPaginate(
         request.auth.credentials.uid,
@@ -72,9 +72,9 @@ internals.applyRoutes = function (server, next) {
         page, 
         (err, result) => {
           if (err) {
-            return reply(Boom.internal('Get transaction error', err));
+            return Boom.internal('Get transaction error', err);
           } else {
-            return reply(result);
+            return result;
           }
         }
       )
@@ -94,7 +94,7 @@ internals.applyRoutes = function (server, next) {
         }
       }
     },
-    handler: function (request, reply) {
+    handler: function (request) {
       if (request.query.fromDate && request.query.toDate) {
         const { fromDate, toDate } = request.query;
         WalletService.totalAmount(
@@ -103,11 +103,11 @@ internals.applyRoutes = function (server, next) {
           new Date(toDate),
           (err, result) => {
             if (err) {
-              return reply(Boom.internal('Get transaction total amount error', err));
+              return Boom.internal('Get transaction total amount error', err);
             } else {
-              return reply({
+              return {
                 data: result[0]
-              });
+              };
             }
           }
         )
@@ -118,11 +118,11 @@ internals.applyRoutes = function (server, next) {
           null,
           (err, result) => {
             if (err) {
-              return reply(Boom.internal('Get transaction total amount error', err));
+              return Boom.internal('Get transaction total amount error', err);
             } else {
-              return reply({
+              return {
                 data: result[0]
-              });
+              };
             }
           }
         )
@@ -136,29 +136,27 @@ internals.applyRoutes = function (server, next) {
     config: {
       auth: 'firebase'
     },
-    handler: function (request, reply) {
+    handler: function (request) {
       WalletService.deleteTransaction(request.auth.credentials.uid, request.params.id, (err, deletedTransaction) => {
         if (err) {
-          reply(err);
+          return err;
         } else {
-          reply({
+          return {
             success: true,
             data: deletedTransaction
-          });
+          };
         }
       });
     }
   });
 
-  next();
+  return;
 };
 
-exports.register = function (server, options, next) {
+exports.register = function (server, options) {
   server.dependency(['auth', 'wallet-service'], internals.applyRoutes);
 
-  next();
+  return;
 };
 
-exports.register.attributes = {
-  name: 'wallet-transaction'
-};
+exports.name = 'wallet-transaction';

@@ -2,12 +2,12 @@
 
 const internals = {};
 
-internals.applyRoutes = function (server, next) {
+internals.applyRoutes = function (server) {
   server.route({
     method: 'GET',
     path: '/',
-    handler: function (request, reply) {
-      reply({ message: 'Welcome to Wallet Master.' });
+    handler: function (request) {
+      return { message: 'Welcome to Wallet Master.' };
     }
   });
 
@@ -17,25 +17,23 @@ internals.applyRoutes = function (server, next) {
     config: {
       auth: 'firebase'
     },
-    handler: function (request, reply) {
+    handler: function (request) {
       console.log("kkkk");
       console.log(request.auth);
       request.auth.credentials.then((data) => {
         console.log("hahaha", data);
       });
-      reply('hello ');
+      return 'hello ';
     }
   });
 
-  next();
+  return;
 };
 
-exports.register = function (server, options, next) {
+exports.register = function (server, options) {
   server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
 
-  next();
+  return;
 };
 
-exports.register.attributes = {
-  name: 'index'
-};
+exports.name = 'index';

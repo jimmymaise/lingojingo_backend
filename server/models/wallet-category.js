@@ -24,7 +24,7 @@ class WalletCategory extends MongoModels {
   }
 };
 
-WalletCategory.collection = 'wallet_categories';
+WalletCategory.collectionName = 'wallet_categories';
 
 WalletCategory.schema = Joi.object().keys({
   firebaseUserId: Joi.string().required(),

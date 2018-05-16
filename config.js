@@ -21,19 +21,22 @@ const config = {
     $filter: 'env',
     production: {
       mongodb: {
-        uri: process.env.DB_SERVERS
+        uri: process.env.DB_SERVERS,
+        db: 'vomemo'
       },
       autoIndex: false
     },
     test: {
       mongodb: {
-        uri: 'mongodb://localhost:27017/wallet_master'
+        uri: 'mongodb://localhost:27017/',
+        db: 'vomemo'
       },
       autoIndex: false
     },
     $default: {
       mongodb: {
-        uri: 'mongodb://walltermaster_admin:g8E[FML{VAtmyn3C@ds029224.mlab.com:29224/aznode-walltet-master'
+        uri: 'mongodb://vomemo_user:Aa123456!@ds117960.mlab.com:17960/vomemo',
+        db: 'vomemo'
       },
       autoIndex: false
     }

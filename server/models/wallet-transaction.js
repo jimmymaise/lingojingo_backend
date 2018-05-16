@@ -34,7 +34,7 @@ class WalletTransaction extends MongoModels {
   }
 };
 
-WalletTransaction.collection = 'wallet_transactions';
+WalletTransaction.collectionName = 'wallet_transactions';
 
 WalletTransaction.schema = Joi.object().keys({
   firebaseUserId: Joi.string().required(),

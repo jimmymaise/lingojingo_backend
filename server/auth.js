@@ -12,51 +12,50 @@ firebaseAdmin.initializeApp({
 
 const internals = {};
 
-internals.applyStrategy = function (server, next) {
+internals.applyStrategy = function (server) {
   server.auth.strategy('firebase', 'firebase', { 
     firebaseAdmin 
   });
 
-  next();
+  return;
 };
 
 
-internals.preware = {
-  // ensureRole: function (roles) {
+// internals.preware = {
+//   ensureRole: function (roles) {
 
-  //   return {
-  //     assign: 'ensureRole',
-  //     method: function (request, reply) {
+//     return {
+//       assign: 'ensureRole',
+//       method: function (request, reply) {
 
-  //       if (Object.prototype.toString.call(roles) !== '[object Array]') {
-  //         roles = [roles];
-  //       }
+//         if (Object.prototype.toString.call(roles) !== '[object Array]') {
+//           roles = [roles];
+//         }
 
-  //       const roleFound = _.includes(roles, request.auth.credentials.user.role);
+//         const roleFound = _.includes(roles, request.auth.credentials.user.role);
 
-  //       if (!roleFound) {
-  //         return reply(Boom.notFound('Permission denied to this resource.'));
-  //       }
+//         if (!roleFound) {
+//           return reply(Boom.notFound('Permission denied to this resource.'));
+//         }
 
-  //       reply();
-  //     }
-  //   };
-  // }
-};
+//         reply();
+//       }
+//     };
+//   }
+// };
 
 
 
-exports.register = function (server, options, next) {
+exports.register = function (server, options) {
 
   server.dependency('hapi-mongo-models', internals.applyStrategy);
 
-  next();
+  return;
 };
 
 
 exports.preware = internals.preware;
 
 
-exports.register.attributes = {
-  name: 'auth'
-};
+exports.name = 'auth';
+

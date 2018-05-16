@@ -14,9 +14,9 @@ module.exports = {
   getCredentialFromAuthHeader
 };
 
-function register(server, options, next) {
+function register(server, options) {
   server.auth.scheme('firebase', firebaseAuthScheme);
-  return next();
+  return;
 }
 
 function raiseError(errorFunc, errorContext) {
@@ -38,12 +38,12 @@ function firebaseAuthScheme(server, options) {
 }
 
 function authenticateRequest(server, options) {
-  return (request, reply) => {
+  return (request) => {
 
     const token = extractTokenFromRequest(request);
 
     if (!token) {
-      return reply(unauthorizedError(options.errorFunc));
+      return unauthorizedError(options.errorFunc);
     }
 
     request.auth.token = token;
@@ -51,20 +51,20 @@ function authenticateRequest(server, options) {
     try {
       const credentials = verifyToken(options.firebaseAdmin, token);
       credentials.then(function(decodedToken) {
-        reply.continue({
+        return {
           credentials: decodedToken,
           artifacts: token
-        });
+        };
       }).catch(function(error) {
         // Handle error
-        return reply(unauthorizedError(options.errorFunc, {
+        return unauthorizedError(options.errorFunc, {
           message: error.message || error
-        }));
+        });
       });
     } catch (error) {
-      return reply(unauthorizedError(options.errorFunc, {
+      return unauthorizedError(options.errorFunc, {
         message: error.message || error
-      }));
+      });
     }
   };
 }
@@ -88,6 +88,4 @@ function getCredentialFromAuthHeader(scheme, header) {
   return (header.match(new RegExp(`${scheme} (.*)`)) || [])[1];
 }
 
-module.exports.register.attributes = {
-  name: 'firebase'
-};
+module.exports.name = 'firebase';

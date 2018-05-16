@@ -1,13 +1,17 @@
 'use strict';
 
-const Composer = require('./index');
+const composer = require('./index');
 
-Composer((err, server) => {
-  if (err) {
-    throw err;
+const startServer = async () => {
+  try {
+    const server = await composer();
+    await server.start();
+    console.log('hapi days!');
   }
+  catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+};
 
-  server.start(() => {
-    console.log('Started the plot device on port ' + server.info.port);
-  });
-});
+startServer();

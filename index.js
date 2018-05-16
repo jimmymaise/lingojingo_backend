@@ -7,4 +7,6 @@ const composeOptions = {
   relativeTo: __dirname
 };
 
-module.exports = Glue.compose.bind(Glue, Manifest.get('/'), composeOptions);
+module.exports = async () => {
+  return Glue.compose(Manifest.get('/'), composeOptions);
+}
