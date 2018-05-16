@@ -1,20 +1,12 @@
 {
-  "name": "wallet_master",
+  "name": "docker_web_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -e js,md ./server.js",
-    "start": "node ./server.js"
+    "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://aznode.visualstudio.com/AzNode/_git/WalletMaster"
-  },
-  "keywords": [],
-  "author": "Phat Tran",
-  "license": "ISC",
   "dependencies": {
     "async": "^2.4.1",
     "boom": "^7.2.0",
