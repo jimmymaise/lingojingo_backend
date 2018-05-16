@@ -14,7 +14,7 @@ const config = {
       $filter: 'env',
       production: 3800,
       test: 9000,
-      $default: 3600
+      $default: 8080
     }
   },
   hapiMongoModels: {
