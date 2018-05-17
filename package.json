@@ -5,6 +5,7 @@
   "author": "First Last <first.last@example.com>",
   "main": "server.js",
   "scripts": {
+    "dev": "cross-env NODE_ENV=dev npm start",
     "start": "node server.js"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "mongodb": "^3.1.0-beta4"
   },
   "devDependencies": {
+    "cross-env": "^5.1.5",
     "eslint": "^4.0.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.6.0",
