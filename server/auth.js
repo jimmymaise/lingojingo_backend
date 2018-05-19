@@ -14,7 +14,7 @@ const internals = {};
 
 internals.applyStrategy = function (server) {
   server.auth.strategy('firebase', 'firebase', { 
-    firebaseAdmin 
+    instance: firebaseAdmin 
   });
 
   return;

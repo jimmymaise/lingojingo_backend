@@ -17,15 +17,12 @@ const manifest = {
     debug: {
       request: ['error']
     },
-    port: Config.get('/port/web'),
-    routes: {
-      cors: true
-    }
+    port: Config.get('/port/web')
   },
   register: {
     plugins: [
       {
-        plugin: './server/firebase-auth'
+        plugin: require('hapi-firebase-auth')
       },
       {
         plugin: require('hapi-mongo-models'),

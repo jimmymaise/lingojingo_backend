@@ -15,6 +15,7 @@
     "firebase-admin": "^5.1.0",
     "glue": "^5.0.0",
     "hapi": "^17.4.0",
+    "hapi-firebase-auth": "^0.1.1",
     "hapi-mongo-models": "^7.1.0",
     "joi": "^13.3.0",
     "lodash": "^4.17.4",
