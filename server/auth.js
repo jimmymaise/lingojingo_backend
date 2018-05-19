@@ -3,11 +3,11 @@
 const Boom = require('boom');
 const Config = require('../config');
 const firebaseAdmin = require('firebase-admin');
-const serviceAccount = require("./data/wallet-master-fbf88-firebase-adminsdk-xq9u1-268ecd2249.json");
+const serviceAccount = require("./data/voca-memo-firebase-adminsdk-s6hgg-066a023101.json");
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: "https://wallet-master-fbf88.firebaseio.com"
+  databaseURL: "https://voca-memo.firebaseio.com/"
 });
 
 const internals = {};
