@@ -29,7 +29,7 @@ const manifest = {
         options: {
           models: [
             Path.resolve(__dirname, './server/models/wallet-category'),
-            Path.resolve(__dirname, './server/models/wallet-transaction'),
+            Path.resolve(__dirname, './server/models/wallet-transaction')
           ],
           mongodb: {
             connection: {
@@ -57,12 +57,6 @@ const manifest = {
       },
       {
         plugin: './server/api/wallet-category',
-        options: {
-          routes: { prefix: '/api' }
-        }
-      },
-      {
-        plugin: './server/api/wallet-transaction',
         options: {
           routes: { prefix: '/api' }
         }

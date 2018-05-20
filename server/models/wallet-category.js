@@ -4,7 +4,7 @@ const Joi = require('joi');
 const MongoModels = require('mongo-models');
 
 class WalletCategory extends MongoModels {
-  static create(firebase_uid, name, color, callback) {
+  static async create(firebase_uid, name, color) {
     const document = {
       firebaseUserId: firebase_uid,
       name,
@@ -13,29 +13,26 @@ class WalletCategory extends MongoModels {
       timeCreated: new Date()
     };
 
-    this.insertOne(document, callback);
+    return await this.insertOne(document);
   }
 
-  static deleteOne(firebase_uid, categoryId, callback) {
-    findOneAndDelete({
+  static async deleteOne(firebase_uid, categoryId) {
+    return await findOneAndDelete({
       _id: ObjectID(categoryId),
       firebaseUserId: firebase_uid
-    }, callback);
+    });
   }
 };
 
 WalletCategory.collectionName = 'wallet_categories';
 
 WalletCategory.schema = Joi.object().keys({
+  _id: Joi.object(),
   firebaseUserId: Joi.string().required(),
   name: Joi.string().required(),
   color: Joi.string().required(),
   timeUpdated: Joi.date().required().default(new Date()),
   timeCreated: Joi.date().required().default(new Date())
 });
-
-WalletCategory.indexes = [
-    { key: { _id: 1 } }
-];
 
 module.exports = WalletCategory;

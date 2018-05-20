@@ -5,7 +5,7 @@ const ObjectID = require('mongodb').ObjectID;
 const MongoModels = require('mongo-models');
 
 class WalletTransaction extends MongoModels {
-  static create(firebase_uid, data, callback) {
+  static async create(firebase_uid, data) {
     const document = {
       firebaseUserId: firebase_uid,
       description: data.description,
@@ -16,27 +16,28 @@ class WalletTransaction extends MongoModels {
       timeCreated: new Date()
     };
 
-    this.insertOne(document, callback);
+    return await this.insertOne(document);
   }
 
-  static deleteByCategory(firebase_uid, categoryId, callback) {
-    this.deleteMany({
+  static async deleteByCategory(firebase_uid, categoryId) {
+    return await this.deleteMany({
       firebaseUserId: firebase_uid,
       categoryId: ObjectID(categoryId)
-    }, callback);
+    });
   }
 
-  static deleteOne(firebase_uid, id, callback) {
-    this.findOneAndDelete({
+  static async deleteOne(firebase_uid, id) {
+    return await this.findOneAndDelete({
       _id: ObjectID(id),
       firebaseUserId: firebase_uid
-    }, callback);
+    });
   }
 };
 
 WalletTransaction.collectionName = 'wallet_transactions';
 
 WalletTransaction.schema = Joi.object().keys({
+  _id: Joi.object(),
   firebaseUserId: Joi.string().required(),
   description: Joi.string().required(),
   categoryId: Joi.object(),
@@ -45,9 +46,5 @@ WalletTransaction.schema = Joi.object().keys({
   timeUpdated: Joi.date().required().default(new Date()),
   timeCreated: Joi.date().required().default(new Date())
 });
-
-WalletTransaction.indexes = [
-    { key: { _id: 1 } }
-];
 
 module.exports = WalletTransaction;
