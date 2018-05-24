@@ -17,6 +17,9 @@ internals.applyRoutes = function (server, next) {
     path: '/category',
     config: {
       auth: 'firebase',
+      description: 'Post Category',
+      notes: 'Returns a todo item by the id passed in the path',
+      tags: ['api'],
       validate: {
         payload: {
           name: Joi.string().required(),
@@ -44,6 +47,9 @@ internals.applyRoutes = function (server, next) {
     method: 'GET',
     path: '/category',
     config: {
+      description: 'Get Category',
+      notes: 'Returns a todo item by the id passed in the path',
+      tags: ['api'],
       auth: 'firebase'
     },
     handler: async (request) => {
@@ -60,6 +66,9 @@ internals.applyRoutes = function (server, next) {
     method: 'DELETE',
     path: '/category/{id}',
     config: {
+      description: 'Get Category',
+      notes: 'Returns a todo item by the id passed in the path',
+      tags: ['api'],
       auth: 'firebase'
     },
     handler: function (request) {

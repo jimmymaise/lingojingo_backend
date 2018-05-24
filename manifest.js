@@ -1,4 +1,5 @@
 'use strict';
+const Pack = require('./package');
 
 const Path = require('path');
 const Confidence = require('confidence');
@@ -21,6 +22,21 @@ const manifest = {
   },
   register: {
     plugins: [
+      {
+        plugin: require('inert')
+      },
+      {
+        plugin: require('vision')
+      },
+      {
+        plugin: require('hapi-swagger'),
+        options: {
+          info: {
+            title: 'API Documentation',
+            version: Pack.version,
+          }
+        }
+      },
       {
         plugin: require('hapi-firebase-auth')
       },
