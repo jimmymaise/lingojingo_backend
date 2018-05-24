@@ -7,23 +7,7 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/',
     handler: function (request) {
-      return { message: 'Welcome to Wallet Master.' };
-    }
-  });
-
-  server.route({
-    method: 'GET',
-    path: '/test',
-    config: {
-      auth: 'firebase'
-    },
-    handler: function (request) {
-      console.log("kkkk");
-      console.log(request.auth);
-      request.auth.credentials.then((data) => {
-        console.log("hahaha", data);
-      });
-      return 'hello ';
+      return { message: 'Welcome to Vomemo.' };
     }
   });
 

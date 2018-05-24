@@ -44,6 +44,7 @@ const manifest = {
         plugin: require('hapi-mongo-models'),
         options: {
           models: [
+            Path.resolve(__dirname, './server/models/user-info'),
             Path.resolve(__dirname, './server/models/wallet-category'),
             Path.resolve(__dirname, './server/models/wallet-transaction')
           ],
@@ -63,6 +64,9 @@ const manifest = {
         plugin: './server/auth'
       },
       {
+        plugin: './server/services/user-info.service'
+      },
+      {
         plugin: './server/services/wallet.service'
       },
       {
@@ -73,6 +77,12 @@ const manifest = {
       },
       {
         plugin: './server/api/wallet-category',
+        options: {
+          routes: { prefix: '/api' }
+        }
+      },
+      {
+        plugin: './server/api/user-info',
         options: {
           routes: { prefix: '/api' }
         }

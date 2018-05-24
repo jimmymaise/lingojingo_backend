@@ -4,8 +4,6 @@ const Boom = require('boom');
 const Joi = require('joi');
 const Async = require('async');
 
-const utils = require('../utils');
-
 const internals = {};
 
 internals.applyRoutes = function (server, next) {
