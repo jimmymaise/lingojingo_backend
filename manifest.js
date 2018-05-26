@@ -18,7 +18,10 @@ const manifest = {
     debug: {
       request: ['error']
     },
-    port: Config.get('/port/web')
+    port: Config.get('/port/web'),
+    routes: {
+      cors: true
+    }
   },
   register: {
     plugins: [
@@ -70,22 +73,13 @@ const manifest = {
         plugin: './server/services/wallet.service'
       },
       {
-        plugin: './server/api/index',
-        options: {
-          routes: { prefix: '/api' }
-        }
+        plugin: './server/api/index'
       },
       {
-        plugin: './server/api/wallet-category',
-        options: {
-          routes: { prefix: '/api' }
-        }
+        plugin: './server/api/wallet-category'
       },
       {
-        plugin: './server/api/user-info',
-        options: {
-          routes: { prefix: '/api' }
-        }
+        plugin: './server/api/user-info'
       }
     ]
   }
