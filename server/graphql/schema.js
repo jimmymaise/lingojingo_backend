@@ -27,7 +27,7 @@ const rootType = `
     prev: Int,
     hasPrev: Boolean,
     next: Int,
-    hasNex: Boolean,
+    hasNext: Boolean,
     total: Int
   }
   type PageItemInfo {

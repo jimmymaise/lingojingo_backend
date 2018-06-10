@@ -11,8 +11,9 @@ const typeDefs = `
     decks(pagination: PaginationInput!): DeckPagination
   }
   type Deck {
+    _id: String,
     deck: String,
-    images: [String],
+    topics: [String],
     cards: [Int],
     tags: [String],
     deckName: String
