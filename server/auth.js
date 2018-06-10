@@ -1,9 +1,12 @@
 'use strict';
 
 const Boom = require('boom');
-const Config = require('../config');
+const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
 const firebaseAdmin = require('firebase-admin');
+
+const Config = require('../config');
 const serviceAccount = require("./data/voca-memo-firebase-adminsdk-s6hgg-066a023101.json");
+const graphqlSchema = require('./graphql/schema');
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
@@ -12,10 +15,45 @@ firebaseAdmin.initializeApp({
 
 const internals = {};
 
-internals.applyStrategy = function (server) {
+internals.applyStrategy = async function (server) {
   server.auth.strategy('firebase', 'firebase', { 
     instance: firebaseAdmin 
   });
+
+  // TODO: Refactor - Start
+  // Because the GraphQL not support define in manifest
+  // So need move it to here
+  // And the Strategy must apply first
+  if (process.env.NODE_ENV === 'dev') {
+    await server.register({
+      plugin: graphiqlHapi,
+      options: {
+        path: '/graphiql',
+        graphiqlOptions: {
+          endpointURL: '/graphql'
+        },
+        route: {
+          cors: true
+        }
+      }
+    });
+  }
+
+  await server.register({
+    plugin: graphqlHapi,
+    options: {
+      path: '/graphql',
+      graphqlOptions: request => ({
+        schema: graphqlSchema,
+        context: request // hapi request
+      }),
+      route: {
+        auth: 'firebase',
+        cors: true
+      }
+    }
+  });
+  // TODO: Refactor - End
 
   return;
 };
@@ -46,9 +84,9 @@ internals.applyStrategy = function (server) {
 
 
 
-exports.register = function (server, options) {
+exports.register = async function (server, options) {
 
-  server.dependency('hapi-mongo-models', internals.applyStrategy);
+  server.dependency('hapi-mongo-models', await internals.applyStrategy);
 
   return;
 };

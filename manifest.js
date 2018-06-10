@@ -3,6 +3,7 @@ const Pack = require('./package');
 
 const Path = require('path');
 const Confidence = require('confidence');
+
 const Config = require('./config');
 
 const criteria = {
@@ -49,7 +50,9 @@ const manifest = {
           models: [
             Path.resolve(__dirname, './server/models/user-info'),
             Path.resolve(__dirname, './server/models/wallet-category'),
-            Path.resolve(__dirname, './server/models/wallet-transaction')
+            Path.resolve(__dirname, './server/models/wallet-transaction'),
+            Path.resolve(__dirname, './server/models/card'),
+            Path.resolve(__dirname, './server/models/deck')
           ],
           mongodb: {
             connection: {
@@ -71,6 +74,9 @@ const manifest = {
       },
       {
         plugin: './server/services/wallet.service'
+      },
+      {
+        plugin: './server/services/quiz.service'
       },
       {
         plugin: './server/api/index'

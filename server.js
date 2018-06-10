@@ -6,6 +6,7 @@ const Config = require('./config');
 const startServer = async () => {
   try {
     const server = await composer();
+
     await server.start();
     console.log(`${Config.get('/projectName')}`);
     console.log(`Server running at: ${server.info.uri}`);

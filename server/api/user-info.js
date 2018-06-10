@@ -20,8 +20,7 @@ internals.applyRoutes = function (server, next) {
       tags: ['api'],
       validate: {
         payload: {
-          fullName: Joi.string(),
-          phone: Joi.string(),
+          phone: Joi.string().optional(),
           aboutContent: Joi.string(),
           isLearnMailNotify: Joi.boolean(),
           isNewBlogMailNotify: Joi.boolean(),

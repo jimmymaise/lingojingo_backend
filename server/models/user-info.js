@@ -2,7 +2,6 @@
 
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
-const _ = require('lodash');
 
 class UserInfo extends MongoModels {
   static transformToClientResponseData(userInfo) {
