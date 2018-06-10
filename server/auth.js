@@ -24,20 +24,18 @@ internals.applyStrategy = async function (server) {
   // Because the GraphQL not support define in manifest
   // So need move it to here
   // And the Strategy must apply first
-  if (process.env.NODE_ENV === 'dev') {
-    await server.register({
-      plugin: graphiqlHapi,
-      options: {
-        path: '/graphiql',
-        graphiqlOptions: {
-          endpointURL: '/graphql'
-        },
-        route: {
-          cors: true
-        }
+  await server.register({
+    plugin: graphiqlHapi,
+    options: {
+      path: '/graphiql',
+      graphiqlOptions: {
+        endpointURL: '/graphql'
+      },
+      route: {
+        cors: true
       }
-    });
-  }
+    }
+  });
 
   await server.register({
     plugin: graphqlHapi,
