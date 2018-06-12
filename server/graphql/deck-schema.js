@@ -8,7 +8,8 @@ const typeDefs = `
     items: PageItemInfo
   }
   extend type Query {
-    decks(pagination: PaginationInput!): DeckPagination
+    decks(pagination: PaginationInput): DeckPagination
+    userStoreDecks(pagination: PaginationInput): DeckPagination
   }
   type Deck {
     _id: String,
@@ -16,7 +17,8 @@ const typeDefs = `
     topics: [String],
     cards: [Int],
     tags: [String],
-    deckName: String
+    deckName: String,
+    isOwned: Boolean
   }
 `;
 
@@ -25,7 +27,13 @@ const resolvers = {
   Query: { 
     decks: async (parent, args) => {
       const { limit, page } = args.pagination || {};
+
       return await quizService.getDeckPaginate(limit, page);
+    },
+    userStoreDecks: async (parent, args, context) => {
+      const { limit, page } = args.pagination || {};
+
+      return await quizService.getDeckPaginateMapWithUserInfo(context.auth.credentials.uid, limit, page);
     }
   },
 };

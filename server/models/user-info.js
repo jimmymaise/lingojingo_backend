@@ -44,6 +44,7 @@ UserInfo.schema = Joi.object().keys({
   isLearnMailNotify: Joi.boolean().default(true),
   isNewBlogMailNotify: Joi.boolean().default(true),
   isGeneralMailNotify: Joi.boolean().default(true),
+  decks: Joi.array(),
   timeUpdated: Joi.date().required().default(new Date()),
   timeCreated: Joi.date().required().default(new Date())
 });

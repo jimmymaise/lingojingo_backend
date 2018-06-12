@@ -79,6 +79,9 @@ const manifest = {
         plugin: './server/services/quiz.service'
       },
       {
+        plugin: './server/services/deck.service'
+      },
+      {
         plugin: './server/api/index'
       },
       {
@@ -86,6 +89,9 @@ const manifest = {
       },
       {
         plugin: './server/api/user-info'
+      },
+      {
+        plugin: './server/api/deck'
       }
     ]
   }
