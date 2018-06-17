@@ -15,7 +15,7 @@ const typeDefs = `
     _id: String,
     deck: String,
     topics: [String],
-    cards: [Int],
+    cards: [String],
     tags: [String],
     deckName: String,
     isOwned: Boolean
