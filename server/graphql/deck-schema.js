@@ -1,4 +1,5 @@
 const quizService = require('../services/quiz.service');
+const deckService = require('../services/deck.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
@@ -7,10 +8,6 @@ const typeDefs = `
     pages: PageInfo,
     items: PageItemInfo
   }
-  extend type Query {
-    decks(pagination: PaginationInput): DeckPagination
-    userStoreDecks(pagination: PaginationInput): DeckPagination
-  }
   type Deck {
     _id: String,
     deck: String,
@@ -18,7 +15,15 @@ const typeDefs = `
     cards: [String],
     tags: [String],
     deckName: String,
-    isOwned: Boolean
+    isOwned: Boolean,
+    img: String,
+    topicDetails: [Topic],
+    cardDetails: [Card]
+  }
+  extend type Query {
+    decks(pagination: PaginationInput): DeckPagination
+    userStoreDecks(pagination: PaginationInput): DeckPagination,
+    deck(id: ID!): Deck
   }
 `;
 
@@ -34,8 +39,19 @@ const resolvers = {
       const { limit, page } = args.pagination || {};
 
       return await quizService.getDeckPaginateMapWithUserInfo(context.auth.credentials.uid, limit, page);
+    },
+    deck: async (parent, args, context) => {
+      return await deckService.getDeck(context.auth.credentials.uid, args.id);
     }
   },
+  Deck: {
+    topicDetails: async (parent, args, context) => {
+      return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
+    },
+    cardDetails: async (parent, args, context) => {
+      return await deckService.getListCardDetail(context.auth.credentials.uid, parent.cards);
+    }
+  }
 };
 
 module.exports = {

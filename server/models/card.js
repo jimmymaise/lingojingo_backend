@@ -12,13 +12,14 @@ Card.schema = Joi.object().keys({
   _id: Joi.object(),
   cardId: Joi.number(),
   voca: Joi.string(),
-  transcript: Joi.string(),
-  img: Joi.array(),
-  audio: Joi.string(),
+  transcript: [Joi.string().optional(), Joi.allow(null)],
+  img: [Joi.array().optional(), Joi.allow(null)],
+  audio: [Joi.string().optional(), Joi.allow(null)],
   type: [Joi.string().optional(), Joi.allow(null)],
   meaning: Joi.string(),
-  sample: Joi.array(),
-  enmeaning: [Joi.string().optional(), Joi.allow(null)]
+  sample: [Joi.array().optional(), Joi.allow(null)],
+  enmeaning: [Joi.string().optional(), Joi.allow(null)],
+  tags: [Joi.array().optional(), Joi.allow(null)]
 });
 
 Card.indexes = [];

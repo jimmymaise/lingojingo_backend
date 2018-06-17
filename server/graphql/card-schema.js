@@ -12,8 +12,15 @@ const typeDefs = `
     audio: String,
     type: String,
     meaning: String,
-    sample: [String],
     enmeaning: String
+  },
+  type CardSample {
+    phrases: String,
+    phraseAudio: String,
+    sentence: String,
+    translate: String,
+    img: String,
+    audio: String
   }
 `;
 

@@ -15,7 +15,8 @@ Deck.schema = Joi.object().keys({
   cards: Joi.array(),
   tags: Joi.array(),
   deckName: Joi.string(),
-  topics: Joi.array()
+  topics: Joi.array(),
+  img: [Joi.string().optional(), Joi.allow(null)]
 });
 
 Deck.indexes = [];

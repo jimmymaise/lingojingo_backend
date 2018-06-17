@@ -52,7 +52,8 @@ const manifest = {
             Path.resolve(__dirname, './server/models/wallet-category'),
             Path.resolve(__dirname, './server/models/wallet-transaction'),
             Path.resolve(__dirname, './server/models/card'),
-            Path.resolve(__dirname, './server/models/deck')
+            Path.resolve(__dirname, './server/models/deck'),
+            Path.resolve(__dirname, './server/models/topic')
           ],
           mongodb: {
             connection: {
