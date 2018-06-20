@@ -23,6 +23,7 @@ const typeDefs = `
   extend type Query {
     decks(pagination: PaginationInput): DeckPagination
     userStoreDecks(pagination: PaginationInput): DeckPagination,
+    userOwnerDecks(pagination: PaginationInput): DeckPagination,
     deck(id: ID!): Deck
   }
 `;
@@ -39,6 +40,11 @@ const resolvers = {
       const { limit, page } = args.pagination || {};
 
       return await quizService.getDeckPaginateMapWithUserInfo(context.auth.credentials.uid, limit, page);
+    },
+    userOwnerDecks: async (parent, args, context) => {
+      const { limit, page } = args.pagination || {};
+
+      return await quizService.getUserOwnerDeckPaginate(context.auth.credentials.uid, limit, page);
     },
     deck: async (parent, args, context) => {
       return await deckService.getDeck(context.auth.credentials.uid, args.id);

@@ -2,6 +2,7 @@
 
 const Async = require('async');
 const forEach = require('lodash/forEach');
+const ObjectID = require('mongodb').ObjectID;
 
 const Card = require('../models/card');
 const Deck = require('../models/deck');
@@ -39,11 +40,24 @@ internals.getDeckPaginateMapWithUserInfo = async (firebaseUId, limit, page) => {
   return paginateData;
 }
 
+internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
+  let _limit = limit || 5;
+  let _page = page || 1;
+
+  const userInfo = await UserInfo.findOne({
+    firebaseUserId: firebaseUId
+  });
+
+  const ids = userInfo.decks.map((id) => ObjectID(id));
+  return await Deck.pagedFind({_id: {$in: ids}}, _page, _limit, {});
+}
+
 exports.register = function (server, options) {
 
   server.expose('getOneCard', internals.getOneCard);
   server.expose('getDeckPaginate', internals.getDeckPaginate);
   server.expose('getDeckPaginateMapWithUserInfo', internals.getDeckPaginateMapWithUserInfo);
+  server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
   return;
 };
@@ -51,5 +65,6 @@ exports.register = function (server, options) {
 exports.getOneCard = internals.getOneCard;
 exports.getDeckPaginate = internals.getDeckPaginate;
 exports.getDeckPaginateMapWithUserInfo = internals.getDeckPaginateMapWithUserInfo;
+exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
 
 exports.name = 'quiz-service';
