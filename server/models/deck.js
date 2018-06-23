@@ -16,8 +16,10 @@ Deck.schema = Joi.object().keys({
   tags: Joi.array(),
   deckName: Joi.string(),
   topics: Joi.array(),
-  img: [Joi.string().optional(), Joi.allow(null)]
-});
+  img: [Joi.string().optional(), Joi.allow(null)],
+  cardChoices: Joi.object(),
+  passScore: Joi.number()
+}).options({ stripUnknown: true });
 
 Deck.indexes = [];
 

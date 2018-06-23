@@ -47,7 +47,7 @@ UserInfo.schema = Joi.object().keys({
   decks: Joi.array(),
   timeUpdated: Joi.date().required().default(new Date()),
   timeCreated: Joi.date().required().default(new Date())
-});
+}).options({ stripUnknown: true });
 
 UserInfo.indexes = [
   { key: { firebaseUserId: 1 } }
