@@ -2,6 +2,9 @@
 
 const Async = require('async');
 const ObjectID = require('mongodb').ObjectID;
+const sortBy = require('lodash/sortBy');
+const map = require('lodash/map');
+const reduce = require('lodash/reduce');
 
 const UserInfo = require('../models/user-info');
 const Deck = require('../models/deck');
@@ -55,8 +58,17 @@ internals.getDeck = async (firebaseUId, deckId) => {
 
 // TODO: please protect user don't have permission in this deck
 internals.getListTopicDetail = async (firebaseUId, topics) => {
-  const ids = topics.map((topic) => ObjectID(topic._id));
-  return await Topic.find({_id: {$in: ids}});
+  const topicMapping = reduce(topics, (result, value) => {
+    result[value._id] = value;
+    return result;
+  }, {});
+
+  const ids = map(topics, (topic) => ObjectID(topic._id));
+
+  const results = await Topic.find({_id: {$in: ids}});
+  const sortedResult =  sortBy(results, (topic) => topicMapping[topic._id] && topicMapping[topic._id].order);
+
+  return sortedResult;
 }
 
 // TODO: please protect user don't have permission in this deck
@@ -65,12 +77,17 @@ internals.getListCardDetail = async (firebaseUId, cardIds) => {
   return await Card.find({_id: {$in: ids}});
 }
 
+internals.getOneTopic = async (id) => {
+  return await Topic.findById(id);
+}
+
 exports.register = function (server, options) {
 
   server.expose('getListTopicDetail', internals.getListTopicDetail);
   server.expose('buyDeck', internals.buyDeck);
   server.expose('getDeck', internals.getDeck);
   server.expose('getListCardDetail', internals.getListCardDetail);
+  server.expose('getOneTopic', internals.getOneTopic);
 
   return;
 };
@@ -79,5 +96,6 @@ exports.getListTopicDetail = internals.getListTopicDetail;
 exports.buyDeck = internals.buyDeck;
 exports.getDeck = internals.getDeck;
 exports.getListCardDetail = internals.getListCardDetail;
+exports.getOneTopic = internals.getOneTopic;
 
 exports.name = 'deck-service';

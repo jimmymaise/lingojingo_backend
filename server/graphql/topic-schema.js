@@ -2,6 +2,7 @@ const deckService = require('../services/deck.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
+  extend type Query { topic(id: ID!): Topic }
   type Topic {
     _id: String,
     topic: String,
@@ -16,6 +17,9 @@ const typeDefs = `
 // The resolvers
 const resolvers = {
   Query: {
+    topic: async (parent, args) => {
+      return await deckService.getOneTopic(args.id);
+    }
   },
   Topic: {
     cardDetails: async (parent, args, context) => {
