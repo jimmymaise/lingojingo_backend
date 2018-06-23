@@ -54,8 +54,8 @@ internals.getDeck = async (firebaseUId, deckId) => {
 }
 
 // TODO: please protect user don't have permission in this deck
-internals.getListTopicDetail = async (firebaseUId, topicIds) => {
-  const ids = topicIds.map((id) => ObjectID(id));
+internals.getListTopicDetail = async (firebaseUId, topics) => {
+  const ids = topics.map((topic) => ObjectID(topic._id));
   return await Topic.find({_id: {$in: ids}});
 }
 
