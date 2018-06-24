@@ -4,6 +4,7 @@ const merge = require('lodash/merge');
 const cardSchema = require('./card-schema');
 const deckSchema = require('./deck-schema');
 const topicSchema = require('./topic-schema');
+const userTopicSchema = require('./user-topic-schema');
 
 const rootResolver = {
   Query: {
@@ -49,8 +50,10 @@ const rootType = `
   }
 `;
 
-const typeDefs = [rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs];
-const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers);
+
+
+const typeDefs = [rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,userTopicSchema.typeDefs];
+const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,userTopicSchema.resolvers);
 
 module.exports = graphqlTools.makeExecutableSchema({
   typeDefs,
