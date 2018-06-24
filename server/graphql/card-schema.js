@@ -12,7 +12,8 @@ const typeDefs = `
     audio: String,
     type: String,
     meaning: String,
-    enmeaning: String
+    enmeaning: String,
+    sample: [CardSample]
   },
   type CardSample {
     phrases: String,
