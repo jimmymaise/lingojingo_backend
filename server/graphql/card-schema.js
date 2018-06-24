@@ -27,7 +27,7 @@ const typeDefs = `
 
 // The resolvers
 const resolvers = {
-  Query: { 
+  Query: {
     card: async (parent, args) => {
       return await quizService.getOneCard(args.id);
     }

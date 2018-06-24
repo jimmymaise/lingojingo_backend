@@ -3,10 +3,12 @@ const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  scalar JSON
  
-  extend type Query { userTopic(id: ID!): UserTopic }
-  extend type Mutation { userTopic(userId:String,deckId:String,topicId:String,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserTopic }
+  extend type Query { getUserTopic(id: ID!): UserTopic }
+  extend type Mutation { createUserTopic(userId:String,deckId:String,topicId:String,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserTopic }
+  extend type Mutation { updateUserTopic(id: ID!,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserTopic }
+  extend type Mutation { deleteUserTopic(id: ID!): UserTopic}
+
   type UserTopic {
     _id: String,
     userId: String,
@@ -14,7 +16,7 @@ const typeDefs = `
     topicId:String,
     exams: [String],
     filterKnownCard:JSON,
-    highestResult:JSON
+    highestResult:JSON,
     }
     type HighestResult {
     examId: String,
@@ -25,23 +27,27 @@ const typeDefs = `
 
 // The resolvers
 const resolvers = {
-    JSON: GraphQLJSON,
-    Query: {
-        userTopic: async (parent, args) => {
-            return await quizService.getOneUserTopic(args.id);
-        }
-    },
-    Mutation: {
-        userTopic: async (parent, args) => {
-            return await quizService.addOneUserTopic(args.userId, args.topicId, args.deckId, args.filterKnownCard,
-                args.exams, args.highestResult
-            );
-        }
+  JSON: GraphQLJSON,
+  Query: {
+    getUserTopic: async (parent, args) => {
+      return await quizService.getOneUserTopic(args.id);
     }
+  },
+  Mutation: {
+    createUserTopic: async (parent, args) => {
+      return await quizService.addOneUserTopic(args);
+    },
+    updateUserTopic: async (parent, args) => {
+      return await quizService.updateOneUserTopic(args);
+    },
+    deleteUserTopic: async (parent, args) => {
+      return await quizService.deleteOneUserTopic(args.id);
+    },
+  }
 
 };
 
 module.exports = {
-    typeDefs,
-    resolvers
+  typeDefs,
+  resolvers
 }

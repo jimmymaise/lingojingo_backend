@@ -7,7 +7,7 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/',
     handler: function (request) {
-      return { message: 'Welcome to Vomemo.' };
+      return {message: 'Welcome to Vomemo.'};
     }
   });
 

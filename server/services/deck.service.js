@@ -41,7 +41,7 @@ internals.buyDeck = async (firebaseUId, deckId) => {
     }, {
       firebaseUserId: firebaseUId,
       ...currentInfo,
-      
+
       timeUpdated: new Date()
     }, {
       upsert: true,
@@ -66,7 +66,7 @@ internals.getListTopicDetail = async (firebaseUId, topics) => {
   const ids = map(topics, (topic) => ObjectID(topic._id));
 
   const results = await Topic.find({_id: {$in: ids}});
-  const sortedResult =  sortBy(results, (topic) => topicMapping[topic._id] && topicMapping[topic._id].order);
+  const sortedResult = sortBy(results, (topic) => topicMapping[topic._id] && topicMapping[topic._id].order);
 
   return sortedResult;
 }

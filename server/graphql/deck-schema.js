@@ -30,19 +30,19 @@ const typeDefs = `
 
 // The resolvers
 const resolvers = {
-  Query: { 
+  Query: {
     decks: async (parent, args) => {
-      const { limit, page } = args.pagination || {};
+      const {limit, page} = args.pagination || {};
 
       return await quizService.getDeckPaginate(limit, page);
     },
     userStoreDecks: async (parent, args, context) => {
-      const { limit, page } = args.pagination || {};
+      const {limit, page} = args.pagination || {};
 
       return await quizService.getDeckPaginateMapWithUserInfo(context.auth.credentials.uid, limit, page);
     },
     userOwnerDecks: async (parent, args, context) => {
-      const { limit, page } = args.pagination || {};
+      const {limit, page} = args.pagination || {};
 
       return await quizService.getUserOwnerDeckPaginate(context.auth.credentials.uid, limit, page);
     },

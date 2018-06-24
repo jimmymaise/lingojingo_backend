@@ -1,7 +1,7 @@
 'use strict';
 
 const Boom = require('boom');
-const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
+const {graphqlHapi, graphiqlHapi} = require('apollo-server-hapi');
 const firebaseAdmin = require('firebase-admin');
 
 const Config = require('../config');
@@ -16,8 +16,8 @@ firebaseAdmin.initializeApp({
 const internals = {};
 
 internals.applyStrategy = async function (server) {
-  server.auth.strategy('firebase', 'firebase', { 
-    instance: firebaseAdmin 
+  server.auth.strategy('firebase', 'firebase', {
+    instance: firebaseAdmin
   });
 
   // TODO: Refactor - Start
@@ -79,7 +79,6 @@ internals.applyStrategy = async function (server) {
 //     };
 //   }
 // };
-
 
 
 exports.register = async function (server, options) {

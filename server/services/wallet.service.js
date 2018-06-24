@@ -23,13 +23,14 @@ internals.getTransactionPaginate = async (firebase_uid, fromDate, toDate, limit,
       {
         firebaseUserId: firebase_uid
       },
-      { 
-        transactionDate: { $gte: fromDate }
+      {
+        transactionDate: {$gte: fromDate}
       },
-      { 
-        transactionDate: { $lte: toDate }
+      {
+        transactionDate: {$lte: toDate}
       }
-  ]}, {
+    ]
+  }, {
     firebaseUserId: 0,
     timeUpdated: 0,
     timeCreated: 0

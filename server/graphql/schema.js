@@ -5,6 +5,7 @@ const cardSchema = require('./card-schema');
 const deckSchema = require('./deck-schema');
 const topicSchema = require('./topic-schema');
 const userTopicSchema = require('./user-topic-schema');
+const examSchema = require('./exam-schema');
 
 const rootResolver = {
   Query: {
@@ -20,6 +21,7 @@ const rootResolver = {
 };
 
 const rootType = `
+
   input PaginationInput {
     limit: Int,
     page: Int
@@ -50,10 +52,14 @@ const rootType = `
   }
 `;
 
+const externalType = `
+  scalar JSON
+`
 
-
-const typeDefs = [rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,userTopicSchema.typeDefs];
-const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,userTopicSchema.resolvers);
+const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,
+  userTopicSchema.typeDefs, examSchema.typeDefs];
+const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
+  userTopicSchema.resolvers, examSchema.resolvers);
 
 module.exports = graphqlTools.makeExecutableSchema({
   typeDefs,

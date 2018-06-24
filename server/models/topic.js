@@ -15,7 +15,7 @@ Topic.schema = Joi.object().keys({
   deck: Joi.string(),
   cards: Joi.array(),
   tag: [Joi.string().optional(), Joi.allow(null)]
-}).options({ stripUnknown: true });
+}).options({stripUnknown: true});
 
 Topic.indexes = [];
 

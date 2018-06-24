@@ -19,7 +19,7 @@ Deck.schema = Joi.object().keys({
   img: [Joi.string().optional(), Joi.allow(null)],
   cardChoices: Joi.object(),
   passScore: Joi.number()
-}).options({ stripUnknown: true });
+}).options({stripUnknown: true});
 
 Deck.indexes = [];
 

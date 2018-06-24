@@ -20,7 +20,7 @@ Card.schema = Joi.object().keys({
   sample: [Joi.array().optional(), Joi.allow(null)],
   enmeaning: [Joi.string().optional(), Joi.allow(null)],
   tags: [Joi.array().optional(), Joi.allow(null)]
-}).options({ stripUnknown: true });
+}).options({stripUnknown: true});
 
 Card.indexes = [];
 
