@@ -9,6 +9,7 @@ const Deck = require('../models/deck');
 const UserInfo = require('../models/user-info');
 const UserTopic = require('../models/user-topic');
 const Exam = require('../models/exam');
+const UserDeck = require('../models/user-deck');
 const _ = require('lodash');
 const internals = {};
 
@@ -75,6 +76,34 @@ internals.updateOneExam = async (args) => {
 
 }
 
+//User Deck
+
+internals.getOneUserDeck = async (id) => {
+  return await UserDeck.findById(id);
+}
+
+internals.addOneUserDeck = async (args) => {
+
+  let result = await UserDeck.insertOne(args);
+  return result[0]
+
+}
+
+internals.deleteOneUserDeck = async (id) => {
+  let result = await UserDeck.findByIdAndDelete(id);
+  if (result === undefined) result = {"_id": null}
+  return result
+}
+
+internals.updateOneUserDeck = async (args) => {
+  let id = args.id
+  let updateObj = _.cloneDeep(args)
+  delete updateObj['id']
+  let result = await UserDeck.findByIdAndUpdate(
+    id, {$set: updateObj});
+  return result
+
+}
 //DeckPaginate
 
 internals.getDeckPaginate = async (limit, page) => {
@@ -133,6 +162,12 @@ exports.register = function (server, options) {
   server.expose('updateOneExam', internals.updateOneExam);
   server.expose('deleteOneExam', internals.deleteOneExam);
 
+  server.expose('getOneUserDeck', internals.getOneUserDeck);
+  server.expose('addOneUserDeck', internals.addOneUserDeck);
+  server.expose('updateOneUserDeck', internals.updateOneUserDeck);
+  server.expose('deleteOneUserDeck', internals.deleteOneUserDeck);
+
+
 };
 
 
@@ -151,6 +186,11 @@ exports.getOneExam = internals.getOneExam;
 exports.addOneExam = internals.addOneExam;
 exports.updateOneExam = internals.updateOneExam;
 exports.deleteOneExam = internals.deleteOneExam;
+
+exports.getOneUserDeck = internals.getOneUserDeck;
+exports.addOneUserDeck = internals.addOneUserDeck;
+exports.updateOneUserDeck = internals.updateOneUserDeck;
+exports.deleteOneUserDeck = internals.deleteOneUserDeck;
 
 
 exports.name = 'quiz-service';

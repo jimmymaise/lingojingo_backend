@@ -5,8 +5,9 @@ const GraphQLJSON = require('graphql-type-json');
 const typeDefs = `
  
   extend type Query { getUserTopic(id: ID!): UserTopic }
-  extend type Mutation { createUserTopic(userId:String,deckId:String,topicId:String,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserTopic }
-  extend type Mutation { updateUserTopic(id: ID!,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserTopic }
+  extend type Mutation { createUserTopic(userId:String,deckId:String,topicId:String,filterKnownCard:JSON,exams:[String]
+  ,highestResult:JSON,currentStudyMode:String): UserTopic }
+  extend type Mutation { updateUserTopic(id: ID!,filterKnownCard:JSON,exams:[String],highestResult:JSON,currentStudyMode:String): UserTopic }
   extend type Mutation { deleteUserTopic(id: ID!): UserTopic}
 
   type UserTopic {
@@ -15,8 +16,9 @@ const typeDefs = `
     deckId: String,
     topicId:String,
     exams: [String],
+    currentStudyMode:String,
     filterKnownCard:JSON,
-    highestResult:JSON,
+    highestResult:HighestResult
     }
     type HighestResult {
     examId: String,

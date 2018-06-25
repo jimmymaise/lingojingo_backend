@@ -3,11 +3,10 @@ const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  scalar JSON
  
   extend type Query { getUserDeck(id: ID!): UserDeck }
-  extend type Mutation { createUserDeck(userId:String,deckId:String,deckId:String,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserDeck }
-  extend type Mutation { updateUserDeck(id: ID!,filterKnownCard:JSON,exams:[String],highestResult:JSON): UserDeck }
+  extend type Mutation { createUserDeck(userId:String,deckId:String,deckId:String,latestStudy:JSON): UserDeck }
+  extend type Mutation { updateUserDeck(id: ID!,completedTopics:JSON,exams:[String],latestStudy:JSON): UserDeck }
   extend type Mutation { deleteUserDeck(id: ID!): UserDeck}
 
   type UserDeck {
@@ -15,21 +14,16 @@ const typeDefs = `
     userId: String,
     deckId: String,
     exams: [String],
-    "latestStudyDate": String,
-    learntNotRemember:[String],
-    studiedTopics:JSON,
-    latestTopic:LastestTopic
-    latestReviewExam:LastestReview
+    completedTopics:JSON,
+    latestStudy:LatestStudy
     }
-    type LastestTopic {
-    topicOrder: String,
-    lastestExamId: String,
-    topicId:String,
-    userTopicId:String,
-    latestExamScore:Int,
-    filterKnownCards:JSON,
-    wrongAnswers:[String]
-    type latestfinalExam
+    
+    type LatestStudy {
+    latestStudyDate: String,
+    latestTopic:String,
+    lastestUserTopic: String,
+    lastestStudyMode:String,
+    completeFinalExam:Boolean
     
     }
 
@@ -45,13 +39,11 @@ const resolvers = {
   },
   Mutation: {
     createUserDeck: async (parent, args) => {
-      return await quizService.addOneUserDeck(args.userId, args.deckId, args.deckId, args.filterKnownCard,
-        args.exams, args.highestResult
+      return await quizService.addOneUserDeck(args
       );
     },
     updateUserDeck: async (parent, args) => {
-      return await quizService.updateOneUserDeck(args.id, args.filterKnownCard,
-        args.exams, args.highestResult
+      return await quizService.updateOneUserDeck(args
       );
     },
     deleteUserDeck: async (parent, args) => {

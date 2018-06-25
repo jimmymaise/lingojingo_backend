@@ -36,7 +36,8 @@ const resolvers = {
     }
   },
   Mutation: {
-    createExam: async (parent, args) => {
+    createExam: async (parent, args, context, info) => {
+
       return await quizService.addOneExam(args);
     },
     updateExam: async (parent, args) => {
