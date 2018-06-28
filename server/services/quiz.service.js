@@ -78,6 +78,13 @@ internals.updateOneExam = async (args) => {
 
 //User Deck
 
+internals.getOneMyUserDeckByDeckId = async (userId, deckId) => {
+  return await UserDeck.findOne({
+    userId,
+    deckId
+  });
+}
+
 internals.getOneUserDeck = async (id) => {
   return await UserDeck.findById(id);
 }
@@ -162,6 +169,7 @@ exports.register = function (server, options) {
   server.expose('updateOneExam', internals.updateOneExam);
   server.expose('deleteOneExam', internals.deleteOneExam);
 
+  server.expose('getOneMyUserDeckByDeckId', internals.getOneMyUserDeckByDeckId)
   server.expose('getOneUserDeck', internals.getOneUserDeck);
   server.expose('addOneUserDeck', internals.addOneUserDeck);
   server.expose('updateOneUserDeck', internals.updateOneUserDeck);
@@ -187,6 +195,7 @@ exports.addOneExam = internals.addOneExam;
 exports.updateOneExam = internals.updateOneExam;
 exports.deleteOneExam = internals.deleteOneExam;
 
+exports.getOneMyUserDeckByDeckId = internals.getOneMyUserDeckByDeckId;
 exports.getOneUserDeck = internals.getOneUserDeck;
 exports.addOneUserDeck = internals.addOneUserDeck;
 exports.updateOneUserDeck = internals.updateOneUserDeck;
