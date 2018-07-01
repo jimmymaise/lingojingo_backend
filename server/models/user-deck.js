@@ -12,8 +12,10 @@ UserDeck.schema = Joi.object().keys({
   _id: Joi.object(),
   userId: Joi.string(),
   deckId: Joi.string(),
-  exams: [Joi.string().optional(), Joi.allow(null)],
+  waitingReviewExamTopics: Joi.array().optional(),
+  reviewExams: Joi.object().optional(),
   highestResult: Joi.object().optional().allow(null),
+  finalExam: Joi.object(),
   completedTopics: Joi.object().optional().allow(null),
   latestStudy: Joi.object().keys({ // Store lan hoc gan day nhat
     latestStudyDate: Joi.date().optional().allow(null),
@@ -23,7 +25,7 @@ UserDeck.schema = Joi.object().keys({
     completeFinalExam: Joi.bool() // Hoan thanh bai kiem tra cua topic
   }).optional().allow(null),
 })
-.options({stripUnknown: true});
+  .options({stripUnknown: true});
 
 UserDeck.indexes = [
   {

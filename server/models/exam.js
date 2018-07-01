@@ -12,14 +12,17 @@ Exam.schema = Joi.object().keys({
   _id: Joi.object(),
   type: Joi.string(),
   userDeckId: Joi.string(),
+  userTopicId: Joi.string(),
+  topicId: Joi.string(),
+  reviewTopics: Joi.array(),
   userId: Joi.string(),
   deckId: Joi.string(),
   topics: Joi.array(),
-  wrongAnswer: Joi.array(),
+  wrongAnswers: Joi.array(),
   totalQuestions: Joi.number(),
   date: Joi.string(),
   score: Joi.number(),
-  result: Joi.string()
+  result: Joi.string(),
 
 }).options({stripUnknown: true});
 

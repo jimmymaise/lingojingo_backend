@@ -16,6 +16,7 @@ UserTopic.schema = Joi.object().keys({
   exams: [Joi.string().optional(), Joi.allow(null)],
   highestResult: Joi.object().optional().allow(null),
   filterKnownCard: Joi.object(),
+  notRemembers: Joi.array(),
 })
 
 UserTopic.indexes = [];

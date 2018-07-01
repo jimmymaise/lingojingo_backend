@@ -10,16 +10,20 @@ const typeDefs = `
   }
 
   extend type Mutation { createUserDeck(userId: String, deckId: String, deckId: String, latestStudy: JSON): UserDeck }
-  extend type Mutation { updateUserDeck(id: ID!, completedTopics: JSON, exams: [String], latestStudy: JSON): UserDeck }
+  extend type Mutation { updateUserDeck(id: ID!, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserDeck }
   extend type Mutation { deleteUserDeck(id: ID!): UserDeck}
 
   type UserDeck {
     _id: String,
     userId: String,
     deckId: String,
-    exams: [String],
+    finalExams:JSON,
     completedTopics: JSON,
+    waitingReviewExamTopics:[String],
     latestStudy: LatestStudy
+    finalExam: FinalExam,
+    reviewExams:JSON,
+    
   }
 
   type LatestStudy {
@@ -27,8 +31,17 @@ const typeDefs = `
     latestTopic: String,
     latestUserTopic: String,
     latestStudyMode: String,
-    completeFinalExam: Boolean,
     latestUserTopicDetail: UserTopic
+  }
+  type FinalExam
+  {
+    highestResult: HighestResult,
+    allExams:[String]
+  }
+    type HighestResult {
+    examId: String,
+    score: Int,
+    result: String
   }
 
 `;
