@@ -17,9 +17,18 @@ UserTopic.schema = Joi.object().keys({
   highestResult: Joi.object().optional().allow(null),
   filterKnownCard: Joi.object(),
   notRemembers: Joi.array(),
+  currentStudyMode: Joi.string().optional().allow(null)
 })
 
-UserTopic.indexes = [];
+UserTopic.indexes = [
+  {
+    key: {
+      userId: 1,
+      topicId: 1,
+      deckId: 1
+    }
+  }
+];
 
 module.exports = UserTopic;
 

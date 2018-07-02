@@ -33,12 +33,19 @@ const typeDefs = `
     latestStudyMode: String,
     latestUserTopicDetail: UserTopic
   }
-  type FinalExam
-  {
+
+  type FinalExam {
     highestResult: HighestResult,
     allExams:[String]
   }
-    type HighestResult {
+
+  type HighestResult {
+    examId: String,
+    score: Int,
+    result: String
+  }
+
+  input HighestResultInput {
     examId: String,
     score: Int,
     result: String
