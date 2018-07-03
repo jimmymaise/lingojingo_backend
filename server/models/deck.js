@@ -18,7 +18,7 @@ Deck.schema = Joi.object().keys({
   topics: Joi.array(),
   img: [Joi.string().optional(), Joi.allow(null)],
   cardChoices: Joi.object(),
-  passScore: Joi.number()
+  passScore: Joi.number()// pass score to evaluate exam passed or failed,eg:80 mean exam score must be >=80 to pass
 }).options({stripUnknown: true});
 
 Deck.indexes = [];

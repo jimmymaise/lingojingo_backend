@@ -8,7 +8,6 @@ const Card = require('../models/card');
 const Deck = require('../models/deck');
 const UserInfo = require('../models/user-info');
 const UserTopic = require('../models/user-topic');
-const Exam = require('../models/exam');
 const UserDeck = require('../models/user-deck');
 const _ = require('lodash');
 const internals = {};
@@ -42,7 +41,7 @@ internals.addOneUserTopic = async (userId, userTopicData) => {
 }
 
 internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
-  const { deckId, topicId, exams, currentStudyMode, filterKnownCard, highestResult, notRemembers } = userTopicData;
+  const {deckId, topicId, exams, currentStudyMode, filterKnownCard, highestResult, notRemembers} = userTopicData;
 
   let result = await UserTopic.findOneAndUpdate({
     userId,
@@ -89,34 +88,6 @@ internals.updateOneUserTopic = async (args) => {
 
 }
 
-//Exam
-
-internals.getOneExam = async (id) => {
-  return await Exam.findById(id);
-}
-
-internals.addOneExam = async (args) => {
-
-  let result = await Exam.insertOne(args);
-  return result[0]
-
-}
-
-internals.deleteOneExam = async (id) => {
-  let result = await Exam.findByIdAndDelete(id);
-  if (result === undefined) result = {"_id": null}
-  return result
-}
-
-internals.updateOneExam = async (args) => {
-  let id = args.id
-  let updateObj = _.cloneDeep(args)
-  delete updateObj['id']
-  let result = await Exam.findByIdAndUpdate(
-    id, {$set: updateObj});
-  return result
-
-}
 
 //User Deck
 
@@ -207,10 +178,6 @@ exports.register = function (server, options) {
   server.expose('updateOneUserTopic', internals.updateOneUserTopic);
   server.expose('deleteOneUserTopic', internals.deleteOneUserTopic);
 
-  server.expose('getOneExam', internals.getOneExam);
-  server.expose('addOneExam', internals.addOneExam);
-  server.expose('updateOneExam', internals.updateOneExam);
-  server.expose('deleteOneExam', internals.deleteOneExam);
 
   server.expose('getOneMyUserDeckByDeckId', internals.getOneMyUserDeckByDeckId)
   server.expose('getOneUserDeck', internals.getOneUserDeck);
@@ -234,10 +201,6 @@ exports.addOneUserTopic = internals.addOneUserTopic;
 exports.updateOneUserTopic = internals.updateOneUserTopic;
 exports.deleteOneUserTopic = internals.deleteOneUserTopic;
 
-exports.getOneExam = internals.getOneExam;
-exports.addOneExam = internals.addOneExam;
-exports.updateOneExam = internals.updateOneExam;
-exports.deleteOneExam = internals.deleteOneExam;
 
 exports.getOneMyUserDeckByDeckId = internals.getOneMyUserDeckByDeckId;
 exports.getOneUserDeck = internals.getOneUserDeck;
