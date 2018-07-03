@@ -23,16 +23,58 @@ internals.getOneUserTopic = async (id) => {
   return await UserTopic.findById(id);
 }
 
-internals.addOneUserTopic = async (args) => {
+internals.getUserTopicByDeckAndTopic = async (userId, deckId, topicId) => {
+  return await UserTopic.findOne({
+    userId,
+    deckId,
+    topicId
+  });
+}
 
-  let result = await UserTopic.insertOne(args);
+internals.addOneUserTopic = async (userId, userTopicData) => {
+
+  let result = await UserTopic.insertOne({
+    userId,
+    ...userTopicData
+  });
+
   return result[0]
+}
 
+internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
+  const { deckId, topicId, exams, currentStudyMode, filterKnownCard, highestResult, notRemembers } = userTopicData;
+
+  let result = await UserTopic.findOneAndUpdate({
+    userId,
+    deckId,
+    topicId
+  }, {
+    $set: {
+      userId,
+      deckId,
+      topicId,
+      exams: exams || [],
+      currentStudyMode,
+      filterKnownCard: filterKnownCard || {},
+      highestResult,
+      notRemembers: notRemembers || []
+    }
+  }, {
+    upsert: true
+  });
+
+  return result;
 }
 
 internals.deleteOneUserTopic = async (id) => {
   let result = await UserTopic.findByIdAndDelete(id);
-  if (result === undefined) result = {"_id": null}
+
+  if (!result) {
+    result = {
+      _id: null
+    };
+  }
+
   return result
 }
 
@@ -77,6 +119,13 @@ internals.updateOneExam = async (args) => {
 }
 
 //User Deck
+
+internals.getOneMyUserDeckByDeckId = async (userId, deckId) => {
+  return await UserDeck.findOne({
+    userId,
+    deckId
+  });
+}
 
 internals.getOneUserDeck = async (id) => {
   return await UserDeck.findById(id);
@@ -153,6 +202,7 @@ exports.register = function (server, options) {
   server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
   server.expose('getOneUserTopic', internals.getOneUserTopic);
+  server.expose('getUserTopicByDeckAndTopic', internals.getUserTopicByDeckAndTopic);
   server.expose('addOneUserTopic', internals.addOneUserTopic);
   server.expose('updateOneUserTopic', internals.updateOneUserTopic);
   server.expose('deleteOneUserTopic', internals.deleteOneUserTopic);
@@ -162,11 +212,12 @@ exports.register = function (server, options) {
   server.expose('updateOneExam', internals.updateOneExam);
   server.expose('deleteOneExam', internals.deleteOneExam);
 
+  server.expose('getOneMyUserDeckByDeckId', internals.getOneMyUserDeckByDeckId)
   server.expose('getOneUserDeck', internals.getOneUserDeck);
   server.expose('addOneUserDeck', internals.addOneUserDeck);
   server.expose('updateOneUserDeck', internals.updateOneUserDeck);
   server.expose('deleteOneUserDeck', internals.deleteOneUserDeck);
-
+  server.expose('createOrUpdateUserTopic', internals.createOrUpdateUserTopic);
 
 };
 
@@ -178,6 +229,7 @@ exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
 exports.getOneCard = internals.getOneCard;
 
 exports.getOneUserTopic = internals.getOneUserTopic;
+exports.getUserTopicByDeckAndTopic = internals.getUserTopicByDeckAndTopic;
 exports.addOneUserTopic = internals.addOneUserTopic;
 exports.updateOneUserTopic = internals.updateOneUserTopic;
 exports.deleteOneUserTopic = internals.deleteOneUserTopic;
@@ -187,10 +239,12 @@ exports.addOneExam = internals.addOneExam;
 exports.updateOneExam = internals.updateOneExam;
 exports.deleteOneExam = internals.deleteOneExam;
 
+exports.getOneMyUserDeckByDeckId = internals.getOneMyUserDeckByDeckId;
 exports.getOneUserDeck = internals.getOneUserDeck;
 exports.addOneUserDeck = internals.addOneUserDeck;
 exports.updateOneUserDeck = internals.updateOneUserDeck;
 exports.deleteOneUserDeck = internals.deleteOneUserDeck;
+exports.createOrUpdateUserTopic = internals.createOrUpdateUserTopic;
 
 
 exports.name = 'quiz-service';

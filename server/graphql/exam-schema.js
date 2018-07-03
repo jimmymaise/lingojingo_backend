@@ -1,4 +1,4 @@
-const quizService = require('../services/quiz.service');
+const examService = require('../services/exam.service');
 const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
@@ -6,9 +6,9 @@ const typeDefs = `
   
  
   extend type Query { getExam(id: ID!): Exam }
-  extend type Mutation { createExam(    topics: [String],id: String,userDeckId: String,userId: String,deckId: String,type:String
-      ,topics: [String],wrongAnswer: [String],totalQuestions: Int,date: String,score: Int,result: String): Exam }
-  extend type Mutation { updateExam(id: ID!, wrongAnswer: [String],  totalQuestions: Int,date: String,score: Int,result: String): Exam}
+  extend type Mutation { createExam(    id: String,userDeckId: String,userId: String,deckId: String,type:String,userTopicId:String,
+      ,reviewTopics: [String],wrongAnswers: [String],totalQuestions: Int,date: String,score: Int,result: String): Exam }
+  extend type Mutation { updateExam(id: ID!,isCompleted:[Boolean] wrongAnswers: [String],  totalQuestions: Int,date: String,score: Int,result: String): Exam}
   extend type Mutation { deleteExam(id: ID!): Exam}
 
   type Exam {
@@ -16,13 +16,15 @@ const typeDefs = `
     userDeckId: String,
     userId: String,
     deckId: String,
-    type:String
-    topics: [String],
-    wrongAnswer: [String],
+    type:String,
+    userTopicId:String,
+    topicId:String,
+    reviewTopics: [String],
+    wrongAnswers: [String],
     totalQuestions: Int,
     date: String,
     score: Int,
-    result: String
+    result: String,
     }
 
 `;
@@ -36,15 +38,15 @@ const resolvers = {
     }
   },
   Mutation: {
-    createExam: async (parent, args, context, info) => {
+    createExam: async (parent, args) => {
 
-      return await quizService.addOneExam(args);
+      return await examService.addOneExam(args);
     },
     updateExam: async (parent, args) => {
-      return await quizService.updateOneExam(args);
+      return await examService.updateOneExam(args);
     },
     deleteExam: async (parent, args) => {
-      return await quizService.deleteOneExam(args.id);
+      return await examService.deleteOneExam(args.id);
     },
   }
 

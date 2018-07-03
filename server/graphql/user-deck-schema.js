@@ -4,28 +4,52 @@ const GraphQLJSON = require('graphql-type-json');
 // The GraphQL schema in string form
 const typeDefs = `
  
-  extend type Query { getUserDeck(id: ID!): UserDeck }
-  extend type Mutation { createUserDeck(userId:String,deckId:String,deckId:String,latestStudy:JSON): UserDeck }
-  extend type Mutation { updateUserDeck(id: ID!,completedTopics:JSON,exams:[String],latestStudy:JSON): UserDeck }
+  extend type Query {
+    getUserDeck(id: ID!): UserDeck,
+    getMyUserDeck(deckId: ID!): UserDeck,
+  }
+
+  extend type Mutation { createUserDeck(userId: String, deckId: String, deckId: String, latestStudy: JSON): UserDeck }
+  extend type Mutation { updateUserDeck(id: ID!, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserDeck }
   extend type Mutation { deleteUserDeck(id: ID!): UserDeck}
 
   type UserDeck {
     _id: String,
     userId: String,
     deckId: String,
-    exams: [String],
-    completedTopics:JSON,
-    latestStudy:LatestStudy
-    }
+    finalExams:JSON,
+    completedTopics: JSON,
+    waitingReviewExamTopics:[String],
+    latestStudy: LatestStudy
+    finalExam: FinalExam,
+    reviewExams:JSON,
     
-    type LatestStudy {
+  }
+
+  type LatestStudy {
     latestStudyDate: String,
-    latestTopic:String,
-    lastestUserTopic: String,
-    lastestStudyMode:String,
-    completeFinalExam:Boolean
-    
-    }
+    latestTopic: String,
+    latestUserTopic: String,
+    latestStudyMode: String,
+    latestUserTopicDetail: UserTopic
+  }
+
+  type FinalExam {
+    highestResult: HighestResult,
+    allExams:[String]
+  }
+
+  type HighestResult {
+    examId: String,
+    score: Int,
+    result: String
+  }
+
+  input HighestResultInput {
+    examId: String,
+    score: Int,
+    result: String
+  }
 
 `;
 
@@ -35,6 +59,9 @@ const resolvers = {
   Query: {
     getUserDeck: async (parent, args) => {
       return await quizService.getOneUserDeck(args.id);
+    },
+    getMyUserDeck: async (parent, args, context) => {
+      return await quizService.getOneMyUserDeckByDeckId(context.auth.credentials.uid, args.deckId);
     }
   },
   Mutation: {
@@ -50,8 +77,16 @@ const resolvers = {
       return await quizService.deleteOneUserDeck(args.id
       );
     },
-  }
+  },
+  LatestStudy: {
+    latestUserTopicDetail: async (parent, args) => {
+      if (!parent.latestUserTopic) {
+        return null;
+      }
 
+      return await quizService.getOneUserTopic(parent.latestUserTopic);
+    }
+  }
 };
 
 module.exports = {
