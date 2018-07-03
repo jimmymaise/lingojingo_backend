@@ -15,6 +15,7 @@ const typeDefs = `
   }
  
   extend type Query { getUserTopic(id: ID!): UserTopic }
+  extend type Query { getUserTopicByDeckAndTopic(deckId: ID!, topicId: ID!): UserTopic }
   extend type Mutation { createMyUserTopic(userTopic: UserTopicInput!): UserTopic }
   extend type Mutation { createOrUpdateMyUserTopic(userTopic: UserTopicInput!): UserTopic }
   extend type Mutation { updateUserTopic(id: ID!, filterKnownCard: JSON, exams: [String], highestResult: JSON, currentStudyMode: String): UserTopic }
@@ -39,6 +40,9 @@ const resolvers = {
   Query: {
     getUserTopic: async (parent, args) => {
       return await quizService.getOneUserTopic(args.id);
+    },
+    getUserTopicByDeckAndTopic: async (parent, args, context) => {
+      return await quizService.getUserTopicByDeckAndTopic(context.auth.credentials.uid, args.deckId, args.topicId);
     }
   },
   Mutation: {

@@ -23,6 +23,14 @@ internals.getOneUserTopic = async (id) => {
   return await UserTopic.findById(id);
 }
 
+internals.getUserTopicByDeckAndTopic = async (userId, deckId, topicId) => {
+  return await UserTopic.findOne({
+    userId,
+    deckId,
+    topicId
+  });
+}
+
 internals.addOneUserTopic = async (userId, userTopicData) => {
 
   let result = await UserTopic.insertOne({
@@ -194,6 +202,7 @@ exports.register = function (server, options) {
   server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
   server.expose('getOneUserTopic', internals.getOneUserTopic);
+  server.expose('getUserTopicByDeckAndTopic', internals.getUserTopicByDeckAndTopic);
   server.expose('addOneUserTopic', internals.addOneUserTopic);
   server.expose('updateOneUserTopic', internals.updateOneUserTopic);
   server.expose('deleteOneUserTopic', internals.deleteOneUserTopic);
@@ -220,6 +229,7 @@ exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
 exports.getOneCard = internals.getOneCard;
 
 exports.getOneUserTopic = internals.getOneUserTopic;
+exports.getUserTopicByDeckAndTopic = internals.getUserTopicByDeckAndTopic;
 exports.addOneUserTopic = internals.addOneUserTopic;
 exports.updateOneUserTopic = internals.updateOneUserTopic;
 exports.deleteOneUserTopic = internals.deleteOneUserTopic;
