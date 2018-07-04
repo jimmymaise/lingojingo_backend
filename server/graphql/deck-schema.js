@@ -18,7 +18,7 @@ const typeDefs = `
     isOwned: Boolean,
     img: String,
     topicDetails: [Topic],
-    cardDetails: [Card]
+    cardDetails: [Card],
   }
   extend type Query {
     decks(pagination: PaginationInput): DeckPagination

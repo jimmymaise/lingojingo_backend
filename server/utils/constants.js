@@ -2,7 +2,7 @@ EXAM = {
   TYPE: {
     TOPIC: 'TopicExam',
     REVIEW: 'ReviewExam',
-    FINAL: 'FINAL'
+    FINAL: 'FinalEXam'
   },
   RESULT: {
     PASSED: 'passed',

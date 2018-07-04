@@ -3,14 +3,14 @@
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
 
-class Exam extends MongoModels {
+class UserExam extends MongoModels {
 };
 
-Exam.collectionName = 'exam';
+UserExam.collectionName = 'user_exam';
 
-Exam.schema = Joi.object().keys({
+UserExam.schema = Joi.object().keys({
   _id: Joi.object(),
-  type: Joi.string(),
+  type: Joi.string(),//Type of exam: Final, Review, Topic
   userId: Joi.string(),
   deckId: Joi.string(),
   userDeckId: Joi.string(),
@@ -21,10 +21,11 @@ Exam.schema = Joi.object().keys({
   totalQuestions: Joi.number(),
   date: Joi.string(),// date of exam
   score: Joi.number(),// score of exam
+  timeSpent: Joi.number(),// time spent to complete the exam (using to calculate score and ranking)
   result: Joi.string(),// Passed or failed
 
 }).options({stripUnknown: true});
 
-Exam.indexes = [];
+UserExam.indexes = [];
 
-module.exports = Exam;
+module.exports = UserExam;

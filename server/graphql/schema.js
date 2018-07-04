@@ -5,7 +5,7 @@ const cardSchema = require('./card-schema');
 const deckSchema = require('./deck-schema');
 const topicSchema = require('./topic-schema');
 const userTopicSchema = require('./user-topic-schema');
-const examSchema = require('./exam-schema');
+const examSchema = require('./user-exam-schema');
 const userDeckSchema = require('./user-deck-schema');
 const rootResolver = {
   Query: {

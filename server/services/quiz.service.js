@@ -103,7 +103,11 @@ internals.getOneUserDeck = async (id) => {
 }
 
 internals.addOneUserDeck = async (args) => {
+  let userInfo = await UserInfo.findById(args.userInfo);
+  if (!userInfo.decks || !(args.deckId in userInfo.decks)) {
+    throw new Error(`User must own the deck ${args.deckId} to learn it`);
 
+  }
   let result = await UserDeck.insertOne(args);
   return result[0]
 
