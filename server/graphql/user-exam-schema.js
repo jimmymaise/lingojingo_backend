@@ -3,31 +3,35 @@ const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  
- 
+  input UserExamInput {
+    deckId: String,
+    # Link den Table Topics, de biet exam nay cua topic nao
+    topicId: String,
+    wrongAnswers: JSON,
+    # time spent to complete the exam (using to calculate score and ranking) - In Milisecond
+    timeSpent: Int
+  }
+
   extend type Query { getUserExam(id: ID!): UserExam }
-  extend type Mutation { createUserExam(    id: String,userDeckId: String,userId: String,deckId: String,type:String,userTopicId:String,
-      ,reviewTopics: [String],wrongAnswers: [String],totalQuestions: Int,date: String,score: Int,result: String): UserExam }
+  extend type Mutation { createUserExam(userExam: UserExamInput!): UserExam }
   extend type Mutation { updateUserExam(id: ID!,isCompleted:[Boolean] wrongAnswers: [String],  totalQuestions: Int,date: String,score: Int,result: String): UserExam}
   extend type Mutation { deleteUserExam(id: ID!): UserExam}
 
   type UserExam {
     _id: String,
-    userDeckId: String,
     userId: String,
     deckId: String,
-    type:String,
-    userTopicId:String,
-    topicId:String,
-    reviewTopics: [String],
-    wrongAnswers: [String],
+    # Link den Table Topics, de biet exam nay cua topic nao
+    topicId: String,
+    wrongAnswers: JSON,
     totalQuestions: Int,
-    date: String,
+    timeCreated: String,
     score: Int,
-    result: String,
-    timeSpent:Int
-    }
-
+    # time spent to complete the exam (using to calculate score and ranking) - In Milisecond
+    timeSpent: Int,
+    # 0 - Failed | 1 - Passed
+    result: Int
+  }
 `;
 
 // The resolvers
@@ -39,15 +43,21 @@ const resolvers = {
     }
   },
   Mutation: {
-    createUserExam: async (parent, args) => {
+    createUserExam: async (parent, args, context) => {
+      const userExam = args.userExam;
+      userExam.userId = context.auth.credentials.uid;
 
-      return await userExamService.addOneUserExam(args);
+      return await userExamService.addOneUserExam(userExam);
     },
     updateUserExam: async (parent, args) => {
-      return await userExamService.updateOneUserExam(args);
+      // Tam thời ko cho update exam
+      return null;
+      // return await userExamService.updateOneUserExam(args);
     },
     deleteUserExam: async (parent, args) => {
-      return await userExamService.deleteOneUserExam(args.id);
+      // Tạm thời ko cho delete exam
+      return null;
+      // return await userExamService.deleteOneUserExam(args.id);
     },
   }
 

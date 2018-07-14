@@ -14,8 +14,16 @@ internals.getOneUserExam = async (id) => {
   return await UserExam.findById(id);
 }
 
-internals.addOneUserExam = async (args) => {
-  let result = await UserExam.insertOne(args);
+internals.addOneUserExam = async (userExam) => {
+  userExam.timeCreated = new Date();
+  // Todo: tính thêm các field dưới trước khi insert
+  // totalQuestions - get deckIds length based on topic
+  // score
+  // result
+
+  // Sau do Update lastExamResult, notRemembers ben UserTopic
+
+  let result = await UserExam.insertOne(userExam);
   return result[0]
 
 }
