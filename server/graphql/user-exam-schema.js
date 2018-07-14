@@ -7,14 +7,14 @@ const typeDefs = `
     deckId: String,
     # Link den Table Topics, de biet exam nay cua topic nao
     topicId: String,
-    wrongAnswers: JSON,
+    knownAnswer: JSON,
     # time spent to complete the exam (using to calculate score and ranking) - In Milisecond
     timeSpent: Int
   }
 
   extend type Query { getUserExam(id: ID!): UserExam }
   extend type Mutation { createUserExam(userExam: UserExamInput!): UserExam }
-  extend type Mutation { updateUserExam(id: ID!,isCompleted:[Boolean] wrongAnswers: [String],  totalQuestions: Int,date: String,score: Int,result: String): UserExam}
+  extend type Mutation { updateUserExam(id: ID!,isCompleted:[Boolean] knownAnswer: [String],  totalQuestions: Int,date: String,score: Int,result: String): UserExam}
   extend type Mutation { deleteUserExam(id: ID!): UserExam}
 
   type UserExam {
@@ -23,7 +23,7 @@ const typeDefs = `
     deckId: String,
     # Link den Table Topics, de biet exam nay cua topic nao
     topicId: String,
-    wrongAnswers: JSON,
+    knownAnswer: JSON,
     totalQuestions: Int,
     timeCreated: String,
     score: Int,

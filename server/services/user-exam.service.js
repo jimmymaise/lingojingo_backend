@@ -21,7 +21,7 @@ internals.addOneUserExam = async (userExam) => {
   // score
   // result
 
-  // Sau do Update lastExamResult, notRemembers ben UserTopic
+  // Sau do Update lastExamResult, knownAnswer ben UserTopic
 
   let result = await UserExam.insertOne(userExam);
   return result[0]
@@ -97,7 +97,7 @@ async function updateDataWhenCompletingUserExam(args) {
       await UserTopic.findByIdAndUpdate(args.userTopicId, {
         $set: {
           highestResult: currentHighestResult,
-          notRemembers: args.wrongAnswers,
+          knownAnswer: args.knownAnswer,
           exams: userTopicData.exams
         }
       });

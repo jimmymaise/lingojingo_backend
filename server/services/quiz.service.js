@@ -41,7 +41,7 @@ internals.addOneUserTopic = async (userId, userTopicData) => {
 }
 
 internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
-  const {deckId, topicId, exams, currentStudyMode, filterKnownCard, highestResult, notRemembers} = userTopicData;
+  const {deckId, topicId, exams, currentStudyMode, filterKnownCard, highestResult, knownAnswer} = userTopicData;
 
   let result = await UserTopic.findOneAndUpdate({
     userId,
@@ -56,7 +56,7 @@ internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
       currentStudyMode,
       filterKnownCard: filterKnownCard || {},
       highestResult,
-      notRemembers: notRemembers || []
+      knownAnswer: knownAnswer || {}
     }
   }, {
     upsert: true

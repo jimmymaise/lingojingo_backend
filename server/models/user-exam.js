@@ -16,7 +16,7 @@ UserExam.schema = Joi.object().keys({
   userId: Joi.string(),
   deckId: Joi.string(),
   topicId: Joi.string(), // Link den Table Topics, de biet exam nay cua topic nao
-  wrongAnswers: Joi.object(), // The wrong answers of the exam
+  knownAnswer: Joi.object(), // The wrong answers of the exam
   totalQuestions: Joi.number(), // Tong question
   timeCreated: Joi.date().required().default(new Date()), // date of exam
   score: Joi.number(), // score of exam

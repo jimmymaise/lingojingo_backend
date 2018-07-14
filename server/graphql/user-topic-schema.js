@@ -11,7 +11,7 @@ const typeDefs = `
     currentStudyMode: String,
     filterKnownCard: JSON,
     highestResult: HighestResultInput,
-    notRemembers: [String]
+    knownAnswer: JSON
   }
  
   extend type Query { getUserTopic(id: ID!): UserTopic }
@@ -30,7 +30,7 @@ const typeDefs = `
     currentStudyMode: String,
     filterKnownCard: JSON,
     highestResult: HighestResult,
-    notRemembers: [String]
+    knownAnswer: JSON
   }
 `;
 
