@@ -1,13 +1,13 @@
-const pointService = require('../services/point.service');
+const rewardService = require('../services/reward.service');
 const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  input PointInput {
+  input RewardHistoryInput {
     userId: String,
-    eventType: String 
+    type: String,
     userTopicId: String,
-    points:Int
+    points:Int,
 
   }
 
@@ -18,7 +18,7 @@ const typeDefs = `
   extend type Mutation { deletePoint(id: ID!): Point}
   
   
-  type Point {
+  type RewardHistory {
     _id: String,
     userId: String,
     type: String,
@@ -30,7 +30,7 @@ const typeDefs = `
   userId: String,
   totalPoints: Int,
   details:[
-  Point
+  RewardHistory
   ]
   
   }
@@ -40,8 +40,8 @@ const typeDefs = `
 const resolvers = {
   JSON: GraphQLJSON,
   Query: {
-    getUserPoints: async (parent, args) => {
-      return await pointService.getUserPoint(args.id);
+    getUserPointSummary: async (parent, args) => {
+      return await rewardService.getUserPointSummary(args.userId);
     }
   },
   Mutation: {
