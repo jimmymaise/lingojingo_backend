@@ -4,31 +4,30 @@ const GraphQLJSON = require('graphql-type-json');
 // The GraphQL schema in string form
 const typeDefs = `
   input RewardHistoryInput {
-    userId: String,
     type: String,
     userTopicId: String,
     points:Int,
 
   }
 
-  extend type Query { getPoint(id: ID!): Point }
-  extend type Query { getUserPoints(userId: ID!): UserTotalPoints }
+  extend type Query { getUserPoint(userId: String): UserPoint }
+  extend type Query { details(userId: ID!): UserPoint }
+  extend type Mutation { addRewardHistory(rewardHistory: RewardHistoryInput!): RewardHistory }
 
-  extend type Mutation { createPoint(point: PointInput!): Point }
-  extend type Mutation { deletePoint(id: ID!): Point}
-  
+
+
   
   type RewardHistory {
     _id: String,
     userId: String,
     type: String,
     topicId: String,
-    point: Int,
+    timeRewarded: String
 
   }
-  type UserTotalPoints{
-  userId: String,
-  totalPoints: Int,
+  type UserPoint{
+  _id: String,
+  point: Int,
   details:[
   RewardHistory
   ]
@@ -40,26 +39,19 @@ const typeDefs = `
 const resolvers = {
   JSON: GraphQLJSON,
   Query: {
-    getUserPointSummary: async (parent, args) => {
-      return await rewardService.getUserPointSummary(args.userId);
-    }
+    getUserPoint: async (parent, args) => {
+      return await rewardService.getUserPoint(args.userId);
+    },
   },
+  UserPoint:{ details: async (parent, args) => {
+    return await rewardService.getDetail(parent._id);
+  }},
   Mutation: {
-    createPoint: async (parent, args, context) => {
-      const point = args.point;
-      point.userId = context.auth.credentials.uid;
+    addRewardHistory: async (parent, args, context) => {
+      const rewardHistory = args.rewardHistory;
+      rewardHistory.userId = context.auth.credentials.uid;
 
-      return await pointService.addOnePoint(point);
-    },
-    updatePoint: async (parent, args) => {
-      // Tam thời ko cho update point
-      return null;
-      // return await pointService.updateOnePoint(args);
-    },
-    deletePoint: async (parent, args) => {
-      // Tạm thời ko cho delete point
-      return null;
-      // return await pointService.deleteOnePoint(args.id);
+      return await rewardService.addRewardHistory(rewardHistory.userId,args.rewardHistory);
     },
   }
 

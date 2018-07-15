@@ -7,6 +7,8 @@ const topicSchema = require('./topic-schema');
 const userTopicSchema = require('./user-topic-schema');
 const examSchema = require('./user-exam-schema');
 const userDeckSchema = require('./user-deck-schema');
+const rewardSchema = require('./reward-schema');
+
 const rootResolver = {
   Query: {
     version() {
@@ -57,9 +59,9 @@ const externalType = `
 `
 
 const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,
-  userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs];
+  userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs,rewardSchema.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
-  userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers);
+  userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers,rewardSchema.resolvers);
 
 module.exports = graphqlTools.makeExecutableSchema({
   typeDefs,

@@ -37,7 +37,7 @@ class User_Point extends MongoModels {
 
 User_Point.collectionName = 'user_points';
 
-Deck.schema = Joi.object().keys({
+User_Point.schema = Joi.object().keys({
   _id: Joi.string(),
   point: Joi.number(),
 }).options({stripUnknown: true});

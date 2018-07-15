@@ -8,7 +8,7 @@ const MongoModels = require('mongo-models');
 class RewardHistory extends MongoModels {
 };
 
-RewardHistory.collectionName = 'reward-history';
+RewardHistory.collectionName = 'reward_history';
 RewardHistory.schema = Joi.object().keys({
   _id: Joi.object(),
   userId: Joi.string(),
