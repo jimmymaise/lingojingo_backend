@@ -56,12 +56,23 @@ const rootType = `
 
 const externalType = `
   scalar JSON
+  type HighestResult {
+    examId: String,
+    score: Int,
+    result: String
+  }
+
+  input HighestResultInput {
+    examId: String,
+    score: Int,
+    result: String
+  }
 `
 
 const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,
-  userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs,rewardSchema.typeDefs];
+  userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs, rewardSchema.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
-  userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers,rewardSchema.resolvers);
+  userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers, rewardSchema.resolvers);
 
 module.exports = graphqlTools.makeExecutableSchema({
   typeDefs,

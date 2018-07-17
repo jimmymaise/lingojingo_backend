@@ -7,7 +7,10 @@ const typeDefs = `
     deckId: String,
     # Link den Table Topics, de biet exam nay cua topic nao
     topicId: String,
+    score: Int,
+    totalQuestions: Int,
     knownAnswer: JSON,
+    result: Int
     # time spent to complete the exam (using to calculate score and ranking) - In Milisecond
     timeSpent: Int
   }

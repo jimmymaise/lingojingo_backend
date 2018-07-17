@@ -5,8 +5,8 @@ EXAM = {
     FINAL: 'FinalEXam'
   },
   RESULT: {
-    PASSED: 'passed',
-    FAILED: 'failed'
+    PASSED: 1,
+    FAILED: 0,
   }
 }
 

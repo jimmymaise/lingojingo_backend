@@ -17,13 +17,8 @@ const typeDefs = `
     _id: String,
     userId: String,
     deckId: String,
-    finalExams:JSON,
     completedTopics: JSON,
-    waitingReviewExamTopics:[String],
-    latestStudy: LatestStudy
-    finalExam: FinalExam,
-    reviewExams:JSON,
-    
+    latestStudy: LatestStudy    
   }
 
   type LatestStudy {
@@ -34,22 +29,6 @@ const typeDefs = `
     latestUserTopicDetail: UserTopic
   }
 
-  type FinalExam {
-    highestResult: HighestResult,
-    allExams:[String]
-  }
-
-  type HighestResult {
-    examId: String,
-    score: Int,
-    result: String
-  }
-
-  input HighestResultInput {
-    examId: String,
-    score: Int,
-    result: String
-  }
 
 `;
 

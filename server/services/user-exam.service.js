@@ -24,6 +24,7 @@ internals.addOneUserExam = async (userExam) => {
   // Sau do Update lastExamResult, knownAnswer ben UserTopic
 
   let result = await UserExam.insertOne(userExam);
+  await updateDataWhenCompletingUserExam(userExam)
   return result[0]
 
 }
@@ -53,114 +54,56 @@ internals.updateOneUserExam = async (args) => {
 }
 
 
-async function updateDataWhenCompletingUserExam(args) {
-
-
-  await UserDeck.findByIdAndUpdate(args.userDeckId, {
-    $addToSet: {exams: args.examId}
-  })
+async function updateDataWhenCompletingUserExam(userExam) {
 
   //update userTopic
-  switch (args.type) {
-    case EXAM.TYPE.TOPIC:
-      //update userDeck
-      if (args.result === EXAM.RESULT.PASSED) {
-        let userDeckData = await UserDeck.findById(args.userDeckId)
-        userDeckData.completedTopics = userDeckData.completedTopics || {}
-        if (userDeckData.completedTopics[args.topicId] === undefined) {
-          userDeckData.waitingReviewUserExamTopics == userDeckData.waitingReviewUserExamTopics || []
-          userDeckData.waitingReviewUserExamTopics.push(args.topicId)
-          userDeckData.completedTopics[args.topicId] = args.userTopicId
-          await UserDeck.findByIdAndUpdate(args.userDeckId, {
-            $set: {
-              completedTopics: userDeckData.completedTopics,
-              waitingReviewUserExamTopics: userDeckData.waitingReviewUserExamTopics,
+  let userTopicData = await UserTopic.find({
+    topicId: userExam.topicId,
+    userId: userExam.userId
+  })
+  userTopicData = userTopicData[0]
 
-            }
-          })
-        }
+  let currentHighestResult = userTopicData.highestResult || {}
+  if (currentHighestResult.score || 0 < userExam.score) {
+    currentHighestResult = {
+      examId: userExam._id.toString(),
+      score: userExam.score,
+      result: userExam.result,
+    }
+  }
 
-      }
+  userTopicData.exams = userTopicData.exams || []
+  userTopicData.exams.push(userExam._id.toString())
+  userTopicData.exams = userTopicData.exams.filter(utils.onlyUnique)
+  await UserTopic.findByIdAndUpdate(userTopicData._id, {
+    $set: {
+      highestResult: currentHighestResult,
+      knownAnswer: userExam.knownAnswer,
+      exams: userTopicData.exams
+    }
+  });
 
-      //update userTopic
-      let userTopicData = await UserTopic.findById(args.userTopicId)
-      let currentHighestResult = userTopicData.highestResult
-      if (currentHighestResult.score < args.score) {
-        currentHighestResult = {
-          examId: args._id.toString(),
-          score: args.score,
-          result: args.result,
-        }
-      }
-      userTopicData.exams.push(args._id.toString())
-      userTopicData.exams = userTopicData.exams.filter(utils.onlyUnique)
-      await UserTopic.findByIdAndUpdate(args.userTopicId, {
+  //update userDeck
+  if (userExam.result === EXAM.RESULT.PASSED) {
+    let userDeckData = await UserDeck.find({
+      deckId: userExam.deckId,
+      userId: userExam.userId
+    })
+    userDeckData = userDeckData[0]
+    userDeckData.completedTopics = userDeckData.completedTopics || {}
+
+    if (userDeckData.completedTopics[userExam.topicId] !== userTopicData._id) {
+      userDeckData.completedTopics[userExam.topicId] = userTopicData._id
+
+      await UserDeck.findByIdAndUpdate(userDeckData._id, {
         $set: {
-          highestResult: currentHighestResult,
-          knownAnswer: args.knownAnswer,
-          exams: userTopicData.exams
-        }
-      });
-      break
-
-
-    case EXAM.TYPE.REVIEW:
-      userDeckData = await UserDeck.findById(args.userDeckId)
-      let reviewUserExams = userDeckData.reviewUserExams || {};
-      currentHighestResult = {
-        examId: args._id.toString(),
-        score: args.score,
-        result: args.result,
-      };
-      reviewUserExams[args.userTopicId] = reviewUserExams[args.userTopicId] || {}
-      reviewUserExams[args.userTopicId].exams = reviewUserExams[args.userTopicId].exams || []
-      if (reviewUserExams[args.userTopicId] === undefined || reviewUserExams[args.userTopicId].highestResult.score < args.score) {
-        reviewUserExams[args.userTopicId].highestResult = currentHighestResult
-        if (reviewUserExams[args.userTopicId].highestResult.result === EXAM.RESULT.PASSED) {
-          userDeckData.waitingReviewUserExamTopics = []
-        }
-      }
-      reviewUserExams[args.userTopicId].exams.push(args._id.toString())
-      reviewUserExams[args.userTopicId].exams = reviewUserExams[args.userTopicId].exams.filter(utils.onlyUnique)
-      reviewUserExams[args.userTopicId].reviewTopics = reviewUserExams[args.userTopicId].reviewTopics || args.reviewTopics
-
-
-      await UserDeck.findByIdAndUpdate(args.userDeckId, {
-        $set: {
-          reviewUserExams: reviewUserExams,
-          waitingReviewUserExamTopics: userDeckData.waitingReviewUserExamTopics,
+          completedTopics: userDeckData.completedTopics,
         }
 
-      });
-      break
-
-    case EXAM.TYPE.FINAL:
-      let userDeckData = await UserDeck.findById(args.userDeckId)
-
-      userDeckData.finalUserExam = userDeckData.finalUserExam || {}
-
-      if (userDeckData.finalUserExam.highestResult === undefined || userDeckData.finalUserExam.highestResult.score < args.score) {
-        userDeckData.finalUserExam.highestResult = {
-          examId: args._id.toString(),
-          score: args.score,
-          result: args.result,
-
-        }
-
-      }
-      userDeckData.finalUserExam.exams = userDeckData.finalUserExam.exams || []
-      userDeckData.finalUserExam.exams.push(args._id.toString())
-      userDeckData.finalUserExam.exams = userDeckData.finalUserExam.exams.filter(utils.onlyUnique)
-
-      await UserDeck.findByIdAndUpdate(args.userDeckId, {
-        $set: {
-          finalUserExam: userDeckData.finalUserExam
-        }
-
-      });
-      break
+      })
 
 
+    }
   }
 
 
