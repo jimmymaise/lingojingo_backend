@@ -3,7 +3,7 @@ const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  input RewardHistoryInput {
+  input RewardEventInput {
     type: String,
     userTopicId: String,
     points:Int,
@@ -12,12 +12,12 @@ const typeDefs = `
 
   extend type Query { getUserPoint(userId: String): UserPoint }
   extend type Query { details(userId: ID!): UserPoint }
-  extend type Mutation { addRewardHistory(rewardHistory: RewardHistoryInput!): RewardHistory }
+  extend type Mutation { addRewardEvent(rewardEvent: RewardEventInput!): RewardEvent }
 
 
 
   
-  type RewardHistory {
+  type RewardEvent {
     _id: String,
     userId: String,
     type: String,
@@ -29,7 +29,7 @@ const typeDefs = `
   _id: String,
   point: Int,
   details:[
-  RewardHistory
+  RewardEvent
   ]
   
   }
@@ -47,11 +47,13 @@ const resolvers = {
     return await rewardService.getDetail(parent._id);
   }},
   Mutation: {
-    addRewardHistory: async (parent, args, context) => {
-      const rewardHistory = args.rewardHistory;
-      rewardHistory.userId = context.auth.credentials.uid;
+    addRewardEvent: async (parent, args, context) => {
+      const rewardEvent = args.rewardEvent;
+      rewardEvent.userId = context.auth.credentials.uid;
+      rewardEvent.timeRewarded = new Date();
 
-      return await rewardService.addRewardHistory(rewardHistory.userId,args.rewardHistory);
+
+      return await rewardService.addRewardEvent(rewardEvent.userId,args.rewardEvent);
     },
   }
 

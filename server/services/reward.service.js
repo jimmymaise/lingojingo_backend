@@ -3,7 +3,7 @@ const _ = require('lodash');
 const internals = {};
 
 const UserPoint = require('../models/user-points');
-const RewardHistory = require('../models/reward-history');
+const RewardEvent = require('../models/reward-event');
 
 const UserTopic = require('../models/user-topic');
 const UserDeck = require('../models/user-deck');
@@ -18,15 +18,15 @@ internals.getUserPoint = async (userId) => {
 }
 
 internals.getDetail = async (userId) => {
-  let data = await RewardHistory.find({"userId": userId});
+  let data = await RewardEvent.find({"userId": userId});
   return data
 }
 
 
-internals.addRewardHistory = async (userId,rewardHistory) => {
-  let result = await RewardHistory.insertOne({
+internals.addRewardEvent = async (userId,rewardEvent) => {
+  let result = await RewardEvent.insertOne({
     userId,
-    ...rewardHistory
+    ...rewardEvent
   });
 
   return result[0]
@@ -38,14 +38,14 @@ exports.register = function (server, options) {
 
   server.expose('getUserPoint', internals.getUserPoint);
   server.expose('getDetail', internals.getDetail);
-  server.expose('addRewardHistory', internals.addRewardHistory);
+  server.expose('addRewardEvent', internals.addRewardEvent);
 
 
 
 };
 exports.getUserPoint = internals.getUserPoint;
 exports.getDetail = internals.getDetail;
-exports.addRewardHistory = internals.addRewardHistory;
+exports.addRewardEvent = internals.addRewardEvent;
 
 
 exports.name = 'reward-service';

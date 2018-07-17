@@ -5,7 +5,7 @@ const MongoModels = require('mongo-models');
 
 /**
  * Reward Point dùng để quy định mỗi type reward user nhận được bao nhiêu điểm */
-class RewardHistory extends MongoModels {
+class RewardEvent extends MongoModels {
 };
 
 RewardPoint.collectionName = 'reward-point';
@@ -16,4 +16,4 @@ RewardPoint.schema = Joi.object().keys({
 }).options({stripUnknown: true});
 
 
-module.exports = RewardHistory;
+module.exports = RewardEvent;

@@ -4,12 +4,12 @@ const Joi = require('joi');
 const MongoModels = require('mongo-models');
 
 /**
- * RewardHistory dùng để lưu các point được nhận của user khi hoàn thành một task nào đó. Dùng để khích lệ user*/
-class RewardHistory extends MongoModels {
+ * RewardEvent dùng để lưu các point được nhận của user khi hoàn thành một task nào đó. Dùng để khích lệ user*/
+class RewardEvent extends MongoModels {
 };
 
-RewardHistory.collectionName = 'reward_history';
-RewardHistory.schema = Joi.object().keys({
+RewardEvent.collectionName = 'reward_event';
+RewardEvent.schema = Joi.object().keys({
   _id: Joi.object(),
   userId: Joi.string(),
   timeRewarded: Joi.date().required().default(new Date()),//Thời điểm user được cộng point
@@ -19,4 +19,4 @@ RewardHistory.schema = Joi.object().keys({
 }).options({stripUnknown: true});
 
 
-module.exports = RewardHistory;
+module.exports = RewardEvent;

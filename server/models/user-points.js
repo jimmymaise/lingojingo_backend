@@ -1,6 +1,6 @@
 // This collection is a view
 
-//  Create from table "reward_history");
+//  Create from table "reward_event");
 //   var pipeline = [
 //     {
 //       "$lookup": {
