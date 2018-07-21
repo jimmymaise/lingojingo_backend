@@ -27,7 +27,7 @@ const typeDefs = `
     totalQuestions: Int,
     timeCreated: String,
     score: Int,
-    # time spent to complete the exam (using to calculate score and ranking) - In Milisecond
+    # time spent to complete the exam (using to calculate score and ranking) - In Second
     timeSpent: Int,
     # 0 - Failed | 1 - Passed
     result: Int

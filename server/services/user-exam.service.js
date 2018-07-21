@@ -31,7 +31,7 @@ internals.getOneUserExam = async (id) => {
 internals.addOneUserExam = async (userExam) => {
   userExam.timeCreated = new Date();
   let deckData = await Deck.findById(userExam.deckId)
-  userExam.totalQuestions = userExam.knownAnswer.keys(obj).length
+  userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
   userExam.score = calculateScore(userExam.knownAnswer, userExam.totalQuestions)
   userExam['result'] = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
