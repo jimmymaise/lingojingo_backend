@@ -4,8 +4,20 @@ const GraphQLJSON = require('graphql-type-json');
 // The GraphQL schema in string form
 const typeDefs = `
   extend type Query {
-    getLeaderBoardTopic(topicId: String!,cardId:String!,top:Int): [UserExam]
+    getLeaderBoardTopic(topicId: String!,cardId:String!,top:Int): [LeaderBoard]
   }
+  
+  type LeaderBoard {
+    userId: String,
+    topicId: String,
+    deckId: String,
+    examId: String,
+    score: Int,
+    correctAns: Int,
+    totalQuestion: Int,
+    timeSpentAvg: Int,
+
+}
  
 `;
 

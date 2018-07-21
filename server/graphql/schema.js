@@ -56,16 +56,20 @@ const rootType = `
 
 const externalType = `
   scalar JSON
-  type HighestResult {
+  type HighestResult {    
     examId: String,
     score: Int,
-    result: String
+    result: String,
+    timeSpent: Int,
+    knownAnswer: JSON
   }
 
   input HighestResultInput {
     examId: String,
     score: Int,
-    result: String
+    result: String,
+    timeSpent: Int,
+    knownAnswer: JSON
   }
 `
 

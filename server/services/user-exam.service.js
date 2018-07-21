@@ -33,7 +33,8 @@ internals.addOneUserExam = async (userExam) => {
   let deckData = await Deck.findById(userExam.deckId)
   userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
   userExam.score = calculateScore(userExam.knownAnswer, userExam.totalQuestions)
-  userExam['result'] = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
+  if (userExam.totalQuestions >0):userExam.timeSpentAvg = userExam.timeSpentAvg/u
+  userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
 // Sau do Update lastExamResult, knownAnswer ben UserTopic
 
