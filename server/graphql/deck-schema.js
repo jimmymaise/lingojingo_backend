@@ -19,6 +19,10 @@ const typeDefs = `
     img: String,
     topicDetails: [Topic],
     cardDetails: [Card],
+    topicExamQuestions: String,
+    reviewExamQuestions: String,
+    finalExamQuestions: String,
+    passScore: String
   }
   extend type Query {
     decks(pagination: PaginationInput): DeckPagination

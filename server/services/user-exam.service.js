@@ -5,8 +5,22 @@ const internals = {};
 const UserExam = require('../models/user-exam');
 const UserTopic = require('../models/user-topic');
 const UserDeck = require('../models/user-deck');
+const Deck = require('../models/deck');
+
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
+
+function calculateScore(knownAnswer, totalQuestion) {
+  let numCorrect = 0;
+  for (let ans in knownAnswer) {
+    if (knownAnswer[ans] === true) {
+      numCorrect++
+    }
+  }
+  return Math.round((numCorrect / totalQuestion) * 100)
+
+}
+
 
 //UserExam
 
@@ -16,12 +30,12 @@ internals.getOneUserExam = async (id) => {
 
 internals.addOneUserExam = async (userExam) => {
   userExam.timeCreated = new Date();
-  // Todo: tính thêm các field dưới trước khi insert
-  // totalQuestions - get deckIds length based on topic
-  // score
-  // result
+  let deckData = await Deck.findById(userExam.deckId)
+  userExam.totalQuestions = userExam.knownAnswer.keys(obj).length
+  userExam.score = calculateScore(userExam.knownAnswer, userExam.totalQuestions)
+  userExam['result'] = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
-  // Sau do Update lastExamResult, knownAnswer ben UserTopic
+// Sau do Update lastExamResult, knownAnswer ben UserTopic
 
   let result = await UserExam.insertOne(userExam);
   await updateDataWhenCompletingUserExam(userExam)
