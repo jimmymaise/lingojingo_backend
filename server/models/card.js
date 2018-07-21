@@ -18,8 +18,9 @@ Card.schema = Joi.object().keys({
   type: [Joi.string().optional(), Joi.allow(null)],
   meaning: Joi.string(),
   sample: [Joi.array().optional(), Joi.allow(null)],
-  enmeaning: [Joi.string().optional(), Joi.allow(null)],
-  tags: [Joi.array().optional(), Joi.allow(null)]
+  enmeaning: [Joi.string().optional(), Joi.allow(null)],//to do: Replace enmeaning to enMeaning
+  tags: [Joi.array().optional(), Joi.allow(null)],
+
 }).options({stripUnknown: true});
 
 Card.indexes = [];
