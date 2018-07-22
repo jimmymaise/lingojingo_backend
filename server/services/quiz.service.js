@@ -146,7 +146,7 @@ internals.getDeckPaginateMapWithUserInfo = async (firebaseUId, limit, page) => {
   });
 
   forEach(paginateData.data, (deckItem) => {
-    if (userInfo.decks.indexOf(deckItem._id.toString()) >= 0) {
+    if (userInfo && userInfo.decks && userInfo.decks.indexOf(deckItem._id.toString()) >= 0) {
       deckItem.isOwned = true;
     } else {
       deckItem.isOwned = false;
@@ -164,7 +164,7 @@ internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
     firebaseUserId: firebaseUId
   });
 
-  const ids = userInfo.decks.map((id) => ObjectID(id));
+  const ids = userInfo && userInfo.decks ? userInfo.decks.map((id) => ObjectID(id)) : [];
   return await Deck.pagedFind({_id: {$in: ids}}, _page, _limit, {});
 }
 
