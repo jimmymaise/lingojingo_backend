@@ -14,9 +14,6 @@ const typeDefs = `
   extend type Query { details(userId: ID!): UserPoint }
   extend type Mutation { addRewardEvent(rewardEvent: RewardEventInput!): RewardEvent }
 
-
-
-  
   type RewardEvent {
     _id: String,
     userId: String,

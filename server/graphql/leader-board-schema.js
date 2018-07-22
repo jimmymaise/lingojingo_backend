@@ -13,8 +13,7 @@ const typeDefs = `
     deckId: String,
     examId: String,
     score: Int,
-    correctAns: Int,
-    totalQuestion: Int,
+    totalQuestions: Int,
     timeSpentAvg: Int,
 
 }

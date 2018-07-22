@@ -59,17 +59,20 @@ const externalType = `
   type HighestResult {    
     examId: String,
     score: Int,
-    result: String,
+    result: Int,
     timeSpent: Int,
-    knownAnswer: JSON
+    knownAnswer: JSON,
+    totalQuestions: Int,
+    timeSpentAvg: Int,
   }
 
   input HighestResultInput {
     examId: String,
     score: Int,
-    result: String,
+    result: Int,
     timeSpent: Int,
-    knownAnswer: JSON
+    knownAnswer: JSON,
+    totalQuestions: Int,    
   }
 `
 

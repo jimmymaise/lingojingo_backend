@@ -13,6 +13,8 @@ const typeDefs = `
   }
 
   extend type Query { getUserExam(id: ID!): UserExam }
+  extend type Query { getUserExams(userId: String!, topicId: String): [UserExam] }
+
   extend type Mutation { createUserExam(userExam: UserExamInput!): UserExam }
   extend type Mutation { updateUserExam(id: ID!,isCompleted:[Boolean] knownAnswer: [String],  totalQuestions: Int,date: String,score: Int,result: String): UserExam}
   extend type Mutation { deleteUserExam(id: ID!): UserExam}
@@ -39,7 +41,10 @@ const resolvers = {
   JSON: GraphQLJSON,
   Query: {
     getUserExam: async (parent, args) => {
-      return await quizService.getOneUserExam(args.id);
+      return await userExamService.getOneUserExam(args.id);
+    },
+    getUserExams: async (parent, args) => {
+      return await userExamService.getUserExams(args);
     }
   },
   Mutation: {

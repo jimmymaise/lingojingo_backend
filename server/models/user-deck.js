@@ -21,7 +21,6 @@ UserDeck.schema = Joi.object().keys({
     latestUserTopic: Joi.string().optional().allow(null), // Join qua table user-topic
     latestTopic: Joi.string().optional().allow(null), // Chi de backup topicId gan nhat
     latestStudyMode: Joi.string().optional().allow(null), // mode hoc tap
-    completeFinalExam: Joi.bool() // Hoan thanh bai kiem tra cua topic
   }).optional().allow(null),
 })
   .options({stripUnknown: true});

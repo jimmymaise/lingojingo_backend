@@ -21,8 +21,7 @@ internals.getLeaderBoard = async (args) => {
       deckId: item.deckId,
       examId: item.highestResult.examId,
       score: item.highestResult.score,
-      correctAns: item.highestResult.correctAns,
-      totalQuestion: item.highestResult.totalQuestion,
+      totalQuestions: item.highestResult.totalQuestions,
       timeSpentAvg: item.highestResult.timeSpentAvg,
 
     })

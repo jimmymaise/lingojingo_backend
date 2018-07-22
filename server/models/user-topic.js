@@ -14,7 +14,17 @@ UserTopic.schema = Joi.object().keys({
   topicId: Joi.string(),
   deckId: Joi.string(),
   exams: [Joi.string().optional(), Joi.allow(null)], // ids of all exams
-  highestResult: Joi.object().optional().allow(null), // Highest result of all the topic exams of this topic
+  highestResult: Joi.object().keys({ // Store diem cao nhat
+
+    examId:Joi.string(),
+    score: Joi.number(),
+    result: Joi.number(),
+    timeSpent: Joi.number(),
+    knownAnswer: Joi.object(),
+    totalQuestions: Joi.number(),
+    timeSpentAvg: Joi.number(),
+
+  }).optional().allow(null),
   filterKnownCard: Joi.object(), // Luu nhung card id ko thuoc trong qua trinh filter
   knownAnswer: Joi.object(), // the correct answers of the latest topic exam
   currentStudyMode: Joi.string().optional().allow(null), // type of study mode

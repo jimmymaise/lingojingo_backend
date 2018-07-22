@@ -21,7 +21,7 @@ UserExam.schema = Joi.object().keys({
   timeCreated: Joi.date().required().default(new Date()), // date of exam
   score: Joi.number(), // score of exam
   timeSpent: Joi.number(), // time spent to complete the exam (using to calculate score and ranking) - In Milisecond
-  result: Joi.number(), // 0 - Failed | 1 - Passed
+  result: Joi.number(), // 0 - Failed | 1 - Passed,
 }).options({stripUnknown: true});
 
 UserExam.indexes = [];

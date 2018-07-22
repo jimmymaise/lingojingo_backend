@@ -10,14 +10,14 @@ const Deck = require('../models/deck');
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
 
-function calculateScore(knownAnswer, totalQuestion) {
+function calculateScore(knownAnswer, totalQuestions) {
   let numCorrect = 0;
   for (let ans in knownAnswer) {
     if (knownAnswer[ans] === true) {
       numCorrect++
     }
   }
-  return Math.round((numCorrect / totalQuestion) * 100)
+  return Math.round((numCorrect / totalQuestions) * 100)
 
 }
 
@@ -28,13 +28,18 @@ internals.getOneUserExam = async (id) => {
   return await UserExam.findById(id);
 }
 
+internals.getUserExams = async (args) => {
+  return await UserExam.find({args});
+}
+
 internals.addOneUserExam = async (userExam) => {
   userExam.timeCreated = new Date();
   let deckData = await Deck.findById(userExam.deckId)
   userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
   userExam.score = calculateScore(userExam.knownAnswer, userExam.totalQuestions)
-  if (userExam.totalQuestions >0):userExam.timeSpentAvg = userExam.timeSpentAvg/u
+  userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpentAvg / userExam.totalQuestions) : null
   userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
+
 
 // Sau do Update lastExamResult, knownAnswer ben UserTopic
 
@@ -84,6 +89,10 @@ async function updateDataWhenCompletingUserExam(userExam) {
       examId: userExam._id.toString(),
       score: userExam.score,
       result: userExam.result,
+      timeSpentAvg: userExam.timeSpentAvg,
+      totalQuestions: userExam.totalQuestions,
+      knownAnswer: userExam.knownAnswer,
+
     }
   }
 
@@ -94,7 +103,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
     $set: {
       highestResult: currentHighestResult,
       knownAnswer: userExam.knownAnswer,
-      exams: userTopicData.exams
+      exams: userTopicData.exams,
     }
   });
 
@@ -131,6 +140,7 @@ exports.register = function (server, options) {
   server.expose('addOneUserExam', internals.addOneUserExam);
   server.expose('updateOneUserExam', internals.updateOneUserExam);
   server.expose('deleteOneUserExam', internals.deleteOneUserExam);
+  server.expose('getUserExams', internals.getUserExams);
 
 
 };
@@ -138,6 +148,7 @@ exports.getOneUserExam = internals.getOneUserExam;
 exports.addOneUserExam = internals.addOneUserExam;
 exports.updateOneUserExam = internals.updateOneUserExam;
 exports.deleteOneUserExam = internals.deleteOneUserExam;
+exports.getUserExams = internals.getUserExams;
 
 
 exports.name = 'user-exam-service';
