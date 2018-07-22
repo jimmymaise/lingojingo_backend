@@ -20,11 +20,12 @@ internals.applyRoutes = function (server, next) {
       tags: ['api'],
       validate: {
         payload: {
-          phone: Joi.string().optional(),
-          aboutContent: Joi.string(),
-          isLearnMailNotify: Joi.boolean(),
-          isNewBlogMailNotify: Joi.boolean(),
-          isGeneralMailNotify: Joi.boolean()
+          fullName: Joi.string().optional().allow(null),
+          phone: Joi.string().optional().allow(null),
+          aboutContent: Joi.string().optional().allow(null),
+          isLearnMailNotify: Joi.boolean().optional().allow(null),
+          isNewBlogMailNotify: Joi.boolean().optional().allow(null),
+          isGeneralMailNotify: Joi.boolean().optional().allow(null)
         }
       }
     },
@@ -39,7 +40,7 @@ internals.applyRoutes = function (server, next) {
           data: result
         };
       } catch (err) {
-        return Boom.internal('Update User Data error!');
+        return Boom.internal(err);
       }
     }
   });
