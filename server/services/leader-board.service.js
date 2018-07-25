@@ -29,6 +29,36 @@ internals.getLeaderBoard = async (args) => {
   return leaderBoard
 }
 
+//implementing not yet finish
+internals.getGeneralLeaderBoard = async (args) => {
+
+  let data = UserTopic.aggregate(
+    [
+
+      {
+        $match:
+          {'highestResult': {$exists: true}},
+      },
+      {
+        $group: {
+          _id: "$userId",
+          score: {$avg: "$highestResult.score"}
+
+        }
+      },
+      {
+        $sort: {score: -1}
+
+      },
+      {
+        $limit: 1
+
+      }
+
+    ]
+  )
+
+}
 exports.getLeaderBoard = internals.getLeaderBoard;
 
 exports.name = 'leader-board-service';
