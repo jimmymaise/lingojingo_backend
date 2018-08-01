@@ -30,7 +30,8 @@ const typeDefs = `
     currentStudyMode: String,
     filterKnownCard: JSON,
     highestResult: HighestResult,
-    knownAnswer: JSON
+    knownAnswer: JSON,
+    totalExam: Int
   }
 `;
 

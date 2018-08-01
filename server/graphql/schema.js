@@ -63,6 +63,7 @@ const externalType = `
     timeSpent: Int,
     knownAnswer: JSON,
     totalQuestions: Int,
+    totalCorrectAnswers: Int,
     timeSpentAvg: Int,
   }
 

@@ -12,7 +12,12 @@ internals.getLeaderBoard = async (args) => {
     deckId: args.deckId,
     topicId: args.topicId,
     highestResult: {$exists: true}
-  }).sort({"highestResult.score": -1}).limit(args.top || 10).toArray()
+  }).sort({
+      "highestResult.totalCorrectAnswers": -1,
+      "highestResult.timeSpent": 1,
+      "totalExams": 1
+    }
+  ).limit(args.top || 10).toArray()
   let leaderBoard = []
   data.forEach(item => {
     leaderBoard.push({
@@ -22,8 +27,10 @@ internals.getLeaderBoard = async (args) => {
       examId: item.highestResult.examId,
       score: item.highestResult.score,
       totalQuestions: item.highestResult.totalQuestions,
+      timeSpent: item.timeSpent,
       timeSpentAvg: item.highestResult.timeSpentAvg,
-
+      totalCorrectAnswers: item.highestResult.totalCorrectAnswers,
+      totalExams: item.totalExams
     })
   });
   return leaderBoard
@@ -37,17 +44,25 @@ internals.getGeneralLeaderBoard = async (args) => {
 
       {
         $match:
-          {'highestResult': {$exists: true}},
+          {
+            "highestResult": {$exists: true},
+            "type": 0,
+          },
       },
       {
         $group: {
           _id: "$userId",
-          score: {$avg: "$highestResult.score"}
-
+          totalCorrectAnswers: {$sum: "$highestResult.totalCorrectAnswers"},
+          timeSpent: {$sum: "$highestResult.timeSpent"},
+          totalExams: {$sum: "$totalExams"},
         }
       },
       {
-        $sort: {score: -1}
+        $sort: {
+          totalCorrectAnswers: -1,
+          timeSpent: 1,
+          totalExams: 1
+        }
 
       },
       {
@@ -57,6 +72,8 @@ internals.getGeneralLeaderBoard = async (args) => {
 
     ]
   )
+
+  return data
 
 }
 exports.getLeaderBoard = internals.getLeaderBoard;

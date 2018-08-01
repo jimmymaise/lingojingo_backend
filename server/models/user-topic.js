@@ -14,6 +14,7 @@ UserTopic.schema = Joi.object().keys({
   topicId: Joi.string(),
   deckId: Joi.string(),
   exams: [Joi.string().optional(), Joi.allow(null)], // ids of all exams
+  totalExams:Joi.number(),
   highestResult: Joi.object().keys({ // Store diem cao nhat
 
     examId:Joi.string(),
@@ -23,6 +24,7 @@ UserTopic.schema = Joi.object().keys({
     knownAnswer: Joi.object(),
     totalQuestions: Joi.number(),
     timeSpentAvg: Joi.number(),
+    totalCorrectAnswers: Joi.number(),
 
   }).optional().allow(null),
   filterKnownCard: Joi.object(), // Luu nhung card id ko thuoc trong qua trinh filter
@@ -31,7 +33,7 @@ UserTopic.schema = Joi.object().keys({
   // Vì có thể làm nhiều lần Exam, nên ở đây sẽ lưu kết qua cuối cùng
   // để mình check là nó có dc move qua topic kế tiếp ko
   // Đỡ phải ngồi tra lại table user-exam
-  lastExamResult: Joi.number(), // 0 - failed | 1 - Passed
+  //lastExamResult: Joi.number(), // 0 - failed | 1 - Passed ==>Chi can check o highestResult la du
 })
 
 UserTopic.indexes = [

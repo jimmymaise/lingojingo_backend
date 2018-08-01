@@ -10,14 +10,14 @@ const Deck = require('../models/deck');
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
 
-function calculateScore(knownAnswer, totalQuestions) {
+function calculateTotalCorrectAnswer(knownAnswer, totalQuestions) {
   let numCorrect = 0;
   for (let ans in knownAnswer) {
     if (knownAnswer[ans] === true) {
       numCorrect++
     }
   }
-  return Math.round((numCorrect / totalQuestions) * 100)
+  return numCorrect
 
 }
 
@@ -36,7 +36,8 @@ internals.addOneUserExam = async (userExam) => {
   userExam.timeCreated = new Date();
   let deckData = await Deck.findById(userExam.deckId)
   userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
-  userExam.score = calculateScore(userExam.knownAnswer, userExam.totalQuestions)
+  userExam.totalCorrectAnswers = calculateTotalCorrectAnswer(userExam.knownAnswer, userExam.totalQuestions)
+  userExam.score = Math.round((userExam.totalCorrectAnswers / userExam.totalQuestions) * 100)
   userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpentAvg / userExam.totalQuestions) : null
   userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
@@ -92,7 +93,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
       timeSpentAvg: userExam.timeSpentAvg,
       totalQuestions: userExam.totalQuestions,
       knownAnswer: userExam.knownAnswer,
-
+      totalCorrectAnswers: userExam.totalCorrectAnswers
     }
   }
 
@@ -104,6 +105,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
       highestResult: currentHighestResult,
       knownAnswer: userExam.knownAnswer,
       exams: userTopicData.exams,
+      totalExams: userTopicData.exams.length,
     }
   });
 
