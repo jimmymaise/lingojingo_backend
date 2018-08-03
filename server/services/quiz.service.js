@@ -31,6 +31,9 @@ internals.getUserTopicByDeckAndTopic = async (userId, deckId, topicId) => {
 }
 
 internals.addOneUserTopic = async (userId, userTopicData) => {
+  let topicData = await Deck.findById(userTopicData.topicId)
+
+  userTopicData.topicType=topicData.type
 
   let result = await UserTopic.insertOne({
     userId,

@@ -4,17 +4,18 @@ const GraphQLJSON = require('graphql-type-json');
 // The GraphQL schema in string form
 const typeDefs = `
   extend type Query {
-    getLeaderBoardTopic(topicId: String!,cardId:String!,top:Int): [LeaderBoard]
+    getTopicLeaderBoard(topicId: String!,cardId:String!,top:Int): [LeaderBoard],
+    getGeneralLeaderBoard(topicId: String,cardId:String,type:String,top:Int): [LeaderBoard]
+
   }
   
   type LeaderBoard {
-    userId: String,
-    topicId: String,
-    deckId: String,
-    examId: String,
+    _id: String,
     score: Int,
     totalQuestions: Int,
     timeSpentAvg: Int,
+    totalCorrectAnswers: Int,
+    timeSpent: Int
 
 }
  
@@ -24,7 +25,10 @@ const typeDefs = `
 const resolvers = {
   JSON: GraphQLJSON,
   Query: {
-    getLeaderBoard: async (parent, args) => {
+    getTopicLeaderBoard: async (parent, args) => {
+      return await leaderBoardService.getLeaderBoard(args);
+    },
+    getGeneralLeaderBoard: async (parent, args) => {
       return await leaderBoardService.getLeaderBoard(args);
     },
   }

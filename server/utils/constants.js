@@ -10,4 +10,14 @@ EXAM = {
   }
 }
 
+TOPIC={
+  TYPE:{
+    TOPIC:0,
+    REVIEW:1,
+    FINAL:2
+  }
+
+}
+
 module.exports.EXAM = EXAM;
+module.exports.TOPIC = TOPIC;

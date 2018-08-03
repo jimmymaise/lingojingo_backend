@@ -31,6 +31,7 @@ const typeDefs = `
     filterKnownCard: JSON,
     highestResult: HighestResult,
     knownAnswer: JSON,
+    topicType: Int,
     totalExam: Int
   }
 `;
