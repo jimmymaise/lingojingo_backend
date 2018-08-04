@@ -5,31 +5,31 @@ const UserTopic = require('../models/user-topic');
 
 //UserPoint
 
-internals.getTopicLeaderBoard = async (args) => {
-
-  let data = UserTopic.find({
-    deckId: args.deckId,
-    topicId: args.topicId,
-    highestResult: {$exists: true}
-  }).sort({
-      "highestResult.totalCorrectAnswers": -1,
-      "highestResult.timeSpent": 1,
-      "totalExams": 1
-    }
-  ).limit(args.top || 10).toArray()
-  let leaderBoard = []
-  data.forEach(item => {
-    leaderBoard.push({
-      _id: item.userId,
-      score: item.highestResult.score,
-      timeSpent: item.timeSpent,
-      timeSpentAvg: item.highestResult.timeSpentAvg,
-      totalCorrectAnswers: item.highestResult.totalCorrectAnswers,
-      totalExams: item.totalExams
-    })
-  });
-  return leaderBoard
-}
+// internals.getTopicLeaderBoard = async (args) => {
+//
+//   let data = UserTopic.find({
+//     deckId: args.deckId,
+//     topicId: args.topicId,
+//     highestResult: {$exists: true}
+//   }).sort({
+//       "highestResult.totalCorrectAnswers": -1,
+//       "highestResult.timeSpent": 1,
+//       "totalExams": 1
+//     }
+//   ).limit(args.top || 10).toArray()
+//   let leaderBoard = []
+//   data.forEach(item => {
+//     leaderBoard.push({
+//       _id: item.userId,
+//       score: item.highestResult.score,
+//       timeSpent: item.timeSpent,
+//       timeSpentAvg: item.highestResult.timeSpentAvg,
+//       totalCorrectAnswers: item.highestResult.totalCorrectAnswers,
+//       totalExams: item.totalExams
+//     })
+//   });
+//   return leaderBoard
+// }
 
 //implementing not yet finish
 internals.getGeneralLeaderBoard = async (args) => {
@@ -91,6 +91,8 @@ internals.getGeneralLeaderBoard = async (args) => {
   return data
 
 }
-exports.getLeaderBoard = internals.getLeaderBoard;
+// exports.getTopicLeaderBoard = internals.getTopicLeaderBoard;
+exports.getGeneralLeaderBoard = internals.getGeneralLeaderBoard;
+
 
 exports.name = 'leader-board-service';
