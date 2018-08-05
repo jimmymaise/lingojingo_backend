@@ -1,4 +1,6 @@
 const quizService = require('../services/quiz.service');
+const userStatisticsService = require('../services/user-statistics.service');
+
 const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
@@ -7,6 +9,7 @@ const typeDefs = `
   extend type Query {
     getUserDeck(id: ID!): UserDeck,
     getMyUserDeck(deckId: ID!): UserDeck,
+    getUserDeckStatistics(userId:ID!):[wordStatistics]
   }
 
   extend type Mutation { createUserDeck(userId: String, deckId: String, deckId: String, latestStudy: JSON): UserDeck }
@@ -18,7 +21,8 @@ const typeDefs = `
     userId: String,
     deckId: String,
     completedTopics: JSON,
-    latestStudy: LatestStudy    
+    latestStudy: LatestStudy,
+    wordStatistics: wordStatistics
   }
 
   type LatestStudy {
@@ -28,6 +32,7 @@ const typeDefs = `
     latestStudyMode: String,
     latestUserTopicDetail: UserTopic
   }
+  
 
 
 `;
@@ -41,8 +46,21 @@ const resolvers = {
     },
     getMyUserDeck: async (parent, args, context) => {
       return await quizService.getOneMyUserDeckByDeckId(context.auth.credentials.uid, args.deckId);
+    },
+//Thống kê từ đang học, chưa học, đã học cho toàn bộ deck của user
+    getUserDeckStatistics: async (parent, args) => {
+      return await userStatisticsService.getWordStatics(args);
     }
   },
+  UserDeck:{ wordStatistics: async (parent, args) => {
+      //Thống kê từ đang học, chưa học, đã học cho 1 deck cụ thể của user
+
+      let queryData = {}
+      queryData.deckId = parent.deckId
+      queryData.userId  = parent.userId
+
+      return await userStatisticsService.getWordStatics(queryData)[0];
+    }},
   Mutation: {
     createUserDeck: async (parent, args) => {
       return await quizService.addOneUserDeck(args

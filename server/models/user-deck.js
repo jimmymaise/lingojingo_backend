@@ -12,9 +12,6 @@ UserDeck.schema = Joi.object().keys({
   _id: Joi.object(),
   userId: Joi.string(),
   deckId: Joi.string(),
-  waitingReviewExamTopics: Joi.array().optional(),//List of the topic will using for the next review exam. After finish review exam (passed), this list will reset
-  reviewExams: Joi.object().optional(), //Review exam with the property is the id of the topic having review exam
-  finalExam: Joi.object(), //Final exam info with two properties: exams (array) and highest result (object)
   completedTopics: Joi.object().optional().allow(null),// List completed topics with property is the id of topic and value is the id of userTopic
   latestStudy: Joi.object().keys({ // Store lan hoc gan day nhat
     latestStudyDate: Joi.date().optional().allow(null),

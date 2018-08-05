@@ -13,6 +13,7 @@ const typeDefs = `
     deck: String,
     topics: [String],
     cards: [String],
+    totalCards: Int,
     tags: [String],
     deckName: String,
     isOwned: Boolean,
