@@ -1,12 +1,14 @@
 'use strict';
 const _ = require('lodash');
 const internals = {};
-
+const Constant = require('../utils/constants')
+const UserInfo = require('../models/user-info');
 const UserExam = require('../models/user-exam');
 const UserTopic = require('../models/user-topic');
 const UserDeck = require('../models/user-deck');
 const Deck = require('../models/deck');
-
+const LeaderBoardService = require('../services/leader-board.service')
+const RewardService = require('../services/reward.service')
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
 
@@ -85,6 +87,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
   userTopicData = userTopicData[0]
 
   let currentHighestResult = userTopicData.highestResult || {}
+  let isCalculateTotalWord = false
   if (currentHighestResult.score || 0 < userExam.score) {
     currentHighestResult = {
       examId: userExam._id.toString(),
@@ -94,6 +97,10 @@ async function updateDataWhenCompletingUserExam(userExam) {
       totalQuestions: userExam.totalQuestions,
       knownAnswer: userExam.knownAnswer,
       totalCorrectAnswers: userExam.totalCorrectAnswers
+    }
+    if (userTopicData.topicType === Constant.TOPIC.TYPE.TOPIC) {
+      isCalculateTotalWord = true
+
     }
   }
 
@@ -128,6 +135,75 @@ async function updateDataWhenCompletingUserExam(userExam) {
 
       })
 
+
+    }
+  }
+
+//  Update user info
+  if (isCalculateTotalWord === true) {
+    let queryData = {}
+    queryData.userId = userExam.userId
+    queryData.topicType = Constant.TOPIC.TYPE.TOPIC
+    let result = LeaderBoardService.getGeneralLeaderBoard(queryData)
+    let updatedLevel
+    if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV1) {
+      updatedLevel = Constant.LEVEL_NAME.LV1
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV2) {
+      updatedLevel = Constant.LEVEL_NAME.LV2
+
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV3) {
+      updatedLevel = Constant.LEVEL_NAME.LV3
+
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV4) {
+      updatedLevel = Constant.LEVEL_NAME.LV4
+
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV5) {
+      updatedLevel = Constant.LEVEL_NAME.LV5
+
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV6) {
+      updatedLevel = Constant.LEVEL_NAME.LV6
+
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV7) {
+      updatedLevel = Constant.LEVEL_NAME.LV7
+
+
+    }
+    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV8) {
+      updatedLevel = Constant.LEVEL_NAME.LV8
+
+
+    }
+
+
+    await UserInfo.findByIdAndUpdate(userExam.userId, {
+      $set: {
+        totalCorrectAnswers: result.totalCorrectAnswers,
+        totalExams: result.totalExams,
+        timeSpent: result.timeSpent,
+        score: result.score,
+        level: updatedLevel
+      }
+
+    })
+    if (updatedLevel !== result.level) {
+      let rewardEvent = {}
+      rewardEvent.userId = userExam.userId;
+      rewardEvent.timeRewarded = new Date()
+      rewardEvent.type = Constant.REWARD_TYPE_NAME.UPDATE_LEVEL;
+      rewardEvent.topicId = userExam.topicId;
+      RewardService.addRewardEvent(userExam.userId)
 
     }
   }

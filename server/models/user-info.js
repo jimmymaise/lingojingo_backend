@@ -46,6 +46,10 @@ UserInfo.schema = Joi.object().keys({
   isGeneralMailNotify: Joi.boolean().default(true),
   decks: Joi.array(),
   points: Joi.number(),
+  totalCorrectAnswers: Joi.number(),
+  totalExams: Joi.number(),
+  timeSpent: Joi.number(),
+  score: Joi.number(),
   level:Joi.number(),
   timeUpdated: Joi.date().required().default(new Date()),
   timeCreated: Joi.date().required().default(new Date())

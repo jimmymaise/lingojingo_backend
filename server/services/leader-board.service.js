@@ -43,7 +43,8 @@ internals.getGeneralLeaderBoard = async (args) => {
           "highestResult": {$exists: true},
           "topicType": args.topicType,
           "topicId": args.topicId,
-          "deckId": args.topicId
+          "deckId": args.topicId,
+          "userId": args.userId,
         },
     },
     {
@@ -81,6 +82,10 @@ internals.getGeneralLeaderBoard = async (args) => {
   }
   if (args.topicType === undefined) {
     delete query[0]['$match']['topicType']
+
+  }
+  if (args.topicType === undefined) {
+    delete query[0]['$match']['userId']
 
   }
 
