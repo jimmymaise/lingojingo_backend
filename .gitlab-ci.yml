@@ -41,6 +41,7 @@ deploy_production:
     name: production
     url: https://app.vomemo.com
   variables:
+    NODE_ENV: $PROD_ENV
     MONGO_PROD_URL: $MONGO_PROD_URL
 
   only:
