@@ -22,7 +22,7 @@ const config = {
     $filter: 'env',
     production: {
       mongodb: {
-        uri: process.env.DB_SERVERS,
+        uri: process.env.MONGO_PROD_URL,
         db: 'vomemo'
       },
       autoIndex: false

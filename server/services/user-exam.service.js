@@ -12,6 +12,7 @@ const RewardService = require('../services/reward.service')
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
 
+
 function calculateTotalCorrectAnswer(knownAnswer, totalQuestions) {
   let numCorrect = 0;
   for (let ans in knownAnswer) {
@@ -145,46 +146,9 @@ async function updateDataWhenCompletingUserExam(userExam) {
     queryData.userId = userExam.userId
     queryData.topicType = Constant.TOPIC.TYPE.TOPIC
     let result = LeaderBoardService.getGeneralLeaderBoard(queryData)
-    let updatedLevel
-    if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV1) {
-      updatedLevel = Constant.LEVEL_NAME.LV1
-
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV2) {
-      updatedLevel = Constant.LEVEL_NAME.LV2
+    let updatedLevel = utils.correctAnswerToLevel(result.totalCorrectAnswers)
 
 
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV3) {
-      updatedLevel = Constant.LEVEL_NAME.LV3
-
-
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV4) {
-      updatedLevel = Constant.LEVEL_NAME.LV4
-
-
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV5) {
-      updatedLevel = Constant.LEVEL_NAME.LV5
-
-
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV6) {
-      updatedLevel = Constant.LEVEL_NAME.LV6
-
-
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV7) {
-      updatedLevel = Constant.LEVEL_NAME.LV7
-
-
-    }
-    else if (result.totalCorrectAnswers <= Constant.LEVEL_SCORE.LV8) {
-      updatedLevel = Constant.LEVEL_NAME.LV8
-
-
-    }
 
 
     await UserInfo.findByIdAndUpdate(userExam.userId, {
