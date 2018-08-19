@@ -12,7 +12,7 @@ const config = {
   port: {
     web: {
       $filter: 'env',
-      production: 3800,
+      production: 8080,
       test: 9000,
       dev: 3200,
       $default: 8080
