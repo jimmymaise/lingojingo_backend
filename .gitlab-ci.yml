@@ -31,8 +31,7 @@ deploy_staging:
     - docker stop $(docker ps -a -q) || true
     - docker rm $(docker ps -a -q)  || true
     - docker build -t my-docker-image .
-    - docker run -t -d -p 8080:8080 my-docker-image
-
+    - docker run -t -d -p 8080:8080  -e NODE_ENV=$STAG_ENV -e MONGO_STAG_URL=$MONGO_STAG_URL my-docker-image
 deploy_production:
   stage: deploy
   tags:

@@ -1,16 +1,16 @@
 'use strict';
-
+const FIRE_BASE_CONFIG = require('./data/firebase_config')
 const Boom = require('boom');
 const {graphqlHapi, graphiqlHapi} = require('apollo-server-hapi');
 const firebaseAdmin = require('firebase-admin');
 
 const Config = require('../config');
-const serviceAccount = require("./data/voca-memo-firebase-adminsdk-s6hgg-066a023101.json");
+const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
 const graphqlSchema = require('./graphql/schema');
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: "https://voca-memo.firebaseio.com/"
+  databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
 });
 
 const internals = {};
@@ -20,7 +20,7 @@ internals.applyStrategy = async function (server) {
     instance: firebaseAdmin
   });
 
-  // TODO: Refactor - Start
+  // TODO: Refactor - Startx
   // Because the GraphQL not support define in manifest
   // So need move it to here
   // And the Strategy must apply first
