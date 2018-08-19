@@ -52,4 +52,5 @@ deploy_production:
     - docker stop $(docker ps -a -q) || true
     - docker rm $(docker ps -a -q)  || true
     - docker build -t my-docker-image .
-    - docker run -t -d -p 8080:8080 my-docker-image
+    - docker run -t -d -p 8080:8080 my-docker-image -e PROD_ENV=$PROD_ENV \
+                                                    -e MONGO_PROD_URL=$MONGO_PROD_URL
