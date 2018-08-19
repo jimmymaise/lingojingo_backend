@@ -5,7 +5,6 @@ const typeDefs = `
   extend type Query { card(id: ID!): Card }
   type Card {
     _id: String,
-    cardId: Int,
     voca: String,
     transcript: String,
     img: [String],
