@@ -9,10 +9,11 @@ const typeDefs = `
     voca: String,
     transcript: String,
     img: [String],
-    audio: String,
+    ukAudio: String,
+    usAudio: String,
     type: String,
-    meaning: String,
-    enmeaning: String,
+    viMeaning: String,
+    enMeaning: String,
     sample: [CardSample]
   },
   type CardSample {
@@ -21,7 +22,9 @@ const typeDefs = `
     sentence: String,
     translate: String,
     img: String,
-    audio: String
+    ukAudio: String,
+    usAudio: String
+
   }
 `;
 

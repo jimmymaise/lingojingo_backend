@@ -10,10 +10,8 @@ Deck.collectionName = 'decks';
 
 Deck.schema = Joi.object().keys({
   _id: Joi.object(),
-  deck: Joi.string(),
   images: Joi.array(),
-  cards: Joi.array(),//Todo: Xoá field cards trong decks, implement field totalCards
-  totalCards: Joi.number(),//Tổng số card trong deck
+  total: Joi.number(),
   tags: Joi.array(),
   deckName: Joi.string(),
   topics: Joi.array(),

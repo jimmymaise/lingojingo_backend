@@ -10,10 +10,8 @@ const typeDefs = `
   }
   type Deck {
     _id: String,
-    deck: String,
     topics: [String],
-    cards: [String],
-    totalCards: Int,
+    total: Int,
     tags: [String],
     deckName: String,
     isOwned: Boolean,

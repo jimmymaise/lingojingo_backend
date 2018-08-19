@@ -14,11 +14,12 @@ Card.schema = Joi.object().keys({
   voca: Joi.string(),
   transcript: [Joi.string().optional(), Joi.allow(null)],
   img: [Joi.array().optional(), Joi.allow(null)],
-  audio: [Joi.string().optional(), Joi.allow(null)],
+  ukAudio: [Joi.string().optional(), Joi.allow(null)],
+  usAudio: [Joi.string().optional(), Joi.allow(null)],
   type: [Joi.string().optional(), Joi.allow(null)],
-  meaning: Joi.string(),
+  viMeaning: Joi.string(),
   sample: [Joi.array().optional(), Joi.allow(null)],
-  enmeaning: [Joi.string().optional(), Joi.allow(null)],//to do: Replace enmeaning to enMeaning
+  enMeaning: [Joi.string().optional(), Joi.allow(null)],//to do: Replace enmeaning to enMeaning
   tags: [Joi.array().optional(), Joi.allow(null)],
 
 }).options({stripUnknown: true});
