@@ -13,6 +13,7 @@ const config = {
     web: {
       $filter: 'env',
       production: 8080,
+      staging: 8080,
       test: 9000,
       dev: 3200,
       $default: 8080
@@ -23,6 +24,13 @@ const config = {
     production: {
       mongodb: {
         uri: process.env.MONGO_PROD_URL,
+        db: 'vomemo'
+      },
+      autoIndex: false
+    },
+    staging: {
+      mongodb: {
+        uri: process.env.MONGO_STAG_URL,
         db: 'vomemo'
       },
       autoIndex: false
