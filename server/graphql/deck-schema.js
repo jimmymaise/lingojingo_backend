@@ -12,6 +12,8 @@ const typeDefs = `
     _id: String,
     topics: [String],
     total: Int,
+    category: Int,
+    level: Int,
     tags: [String],
     deckName: String,
     isOwned: Boolean,

@@ -19,6 +19,8 @@ UserDeck.schema = Joi.object().keys({
     latestTopic: Joi.string().optional().allow(null), // Chi de backup topicId gan nhat
     latestStudyMode: Joi.string().optional().allow(null), // mode hoc tap
   }).optional().allow(null),
+  createdAt: Joi.date().optional(),//Thời gian tạo deck
+  expiredAt: Joi.date().optional(),//Thời gian hết hạn
 })
   .options({stripUnknown: true});
 

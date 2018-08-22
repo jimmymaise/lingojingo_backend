@@ -22,7 +22,9 @@ const typeDefs = `
     deckId: String,
     completedTopics: JSON,
     latestStudy: LatestStudy,
-    wordStatistics: wordStatistics
+    wordStatistics: wordStatistics,
+    createdAt:String,
+    expiredAt:String
   }
 
   type LatestStudy {
