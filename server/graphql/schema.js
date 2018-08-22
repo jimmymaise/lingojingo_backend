@@ -69,10 +69,10 @@ const externalType = `
     timeSpentAvg: Int,
   }
   
-  type wordStatistics{
+  type WordStatistics{
     notLearned: Int,
-    Learned: Int,
-    Learning: Int,
+    learned: Int,
+    learning: Int,
   }
 
   input HighestResultInput {

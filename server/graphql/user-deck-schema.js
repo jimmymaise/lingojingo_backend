@@ -9,7 +9,7 @@ const typeDefs = `
   extend type Query {
     getUserDeck(id: ID!): UserDeck,
     getMyUserDeck(deckId: ID!): UserDeck,
-    getUserDeckStatistics(userId:ID!):[wordStatistics]
+    getUserDeckStatistics(userId:ID!):[WordStatistics]
   }
 
   extend type Mutation { createUserDeck(userId: String, deckId: String, deckId: String, latestStudy: JSON): UserDeck }
@@ -22,7 +22,7 @@ const typeDefs = `
     deckId: String,
     completedTopics: JSON,
     latestStudy: LatestStudy,
-    wordStatistics: wordStatistics,
+    wordStatistics: WordStatistics,
     createdAt:String,
     expiredAt:String
   }
@@ -61,7 +61,8 @@ const resolvers = {
       queryData.deckId = parent.deckId
       queryData.userId  = parent.userId
 
-      return await userStatisticsService.getWordStatics(queryData)[0];
+      data = await userStatisticsService.getWordStatics(queryData);
+      return data[0]
     }},
   Mutation: {
     createUserDeck: async (parent, args) => {

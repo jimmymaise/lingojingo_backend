@@ -40,11 +40,12 @@ internals.getWordStatics = async (queryData) => {
   }
 
 
-  let data = UserTopic.aggregate(
+  let data = await UserTopic.aggregate(
     query
   )
   for (let i=0;i<data.length;i++){
-    let totalCards = await Deck.findById(queryData.deckId)['total']
+    let deckData = await Deck.findById(queryData.deckId)
+    let totalCards = deckData['total']
     data[i]['notLearned'] = totalCards-data[i]['learning']-data[i]['learned']
   }
   return data
