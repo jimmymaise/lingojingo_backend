@@ -1,5 +1,6 @@
 const quizService = require('../services/quiz.service');
 const deckService = require('../services/deck.service');
+const userStatisticsService = require('../services/user-statistics.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
@@ -20,6 +21,7 @@ const typeDefs = `
     img: String,
     topicDetails: [Topic],
     cardDetails: [Card],
+    wordStatistics:WordStatistics,
     topicExamQuestions: String,
     reviewExamQuestions: String,
     finalExamQuestions: String,
@@ -58,6 +60,15 @@ const resolvers = {
   Deck: {
     topicDetails: async (parent, args, context) => {
       return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
+    },
+    wordStatistics: async (parent, args, context) => {
+      let queryData = {}
+      queryData.deckId = parent._id
+      queryData.userId  = context.auth.credentials.uid
+
+      data = await userStatisticsService.getWordStatics(queryData);
+      return data[0]
+      // return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
     },
     cardDetails: async (parent, args, context) => {
       return await deckService.getListCardDetail(context.auth.credentials.uid, parent.cards);
