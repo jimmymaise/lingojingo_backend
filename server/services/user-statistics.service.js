@@ -9,7 +9,7 @@ const Deck = require('../models/deck');
 //UserPoint
 
 internals.getWordStatics = async (queryData) => {
-  // queryData.deckId = queryData.deckId.toString()
+  queryData.deckId = queryData.deckId.toString()
 
   let query = [
 
