@@ -32,7 +32,17 @@ internals.getOneUserExam = async (id) => {
 }
 
 internals.getUserExams = async (args) => {
-  return await UserExam.find({args});
+  return await UserExam.find({ args });
+}
+
+internals.getRecentlyUserExams = async(userId, topicId, limit) => {
+  return await UserExam.find({
+    userId,
+    topicId
+  }, {
+    limit,
+    sort: [['createdTime', 1]]
+  });
 }
 
 internals.addOneUserExam = async (userExam) => {
@@ -41,7 +51,7 @@ internals.addOneUserExam = async (userExam) => {
   userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
   userExam.totalCorrectAnswers = calculateTotalCorrectAnswer(userExam.knownAnswer, userExam.totalQuestions)
   userExam.score = Math.round((userExam.totalCorrectAnswers / userExam.totalQuestions) * 100)
-  userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpentAvg / userExam.totalQuestions) : null
+  userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpent / userExam.totalQuestions) : null
   userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
 
@@ -149,8 +159,6 @@ async function updateDataWhenCompletingUserExam(userExam) {
     let updatedLevel = utils.correctAnswerToLevel(result.totalCorrectAnswers)
 
 
-
-
     await UserInfo.findByIdAndUpdate(userExam.userId, {
       $set: {
         totalCorrectAnswers: result.totalCorrectAnswers,
@@ -183,6 +191,7 @@ exports.register = function (server, options) {
   server.expose('updateOneUserExam', internals.updateOneUserExam);
   server.expose('deleteOneUserExam', internals.deleteOneUserExam);
   server.expose('getUserExams', internals.getUserExams);
+  server.expose('getRecentlyUserExams', internals.getRecentlyUserExams);
 
 
 };
@@ -191,6 +200,6 @@ exports.addOneUserExam = internals.addOneUserExam;
 exports.updateOneUserExam = internals.updateOneUserExam;
 exports.deleteOneUserExam = internals.deleteOneUserExam;
 exports.getUserExams = internals.getUserExams;
-
+exports.getRecentlyUserExams = internals.getRecentlyUserExams;
 
 exports.name = 'user-exam-service';
