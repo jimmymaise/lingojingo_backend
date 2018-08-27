@@ -1,4 +1,5 @@
 const userExamService = require('../services/user-exam.service');
+const deckService = require('../services/deck.service');
 const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
@@ -13,7 +14,7 @@ const typeDefs = `
   }
 
   extend type Query { getUserExam(id: ID!): UserExam }
-  extend type Query { getUserExams(userId: String!, topicId: String): [UserExam] }
+  extend type Query { getRecentlyUserExams(topicId: String): [UserExam] }
 
   extend type Mutation { createUserExam(userExam: UserExamInput!): UserExam }
   extend type Mutation { updateUserExam(id: ID!,isCompleted:[Boolean] knownAnswer: [String],  totalQuestions: Int,date: String,score: Int,result: String): UserExam}
@@ -32,7 +33,8 @@ const typeDefs = `
     # time spent to complete the exam (using to calculate score and ranking) - In Second
     timeSpent: Int,
     # 0 - Failed | 1 - Passed
-    result: Int
+    result: Int,
+    topicDetail: Topic
   }
 `;
 
@@ -43,8 +45,9 @@ const resolvers = {
     getUserExam: async (parent, args) => {
       return await userExamService.getOneUserExam(args.id);
     },
-    getUserExams: async (parent, args) => {
-      return await userExamService.getUserExams(args);
+    getRecentlyUserExams: async (parent, args, context) => {
+      const userId = context.auth.credentials.uid;
+      return await userExamService.getRecentlyUserExams(userId, args.topicId, 10);
     }
   },
   Mutation: {
@@ -64,8 +67,12 @@ const resolvers = {
       return null;
       // return await userExamService.deleteOneUserExam(args.id);
     },
+  },
+  UserExam: {
+    topicDetail: async (parent) => {
+      return await deckService.getOneTopic(parent.topicId);
+    }
   }
-
 };
 
 module.exports = {

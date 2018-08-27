@@ -32,7 +32,17 @@ internals.getOneUserExam = async (id) => {
 }
 
 internals.getUserExams = async (args) => {
-  return await UserExam.find({args});
+  return await UserExam.find({ args });
+}
+
+internals.getRecentlyUserExams = async(userId, topicId, limit) => {
+  return await UserExam.find({
+    userId,
+    topicId
+  }, {
+    limit,
+    sort: [['createdTime', 1]]
+  });
 }
 
 internals.addOneUserExam = async (userExam) => {
@@ -183,6 +193,7 @@ exports.register = function (server, options) {
   server.expose('updateOneUserExam', internals.updateOneUserExam);
   server.expose('deleteOneUserExam', internals.deleteOneUserExam);
   server.expose('getUserExams', internals.getUserExams);
+  server.expose('getRecentlyUserExams', internals.getRecentlyUserExams);
 
 
 };
@@ -191,6 +202,6 @@ exports.addOneUserExam = internals.addOneUserExam;
 exports.updateOneUserExam = internals.updateOneUserExam;
 exports.deleteOneUserExam = internals.deleteOneUserExam;
 exports.getUserExams = internals.getUserExams;
-
+exports.getRecentlyUserExams = internals.getRecentlyUserExams;
 
 exports.name = 'user-exam-service';
