@@ -41,7 +41,7 @@ internals.addOneUserExam = async (userExam) => {
   userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
   userExam.totalCorrectAnswers = calculateTotalCorrectAnswer(userExam.knownAnswer, userExam.totalQuestions)
   userExam.score = Math.round((userExam.totalCorrectAnswers / userExam.totalQuestions) * 100)
-  userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpentAvg / userExam.totalQuestions) : null
+  userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpent / userExam.totalQuestions) : null
   userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
 
@@ -147,8 +147,6 @@ async function updateDataWhenCompletingUserExam(userExam) {
     queryData.topicType = Constant.TOPIC.TYPE.TOPIC
     let result = LeaderBoardService.getGeneralLeaderBoard(queryData)
     let updatedLevel = utils.correctAnswerToLevel(result.totalCorrectAnswers)
-
-
 
 
     await UserInfo.findByIdAndUpdate(userExam.userId, {
