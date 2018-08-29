@@ -75,6 +75,12 @@ const externalType = `
     learning: Int,
   }
 
+  type DeckCategory{
+    _id: String,
+    name: String,
+    decks:[JSON]
+  }
+
   input HighestResultInput {
     examId: String,
     score: Int,

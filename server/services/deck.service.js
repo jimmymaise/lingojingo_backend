@@ -7,7 +7,10 @@ const map = require('lodash/map');
 const reduce = require('lodash/reduce');
 
 const UserInfo = require('../models/user-info');
+
 const Deck = require('../models/deck');
+const DeckCategory = require('../models/deck-category');
+
 const Topic = require('../models/topic');
 const Card = require('../models/card');
 
@@ -77,9 +80,16 @@ internals.getListCardDetail = async (firebaseUId, cardIds) => {
   return await Card.find({_id: {$in: ids}});
 }
 
-internals.getOneTopic = async (id) => {
+getDeckCategoryinternals.getOneTopic = async (id) => {
   return await Topic.findById(id);
 }
+
+internals.getDeckCategory = async (_id) => {
+  let data = await DeckCategory.find(db.getCollection("deck_categories").find({ decks: { $elemMatch: {  id:_id } } } ));
+  return data[0]
+}
+
+
 
 exports.register = function (server, options) {
 
@@ -88,6 +98,8 @@ exports.register = function (server, options) {
   server.expose('getDeck', internals.getDeck);
   server.expose('getListCardDetail', internals.getListCardDetail);
   server.expose('getOneTopic', internals.getOneTopic);
+  server.expose('getDeckCategory', internals.getDeckCategory);
+
 
   return;
 };
@@ -97,5 +109,7 @@ exports.buyDeck = internals.buyDeck;
 exports.getDeck = internals.getDeck;
 exports.getListCardDetail = internals.getListCardDetail;
 exports.getOneTopic = internals.getOneTopic;
+exports.getDeckCategory = internals.getDeckCategory;
+
 
 exports.name = 'deck-service';
