@@ -11,17 +11,18 @@ const typeDefs = `
   }
   type Deck {
     _id: String,
-    topics: [String],
     total: Int,
     category: Int,
     level: Int,
     tags: [String],
+    topics: [JSON],
     deckName: String,
     isOwned: Boolean,
     img: String,
     topicDetails: [Topic],
     cardDetails: [Card],
     wordStatistics:WordStatistics,
+    category:DeckCategory,
     topicExamQuestions: String,
     reviewExamQuestions: String,
     finalExamQuestions: String,
@@ -69,6 +70,10 @@ const resolvers = {
       data = await userStatisticsService.getWordStatics(queryData);
       return data[0]
       // return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
+    },
+    deckCategory: async (parent, args, context) => {
+      data = await deckService.getDeckCategory(parent._id);
+      return data
     },
     cardDetails: async (parent, args, context) => {
       return await deckService.getListCardDetail(context.auth.credentials.uid, parent.cards);
