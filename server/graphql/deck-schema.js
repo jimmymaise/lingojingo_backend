@@ -71,7 +71,7 @@ const resolvers = {
       return data[0]
       // return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
     },
-    deckCategory: async (parent, args, context) => {
+    category: async (parent, args, context) => {
       data = await deckService.getDeckCategory(parent._id);
       return data
     },
