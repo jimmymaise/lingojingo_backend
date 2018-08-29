@@ -84,8 +84,8 @@ internals.getDeckCategory = async (id) => {
   return await Topic.findById(id);
 }
 
-internals.getDeckCategory = async (_id) => {
-  let data = await DeckCategory.find(db.getCollection("deck_categories").find({ decks: { $elemMatch: {  id:_id } } } ));
+internals.getDeckCategory = async (id) => {
+  let data = await DeckCategory.find({ decks: { $elemMatch: {  id:id } } });
   return data[0]
 }
 
