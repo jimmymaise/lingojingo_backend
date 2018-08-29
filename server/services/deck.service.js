@@ -80,7 +80,7 @@ internals.getListCardDetail = async (firebaseUId, cardIds) => {
   return await Card.find({_id: {$in: ids}});
 }
 
-getDeckCategoryinternals.getOneTopic = async (id) => {
+internals.getDeckCategory = async (id) => {
   return await Topic.findById(id);
 }
 
