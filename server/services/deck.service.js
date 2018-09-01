@@ -79,16 +79,14 @@ internals.getListCardDetail = async (firebaseUId, cardIds) => {
   const ids = cardIds.map((id) => ObjectID(id));
   return await Card.find({_id: {$in: ids}});
 }
-
-internals.getDeckCategory = async (id) => {
+internals.getOneTopic = async (id) => {
   return await Topic.findById(id);
 }
 
 internals.getDeckCategory = async (id) => {
-  let data = await DeckCategory.find({ decks: { $elemMatch: {  id:id } } });
+  let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});
   return data[0]
 }
-
 
 
 exports.register = function (server, options) {
