@@ -1,4 +1,6 @@
 const leaderBoardService = require('../services/leader-board.service');
+const userInfoService = require('../services/user-info.service');
+
 const GraphQLJSON = require('graphql-type-json');
 //db.getCollection("user_exams").find({deckId:'5b1bfc365c44cc013e87280b',topicId:'5b1bf1615c44cc013e872289'}).sort({score:-1}).limit(5).toArray()
 // The GraphQL schema in string form
@@ -11,6 +13,7 @@ const typeDefs = `
   
   type LeaderBoard {
     _id: String,
+    userInfo: UserInfo,
     score: Float,
     totalExams: Int,
     timeSpentAvg: Float,
@@ -31,7 +34,16 @@ const resolvers = {
     getGeneralLeaderBoard: async (parent, args) => {
       return await leaderBoardService.getGeneralLeaderBoard(args);
     },
+
+  },
+  LeaderBoard: {
+    userInfo: async (parent, args, context) => {
+      data = await userInfoService.getOne(context.auth.credentials.uid);
+      return data
+    },
+
   }
+
 };
 
 module.exports = {

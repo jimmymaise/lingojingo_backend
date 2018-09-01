@@ -75,6 +75,13 @@ const externalType = `
     learning: Int,
   }
 
+  type UserInfo{
+    fullName: String,
+    email: String,
+    phone: String,
+    avatarUrl: String,
+  }  
+
   type DeckCategory{
     _id: String,
     name: String,
