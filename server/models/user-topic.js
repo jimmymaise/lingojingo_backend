@@ -1,10 +1,45 @@
 'use strict';
-
+const es = require('../elasticsearch/connection').es
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
+const userTopicSchema = require('../elasticsearch/mapping/user-topic').userTopic
 
 class UserTopic extends MongoModels {
+
+  //Should inplement functions change the UserTopic data to inject update ES
+
+  static async findByIdAndUpdate(){
+
+    let data = await super.findByIdAndUpdate.apply(this, arguments)
+    await this.updateES(arguments[0])
+
+    return data
+  }
+  static async findByIdAndDelete(){
+
+    let data = await super.findByIdAndDelete.apply(this, arguments)
+    updateES(arguments[0])
+
+    return data
+  }
+  static async insertOne(){
+
+    let data = await super.insertOne().apply(this, arguments)
+    this.updateES(arguments[0])
+
+    return data
+  }
+  static async updateES(_id){
+    await es.resetIndex('user-topic',userTopicSchema)
+    let data = await this.findById(_id)
+    data
+
+
+  }
+
+
 };
+
 
 UserTopic.collectionName = 'user_topic';
 
@@ -46,6 +81,5 @@ UserTopic.indexes = [
     }
   }
 ];
-
 module.exports = UserTopic;
 
