@@ -20,6 +20,7 @@ internals.applyRoutes = function (server, next) {
       tags: ['api'],
       validate: {
         payload: {
+          avatarUrl: Joi.string().optional().allow(null), 
           fullName: Joi.string().optional().allow(null),
           phone: Joi.string().optional().allow(null),
           aboutContent: Joi.string().optional().allow(null),
