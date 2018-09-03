@@ -132,6 +132,11 @@ internals.getGeneralLeaderBoardES = async (args) => {
               "field": "totalExams"
             }
           },
+          "score": {
+            "avg": {
+              "field": "highestResult.score"
+            }
+          },
           "result_bucket_sort": {
             "bucket_sort": {
               "sort": [
@@ -177,23 +182,38 @@ internals.getGeneralLeaderBoardES = async (args) => {
   let result = await UserTopic.search(body)
   let data = transformESResponseToGraphql(result.aggregations.by_user_id.buckets)
   let limit = (data.length > (args.top || 10)) ? (args.top || 10):data.length;
-  return data.slice(0, limit);
+  let res = {
+
+
+  }
+  res['currentUser'] = data.find(function (obj) { return obj.userId.toString() === args.currentUserId.toString(); });
+
+  res['leaderBoard'] = data.slice(0, limit);
+
+
+  return res;
 
 }
 
 function transformESResponseToGraphql(data) {
 
   let res = []
+  let rank = 1
 
   data.forEach(function (item) {
     let convertItem = {
-      userId: item.key,
-      timeSpent: item.timeSpent.value,
-      totalExams: item.totalExams.value,
-      totalCorrectAnswers: item.totalCorrectAnswers.value
+      userId: _.get(item,'key'),
+      timeSpent: _.get(item,'timeSpent.value'),
+      totalExams: _.get(item,'totalExams.value'),
+      totalCorrectAnswers: _.get(item,'totalCorrectAnswers.value'),
+      score: _.get(item,'score.value'),
+      timeSpentAvg: _.get(item,'timeSpentAvg.value'),
+      rank:rank
+
 
     }
     res.push(convertItem)
+    rank++
 
   });
   return res

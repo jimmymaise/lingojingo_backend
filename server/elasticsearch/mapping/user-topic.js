@@ -40,6 +40,9 @@ userTopic = {
             "timeSpent": {
               "type": "float"
             },
+            "timeSpentAvg": {
+              "type": "float"
+            },
             "totalQuestions": {
               "type": "float"
             },
