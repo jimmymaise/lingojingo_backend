@@ -4,7 +4,7 @@ let bodybuilder = require('bodybuilder')
 
 // Core ES variables for this project
 const port = 9200
-const host = process.env.ES_HOST || 'localhost'
+const host = process.env.ES_HOST || '13.76.130.203'
 const es = new elasticsearch.Client({host: {host, port}})
 es['builder'] = bodybuilder
 
@@ -29,26 +29,36 @@ async function resetIndex(index, mappingSchema) {
     await es.indices.delete({index})
   }
 
-  await es.indices.create({index})
-  await putMapping(mappingSchema)
+  await es.indices.create({index: index, body: mappingSchema})
 }
 
+/** Clear the index, recreate it, and add mappings */
+async function initIndex(index, mappingSchema) {
+  if (!await es.indices.exists({index})) {
+    await es.indices.create({index: index, body: mappingSchema})
+  }
+
+}
 
 /** Add book section schema mapping to ES */
-async function putMapping(mappingSchema) {
-  // const schema = {
-  //   title: { type: 'keyword' },
-  //   author: { type: 'keyword' },
-  //   location: { type: 'integer' },
-  //   text: { type: 'text' }
-  // }
-
+async function putMapping(index, mappingSchema) {
+  type = '_doc'
   return es.indices.putMapping({index, type, body: {properties: mappingSchema}})
 }
 
-checkConnection()
-
+es['initIndex'] = async function (index, mappingSchema) {
+  await initIndex(index, mappingSchema)
+}
+es['checkConnection'] = async function () {
+  await checkConnection()
+}
+es['putMapping'] = async function (index, mappingSchema) {
+  await putMapping(index, mappingSchema)
+}
+es['resetIndex'] = async function (index, mappingSchema) {
+  await resetIndex(index, mappingSchema)
+}
 
 module.exports = {
-  es, checkConnection, resetIndex
+  es
 }

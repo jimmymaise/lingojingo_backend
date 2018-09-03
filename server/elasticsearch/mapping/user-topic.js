@@ -1,45 +1,63 @@
-deck = {
+userTopic = {
   "mappings": {
-    "deck": {
+    "_doc": {
+      "dynamic":  false,
       "properties": {
-        "_id": {
+        // "_id": {
+        //   "type": "keyword"
+        // },
+        "userId": {
           "type": "keyword"
         },
-        "deckName": {
-          "type": "text",
-          "fields": {
-            "keyword": {
+        "topicId": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
+        "topicType": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
+        "deckId": {
+          "type": "keyword"
+        },
+        "exams": {
+          "type": "keyword"
+        },
+        "totalExams": {
+          "type": "float"
+        },
+        "highestResult": {
+          "properties": {
+            "examId": {
               "type": "keyword"
+            },
+            "score": {
+              "type": "float"
+            },
+            "result": {
+              "type": "keyword"
+            },
+            "timeSpent": {
+              "type": "float"
+            },
+            "timeSpentAvg": {
+              "type": "float"
+            },
+            "totalQuestions": {
+              "type": "float"
+            },
+            "totalCorrectAnswers": {
+              "type": "float"
+
             }
+
           },
-          "analyzer": "deck_name_index_analyzer",
-          "search_analyzer": "deck_name_search_analyzer"
-        },
-        "images": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
-        "topics": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
-        "topicExamQuestions": {
-          "type": "keyword"
-        },
-        "reviewExamQuestions": {
-          "type": "keyword"
-        },
-        "finalExamQuestions": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
-        "passScore": {
-          "type": "date",
-          "format": "epoch_millis"
+
         }
       }
     }
-  },
+  }
+  ,
   "settings": {
     "index": {
       "analysis": {
@@ -79,4 +97,9 @@ deck = {
       }
     }
   }
+
+}
+
+module.exports = {
+  userTopic
 }
