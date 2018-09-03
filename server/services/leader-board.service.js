@@ -175,11 +175,32 @@ internals.getGeneralLeaderBoardES = async (args) => {
   }
 
   let result = await UserTopic.search(body)
-
-
+  let data = transformESResponseToGraphql(result.aggregations.by_user_id.buckets)
+  let limit = (data.length > (args.top || 10)) ? (args.top || 10):data.length;
+  return data.slice(0, limit);
 
 }
-exports.getGeneralLeaderBoard = internals.getGeneralLeaderBoard;
+
+function transformESResponseToGraphql(data) {
+
+  let res = []
+
+  data.forEach(function (item) {
+    let convertItem = {
+      userId: item.key,
+      timeSpent: item.timeSpent.value,
+      totalExams: item.totalExams.value,
+      totalCorrectAnswers: item.totalCorrectAnswers.value
+
+    }
+    res.push(convertItem)
+
+  });
+  return res
+
+}
+
+exports.getGeneralLeaderBoard = internals.getGeneralLeaderBoardES;
 
 
 exports.name = 'leader-board-service';

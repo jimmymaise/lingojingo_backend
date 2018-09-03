@@ -38,7 +38,7 @@ const resolvers = {
   },
   LeaderBoard: {
     userInfo: async (parent, args, context) => {
-      data = await userInfoService.getOne(context.auth.credentials.uid);
+      data = await userInfoService.getOne(parent.userId);
       return data
     },
 

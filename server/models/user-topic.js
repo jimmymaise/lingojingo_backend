@@ -33,7 +33,7 @@ class UserTopic extends MongoModels {
   }
 
   static async upsertES(_id) {
-    await es.resetIndex(this.collectionName, userTopicSchema)
+    await es.initIndex(this.collectionName, userTopicSchema)
     let data = await this.findById(_id)
     delete data['_id'];
 
@@ -52,7 +52,7 @@ class UserTopic extends MongoModels {
   }
 
   static async search(body) {
-    await es.search({
+    return await es.search({
       index: this.collectionName,
       body: body
     });
