@@ -1,6 +1,7 @@
 userTopic = {
   "mappings": {
     "_doc": {
+      "dynamic":  false,
       "properties": {
         // "_id": {
         //   "type": "keyword"
@@ -22,23 +23,30 @@ userTopic = {
         "exams": {
           "type": "keyword"
         },
+        "totalExams": {
+          "type": "float"
+        },
         "highestResult": {
           "properties": {
             "examId": {
               "type": "keyword"
             },
             "score": {
-              "type": "keyword"
+              "type": "float"
             },
             "result": {
               "type": "keyword"
             },
             "timeSpent": {
-              "type": "keyword"
+              "type": "float"
             },
             "totalQuestions": {
-              "type": "keyword"
+              "type": "float"
             },
+            "totalCorrectAnswers": {
+              "type": "float"
+
+            }
 
           },
 

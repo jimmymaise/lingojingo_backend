@@ -29,22 +29,31 @@ async function resetIndex(index, mappingSchema) {
     await es.indices.delete({index})
   }
 
-  await es.indices.create({index:index,body:mappingSchema})
+  await es.indices.create({index: index, body: mappingSchema})
 }
 
+/** Clear the index, recreate it, and add mappings */
+async function initIndex(index, mappingSchema) {
+  if (!await es.indices.exists({index})) {
+    await es.indices.create({index: index, body: mappingSchema})
+  }
+
+}
 
 /** Add book section schema mapping to ES */
-async function putMapping(index,mappingSchema) {
-  type='_doc'
-  return es.indices.putMapping({index,type, body: {properties: mappingSchema}})
+async function putMapping(index, mappingSchema) {
+  type = '_doc'
+  return es.indices.putMapping({index, type, body: {properties: mappingSchema}})
 }
 
-
+es['initIndex'] = async function (index, mappingSchema) {
+  await initIndex(index, mappingSchema)
+}
 es['checkConnection'] = async function () {
   await checkConnection()
 }
-es['putMapping'] = async function (index,mappingSchema) {
-  await putMapping(index,mappingSchema)
+es['putMapping'] = async function (index, mappingSchema) {
+  await putMapping(index, mappingSchema)
 }
 es['resetIndex'] = async function (index, mappingSchema) {
   await resetIndex(index, mappingSchema)

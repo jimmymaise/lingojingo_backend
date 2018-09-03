@@ -84,7 +84,7 @@ internals.getGeneralLeaderBoard = async (args) => {
     delete query[0]['$match']['topicType']
 
   }
-  if (args.topicType === undefined) {
+  if (args.userId === undefined) {
     delete query[0]['$match']['userId']
 
   }
@@ -97,6 +97,88 @@ internals.getGeneralLeaderBoard = async (args) => {
 
 }
 // exports.getTopicLeaderBoard = internals.getTopicLeaderBoard;
+
+internals.getGeneralLeaderBoardES = async (args) => {
+
+  let body = {
+    "size": 0,
+    "query": {
+      "bool": {
+        "must": [
+          {"exists": {"field": "highestResult"}},
+        ]
+      }
+    },
+
+
+    "aggs": {
+      "by_user_id": {
+        "terms": {
+          "field": "userId"
+        },
+        "aggs": {
+          "totalCorrectAnswers": {
+            "sum": {
+              "field": "highestResult.totalCorrectAnswers"
+            }
+          },
+          "timeSpent": {
+            "sum": {
+              "field": "highestResult.timeSpent"
+            }
+          },
+          "totalExams": {
+            "sum": {
+              "field": "totalExams"
+            }
+          },
+          "result_bucket_sort": {
+            "bucket_sort": {
+              "sort": [
+                {
+                  "totalCorrectAnswers": {
+                    "order": "desc"
+                  },
+                  "timeSpent": {
+                    "order": "asc"
+
+                  },
+                  "totalExams": {
+                    "order": "asc"
+
+                  }
+                }
+              ],
+              "size": 3
+            }
+          }
+        }
+      }
+    }
+  }
+  let mustQueries = body.query.bool.must
+  if (args.deckId !== undefined) {
+    mustQueries.push({"match": {"deckId": args.deckId}})
+
+  }
+  if (args.topicId !== undefined) {
+    mustQueries.push({"match": {"topicId": args.topicId}})
+
+  }
+  if (args.topicType !== undefined) {
+    mustQueries.push({"match": {"topicType": args.topicType}})
+
+  }
+  if (args.userId !== undefined) {
+    mustQueries.push({"match": {"userId": args.userId}})
+
+  }
+
+  let result = await UserTopic.search(body)
+
+
+
+}
 exports.getGeneralLeaderBoard = internals.getGeneralLeaderBoard;
 
 
