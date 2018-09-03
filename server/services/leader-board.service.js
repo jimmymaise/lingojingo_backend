@@ -137,6 +137,11 @@ internals.getGeneralLeaderBoardES = async (args) => {
               "field": "highestResult.score"
             }
           },
+          "timeSpentAvg": {
+            "avg": {
+              "field": "highestResult.timeSpentAvg"
+            }
+          },
           "result_bucket_sort": {
             "bucket_sort": {
               "sort": [
