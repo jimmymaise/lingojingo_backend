@@ -5,6 +5,7 @@ const ObjectID = require('mongodb').ObjectID;
 const sortBy = require('lodash/sortBy');
 const map = require('lodash/map');
 const reduce = require('lodash/reduce');
+const UserDeck = require('../models/user-deck');
 
 const UserInfo = require('../models/user-info');
 
@@ -37,6 +38,11 @@ internals.buyDeck = async (firebaseUId, deckId) => {
       currentInfo.decks.push(deckId);
     } else {
       return currentInfo;
+    }
+    let addUserDeckResult = await UserDeck.insertOne({"userId": firebaseUId, "deckId": deckId});
+
+    if (!addUserDeckResult) {
+      throw Error('Cannot Add UserDeck');
     }
 
     return await UserInfo.findOneAndUpdate({
