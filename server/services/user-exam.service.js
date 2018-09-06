@@ -105,6 +105,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
       score: userExam.score,
       result: userExam.result,
       timeSpentAvg: userExam.timeSpentAvg,
+      timeSpent:userExam.timeSpent,
       totalQuestions: userExam.totalQuestions,
       knownAnswer: userExam.knownAnswer,
       totalCorrectAnswers: userExam.totalCorrectAnswers

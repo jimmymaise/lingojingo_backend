@@ -7,8 +7,14 @@ const GraphQLJSON = require('graphql-type-json');
 const typeDefs = `
   extend type Query {
     getTopicLeaderBoard(topicId: String!,deckId:String!,top:Int): [LeaderBoard],
-    getGeneralLeaderBoard(topicId: String,deckId:String,type:String,top:Int): [LeaderBoard]
+    getGeneralLeaderBoard(topicId: String,deckId:String,type:String,top:Int): LeaderBoardInfo
 
+  }
+  
+  type LeaderBoardInfo {
+    currentUser: LeaderBoard,
+    leaderBoard: [LeaderBoard]
+  
   }
   
   type LeaderBoard {
@@ -18,7 +24,8 @@ const typeDefs = `
     totalExams: Int,
     timeSpentAvg: Float,
     totalCorrectAnswers: Int,
-    timeSpent: Int
+    timeSpent: Int,
+    rank: Int
 
 }
  
@@ -31,14 +38,15 @@ const resolvers = {
     // getTopicLeaderBoard: async (parent, args) => {
     //   return await leaderBoardService.getTopicLeaderBoard(args);
     // },
-    getGeneralLeaderBoard: async (parent, args) => {
+    getGeneralLeaderBoard: async (parent, args,context) => {
+      args['currentUserId'] = context.auth.credentials.user_id
       return await leaderBoardService.getGeneralLeaderBoard(args);
     },
 
   },
   LeaderBoard: {
     userInfo: async (parent, args, context) => {
-      data = await userInfoService.getOne(context.auth.credentials.uid);
+      data = await userInfoService.getOne(parent.userId);
       return data
     },
 
