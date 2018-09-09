@@ -1,71 +1,16 @@
 'use strict';
-const es = require('../elasticsearch/connection').es
 const Joi = require('joi');
-const MongoModels = require('mongo-models');
-const userTopicSchema = require('../elasticsearch/mapping/user-topic').userTopic
-
-class UserTopic extends MongoModels {
+const ESMongoModels = require('./es-mongo-model');
+const esSchema = require('../elasticsearch/mapping/user-topic').userTopic
 
 
-  //Override these function to inject update ES
-
-  static async findByIdAndUpdate() {
-
-    let data = await super.findByIdAndUpdate.apply(this, arguments)
-    await this.upsertES(arguments[0])
-
-    return data
-  }
-
-  static async findByIdAndDelete() {
-
-    let data = await super.findByIdAndDelete.apply(this, arguments)
-    await this.deleteES(arguments[0])
-    return data
-  }
-
-  static async insertOne() {
-
-    let data = await super.insertOne().apply(this, arguments)
-    await this.upsertES(data['_id'])
-
-    return data
-  }
-
-  static async upsertES(_id) {
-    await es.initIndex(this.collectionName, userTopicSchema)
-    let data = await this.findById(_id)
-    delete data['_id'];
-
-
-
-    es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: data}, doc_as_upsert: true
-    })
-  }
-
-  static async deleteES(_id) {
-    await es.initIndex(this.collectionName, userTopicSchema)
-    es.delete({
-      index: this.collectionName, type: '_doc', id: _id.toString()
-    })
-  }
-
-  static async search(body) {
-    return await es.search({
-      index: this.collectionName,
-      body: body
-    });
-
-
-  }
-
+class UserTopic extends ESMongoModels {
 
 };
 
-UserTopic['buider'] = es.builder
-UserTopic.collectionName = 'user_topic';
 
+UserTopic.collectionName = 'user_topic';
+UserTopic.esSchema = esSchema;
 
 UserTopic.schema = Joi.object().keys({
   _id: Joi.object(),

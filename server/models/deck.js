@@ -1,12 +1,19 @@
 'use strict';
 
 const Joi = require('joi');
-const MongoModels = require('mongo-models');
+const ESMongoModels = require('./es-mongo-model');
+const esSchema = require('../elasticsearch/mapping/deck').deck
 
-class Deck extends MongoModels {
+class Deck extends ESMongoModels {
+  //Override these function to inject update ES
+  // static async upsertES(_id) {
+  //   await super.upsertES(_id, esSchema)
+  // }
+
 };
 
 Deck.collectionName = 'decks';
+Deck.esSchema = esSchema;
 
 Deck.schema = Joi.object().keys({
   _id: Joi.object(),

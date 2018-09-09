@@ -1,10 +1,9 @@
 deck = {
   "mappings": {
-    "deck": {
+    "_doc": {
+      "dynamic":  false,
       "properties": {
-        "_id": {
-          "type": "keyword"
-        },
+
         "deckName": {
           "type": "text",
           "fields": {
@@ -19,10 +18,7 @@ deck = {
           "type": "keyword",
           "null_value": "NULL"
         },
-        "topics": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
+
         "topicExamQuestions": {
           "type": "keyword"
         },
@@ -34,8 +30,7 @@ deck = {
           "null_value": "NULL"
         },
         "passScore": {
-          "type": "date",
-          "format": "epoch_millis"
+          "type": "keyword",
         }
       }
     }
@@ -47,7 +42,7 @@ deck = {
           "deck_name_index_analyzer": {
             "type": "custom",
             "tokenizer": "standard",
-            "filter": ["lowercase", "standard", "deck_name"]
+            "filter": ["lowercase", "standard", "deckName"]
           },
           "deck_name_search_analyzer": {
             "type": "custom",
@@ -70,7 +65,7 @@ deck = {
           }
         },
         "filter": {
-          "deck_name": {
+          "deckName": {
             "type": "nGram",
             "min_gram": "1",
             "max_gram": "100"
@@ -79,4 +74,7 @@ deck = {
       }
     }
   }
+}
+module.exports = {
+  deck
 }
