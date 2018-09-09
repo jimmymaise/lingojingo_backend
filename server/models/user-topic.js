@@ -10,25 +10,20 @@ class UserTopic extends MongoModels {
   //Override these function to inject update ES
 
   static async findByIdAndUpdate() {
-
     let data = await super.findByIdAndUpdate.apply(this, arguments)
     await this.upsertES(arguments[0])
-
     return data
   }
 
   static async findByIdAndDelete() {
-
     let data = await super.findByIdAndDelete.apply(this, arguments)
     await this.deleteES(arguments[0])
     return data
   }
 
   static async insertOne() {
-
     let data = await super.insertOne().apply(this, arguments)
     await this.upsertES(data['_id'])
-
     return data
   }
 
@@ -36,10 +31,7 @@ class UserTopic extends MongoModels {
     await es.initIndex(this.collectionName, userTopicSchema)
     let data = await this.findById(_id)
     delete data['_id'];
-
-
-
-    es.update({
+    await es.update({
       index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: data}, doc_as_upsert: true
     })
   }
@@ -49,6 +41,26 @@ class UserTopic extends MongoModels {
     es.delete({
       index: this.collectionName, type: '_doc', id: _id.toString()
     })
+  }
+
+  static async syncDataES(query = {}) {
+    let page = 1
+    while (page) {
+      let resp = await this.pagedFind(query, page, 3)
+      let data = resp.data
+      for (let i = 0; i < data.length; i++) {
+        await this.upsertES(data[i]._id)
+      }
+      console.log(page)
+      if (!resp.pages.hasNext) {
+        break
+      }
+      page = resp.pages.next
+
+
+    }
+
+
   }
 
   static async search(body) {

@@ -9,11 +9,9 @@ const internals = {};
 internals.addTicket = async (content,file) => {
   let ticketId = await jiraHandler.createJiraTicket(content)
   if(ticketId){
-
     let resp = await jiraHandler.uploadImageToJiraTicket(ticketId,file)
     return resp
   }
-
 
 
 }
