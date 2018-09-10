@@ -29,11 +29,17 @@ internals.applyRoutes = function (server, next) {
 
       try {
         const result = await SupportService.addTicket(content, files);
-        return {
-          success: true,
-          message: 'successfully',
-          data: result
-        };
+        if (result.ticketId) {
+          return {
+            success: true,
+            message: 'successfully',
+            data: result
+          };
+        }
+        else {
+          return Boom.internal('Cannot create support ticket')
+        }
+
       } catch (err) {
         return Boom.internal(err);
       }
