@@ -49,16 +49,27 @@ class ESMongoModels extends MongoModels {
     });
 
   }
+  static async searchWithBodyBuilder() {
+    let body = this.body.build()
+    return await es.search({
+      index: this.collectionName,
+      body: body
+    });
+
+  }
+
 
   static bodyBuilder() {
-    return bodybuilder()
+    this.body = bodybuilder()
+    return this.body
 
   }
 
   static async syncDataES(query = {}) {
+    await es.resetIndex(this.collectionName, this.esSchema)
     let page = 1
     while (page) {
-      let resp = await this.pagedFind(query, page, 3)
+      let resp = await this.pagedFind(query, page, 10)
       let data = resp.data
       for (let i = 0; i < data.length; i++) {
         await this.upsertES(data[i]._id)

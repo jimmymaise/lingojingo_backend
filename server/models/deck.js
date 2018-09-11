@@ -10,7 +10,7 @@ class Deck extends ESMongoModels {
   static async upsertES(_id) {
     let indexData = await this.findById(_id)
     //Add more fields from other table
-    let deckCatInfo = await DeckCategory.findOne({decks: {$elemMatch: {id: id}}});
+    let deckCatInfo = await DeckCategory.findOne({decks: {$elemMatch: {id: _id}}});
     indexData['categoryName'] = deckCatInfo['name']
     indexData['categoryId'] = deckCatInfo['_id'].toString()
     await super.upsertES(_id, indexData)
