@@ -65,6 +65,24 @@ internals.getDeck = async (firebaseUId, deckId) => {
   return await Deck.findById(deckId);
 }
 
+internals.searchDeck = async (args) => {
+  let body = await Deck.bodyBuilder()
+  if (args.deckName) {
+    // First query the almost match, will have boost score
+    // Second query the words but not follow order
+    body.orQuery('match_phrase', 'deckName', {query: args.deckName, analyzer: 'deckNameIndexAnalyzer', 'boost': '5'})
+    body.orQuery('match', 'deckName', {query: args.deckName, operator: 'and'})
+    body.queryMinimumShouldMatch(1)
+  }
+  if (args.category) {
+    body.query('match', 'categoryId', args.category)
+  }
+  let data = await Deck.searchWithBodyBuilder()
+
+
+}
+
+
 // TODO: please protect user don't have permission in this deck
 internals.getListTopicDetail = async (firebaseUId, topics) => {
   const topicMapping = reduce(topics, (result, value) => {
@@ -94,6 +112,7 @@ internals.getDeckCategory = async (id) => {
   return data[0]
 }
 
+// internals.searchDeck({deckName: 'vựng từ'})
 
 exports.register = function (server, options) {
 

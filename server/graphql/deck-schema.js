@@ -4,10 +4,20 @@ const userStatisticsService = require('../services/user-statistics.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
+  input DeckSearchInput {
+    deckSearchName: String,
+    categoryId: Int
+  }
   type DeckPagination {
     data: [Deck],
     pages: PageInfo,
     items: PageItemInfo
+  }
+  type EsDeckList {
+  offset: Int,
+  start: Int,
+  data:[Deck]
+  
   }
   type Deck {
     _id: String,
@@ -31,6 +41,7 @@ const typeDefs = `
     decks(pagination: PaginationInput): DeckPagination
     userStoreDecks(pagination: PaginationInput): DeckPagination,
     userOwnerDecks(pagination: PaginationInput): DeckPagination,
+    deckSearch(search: DeckSearchInput): DeckPagination,
     deck(id: ID!): Deck
   }
 `;
@@ -55,7 +66,10 @@ const resolvers = {
     },
     deck: async (parent, args, context) => {
       return await deckService.getDeck(context.auth.credentials.uid, args.id);
-    }
+    },
+    deckSearch: async (parent, args, context) => {
+      return await deckService.searchDeck(args);
+    },
   },
   Deck: {
     topicDetails: async (parent, args, context) => {
@@ -64,7 +78,7 @@ const resolvers = {
     wordStatistics: async (parent, args, context) => {
       let queryData = {}
       queryData.deckId = parent._id
-      queryData.userId  = context.auth.credentials.uid
+      queryData.userId = context.auth.credentials.uid
 
       data = await userStatisticsService.getWordStatics(queryData);
       return data[0]
