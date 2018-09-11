@@ -65,6 +65,20 @@ internals.getDeck = async (firebaseUId, deckId) => {
   return await Deck.findById(deckId);
 }
 
+internals.searchDeck = async (args) => {
+  let body = Deck.bodyBuilder()
+  if (args.deckName) {
+    body.query('match', 'deckName', args.deckName)
+  }
+  if (args.deckId) {
+    body.query('match', 'category', args.category)
+  }
+  body.build()
+  await Deck.search(Deck)
+  return await Deck.findById(deckId);
+}
+
+
 // TODO: please protect user don't have permission in this deck
 internals.getListTopicDetail = async (firebaseUId, topics) => {
   const topicMapping = reduce(topics, (result, value) => {

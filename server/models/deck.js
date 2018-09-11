@@ -3,12 +3,18 @@
 const Joi = require('joi');
 const ESMongoModels = require('./es-mongo-model');
 const esSchema = require('../elasticsearch/mapping/deck').deck
+const DeckCategory = require('../models/deck-category');
 
 class Deck extends ESMongoModels {
-  //Override these function to inject update ES
-  // static async upsertES(_id) {
-  //   await super.upsertES(_id, esSchema)
-  // }
+
+  static async upsertES(_id) {
+    let indexData = await this.findById(_id)
+    //Add more fields from other table
+    let deckCatInfo = await DeckCategory.findOne({decks: {$elemMatch: {id: id}}});
+    indexData['categoryName'] = deckCatInfo['name']
+    indexData['categoryId'] = deckCatInfo['_id'].toString()
+    await super.upsertES(_id, indexData)
+  }
 
 };
 
@@ -28,6 +34,8 @@ Deck.schema = Joi.object().keys({
   finalExamQuestions: Joi.number(),
   passScore: Joi.number()// pass score to evaluate exam passed or failed,eg:80 mean exam score must be >=80 to pass
 }).options({stripUnknown: true});
+
+Deck['buider'] = require('bodybuilder')
 
 Deck.indexes = [];
 

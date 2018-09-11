@@ -2,6 +2,8 @@
 
 const MongoModels = require('mongo-models');
 const es = require('../elasticsearch/connection').es
+const bodybuilder = require('bodybuilder')
+
 
 class ESMongoModels extends MongoModels {
   //Override these function to inject update ES
@@ -23,12 +25,14 @@ class ESMongoModels extends MongoModels {
     return data
   }
 
-  static async upsertES(_id) {
+  static async upsertES(_id, indexData) {
     await es.initIndex(this.collectionName, this.esSchema)
-    let data = await this.findById(_id)
-    delete data['_id'];
+    if (!indexData) {
+      indexData = await this.findById(_id)
+    }
+    delete indexData['_id'];
     await es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: data}, doc_as_upsert: true
+      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData}, doc_as_upsert: true
     })
   }
 
@@ -43,6 +47,11 @@ class ESMongoModels extends MongoModels {
       index: this.collectionName,
       body: body
     });
+
+  }
+
+  static bodyBuilder() {
+    return bodybuilder()
 
   }
 
@@ -67,6 +76,5 @@ class ESMongoModels extends MongoModels {
   }
 };
 
-ESMongoModels['buider'] = es.builder
 module.exports = ESMongoModels;
 

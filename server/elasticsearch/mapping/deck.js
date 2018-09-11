@@ -18,6 +18,14 @@ deck = {
           "type": "keyword",
           "null_value": "NULL"
         },
+        "categoryId": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
+        "categoryName": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
 
         "topicExamQuestions": {
           "type": "keyword"
