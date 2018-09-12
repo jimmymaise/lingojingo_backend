@@ -11,10 +11,18 @@ deck = {
               "type": "keyword"
             }
           },
-          "analyzer": "deck_name_index_analyzer",
-          "search_analyzer": "deck_name_search_analyzer"
+          "analyzer": "deckNameIndexAnalyzer",
+          "search_analyzer": "deckNameSearchAnalyzer"
         },
-        "images": {
+        "img": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
+        "categoryId": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
+        "categoryName": {
           "type": "keyword",
           "null_value": "NULL"
         },
@@ -39,17 +47,19 @@ deck = {
     "index": {
       "analysis": {
         "analyzer": {
-          "deck_name_index_analyzer": {
-            "type": "custom",
-            "tokenizer": "standard",
-            "filter": ["lowercase", "standard", "deckName"]
+          "deckNameIndexAnalyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "deckNameIndexTokenizer"
           },
-          "deck_name_search_analyzer": {
-            "type": "custom",
-            "tokenizer": "standard",
-            "filter": ["lowercase", "standard"]
+          "deckNameSearchAnalyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "deckNameSearchTokenizer"
           },
-          "lowercase_analyzer": {
+          "lowercaseAnalyzer": {
             "type": "custom",
             "tokenizer": "keyword",
             "filter": [
@@ -57,18 +67,34 @@ deck = {
             ]
           }
         },
+        "tokenizer": {
+          "deckNameIndexTokenizer": {
+            "token_chars": [
+              "letter",
+              "digit",
+              "punctuation",
+              "whitespace"
+            ],
+            "min_gram": "2",
+            "type": "ngram",
+            "max_gram": "3"
+          },
+          "deckNameSearchTokenizer": {
+            "token_chars": [
+              "letter",
+              "digit",
+              "punctuation"
+            ],
+            "min_gram": "2",
+            "type": "ngram",
+            "max_gram": "3"
+          }
+        },
         "normalizer": {
-          "lowercase_normalizer": {
+          "lowercaseNormalizer": {
             "type": "custom",
             "char_filter": [],
             "filter": ["lowercase"]
-          }
-        },
-        "filter": {
-          "deckName": {
-            "type": "nGram",
-            "min_gram": "1",
-            "max_gram": "100"
           }
         }
       }

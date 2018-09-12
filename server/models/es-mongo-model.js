@@ -2,6 +2,8 @@
 
 const MongoModels = require('mongo-models');
 const es = require('../elasticsearch/connection').es
+const bodybuilder = require('bodybuilder')
+
 
 class ESMongoModels extends MongoModels {
   //Override these function to inject update ES
@@ -23,12 +25,14 @@ class ESMongoModels extends MongoModels {
     return data
   }
 
-  static async upsertES(_id) {
+  static async upsertES(_id, indexData) {
     await es.initIndex(this.collectionName, this.esSchema)
-    let data = await this.findById(_id)
-    delete data['_id'];
+    if (!indexData) {
+      indexData = await this.findById(_id)
+    }
+    delete indexData['_id'];
     await es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: data}, doc_as_upsert: true
+      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData}, doc_as_upsert: true
     })
   }
 
@@ -45,11 +49,27 @@ class ESMongoModels extends MongoModels {
     });
 
   }
+  static async searchWithBodyBuilder() {
+    let body = this.body.build()
+    return await es.search({
+      index: this.collectionName,
+      body: body
+    });
+
+  }
+
+
+  static bodyBuilder() {
+    this.body = bodybuilder()
+    return this.body
+
+  }
 
   static async syncDataES(query = {}) {
+    await es.resetIndex(this.collectionName, this.esSchema)
     let page = 1
     while (page) {
-      let resp = await this.pagedFind(query, page, 3)
+      let resp = await this.pagedFind(query, page, 10)
       let data = resp.data
       for (let i = 0; i < data.length; i++) {
         await this.upsertES(data[i]._id)
@@ -67,6 +87,5 @@ class ESMongoModels extends MongoModels {
   }
 };
 
-ESMongoModels['buider'] = es.builder
 module.exports = ESMongoModels;
 
