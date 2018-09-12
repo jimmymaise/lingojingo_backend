@@ -100,98 +100,59 @@ internals.getGeneralLeaderBoard = async (args) => {
 
 internals.getGeneralLeaderBoardES = async (args) => {
 
-  let body = {
-    "size": 0,
-    "query": {
-      "bool": {
-        "must": [
-          {"exists": {"field": "highestResult"}},
-        ]
-      }
-    },
+  let body = UserTopic.bodyBuilder()
+  body
+    .andQuery('exists', 'field', 'highestResult')
+    .size(0)
+    .aggregation('terms', "userId", 'by_user_id'
+      , agg =>
+        agg
+          .aggregation('sum', "highestResult.totalCorrectAnswers", 'totalCorrectAnswers')
+          .aggregation('sum', 'highestResult.timeSpent', 'timeSpent')
+          .aggregation('sum', "highestResult.totalExams", 'totalExams')
+          .aggregation('avg', 'highestResult.score', 'score')
+          .aggregation('avg', 'highestResult.timeSpentAvg', 'timeSpentAvg')
+          .aggregation('bucket_sort', {
+            "sort": [{
+              "totalCorrectAnswers": {
+                "order": "desc"
+              },
+              "timeSpent": {
+                "order": "asc"
+
+              },
+              "totalExams": {
+                "order": "asc"
+
+              }
+            }],
+          }, 'result_bucket_sort'))
 
 
-    "aggs": {
-      "by_user_id": {
-        "terms": {
-          "field": "userId"
-        },
-        "aggs": {
-          "totalCorrectAnswers": {
-            "sum": {
-              "field": "highestResult.totalCorrectAnswers"
-            }
-          },
-          "timeSpent": {
-            "sum": {
-              "field": "highestResult.timeSpent"
-            }
-          },
-          "totalExams": {
-            "sum": {
-              "field": "totalExams"
-            }
-          },
-          "score": {
-            "avg": {
-              "field": "highestResult.score"
-            }
-          },
-          "timeSpentAvg": {
-            "avg": {
-              "field": "highestResult.timeSpentAvg"
-            }
-          },
-          "result_bucket_sort": {
-            "bucket_sort": {
-              "sort": [
-                {
-                  "totalCorrectAnswers": {
-                    "order": "desc"
-                  },
-                  "timeSpent": {
-                    "order": "asc"
-
-                  },
-                  "totalExams": {
-                    "order": "asc"
-
-                  }
-                }
-              ],
-              "size": 3
-            }
-          }
-        }
-      }
-    }
-  }
-  let mustQueries = body.query.bool.must
   if (args.deckId !== undefined) {
-    mustQueries.push({"match": {"deckId": args.deckId}})
-
+    body.andQuery('match', 'deckId', args.deckId)
   }
+
   if (args.topicId !== undefined) {
-    mustQueries.push({"match": {"topicId": args.topicId}})
-
+    body.andQuery('match', 'topicId', args.topicId)
   }
+
   if (args.topicType !== undefined) {
-    mustQueries.push({"match": {"topicType": args.topicType}})
+    body.andQuery('match', 'topicType', args.topicType)
 
   }
   if (args.userId !== undefined) {
-    mustQueries.push({"match": {"userId": args.userId}})
-
+    body.andQuery('match', 'userId', args.userId)
   }
 
-  let result = await UserTopic.search(body)
+  let result = await
+    UserTopic.searchWithBodyBuilder(body)
   let data = transformESResponseToGraphql(result.aggregations.by_user_id.buckets)
-  let limit = (data.length > (args.top || 10)) ? (args.top || 10):data.length;
-  let res = {
-
-
-  }
-  res['currentUser'] = data.find(function (obj) { return obj.userId.toString() === args.currentUserId.toString(); });
+  let limit = (data.length > (args.top || 10)) ? (args.top || 10) : data.length;
+  let res = {}
+  res['currentUser'] = data.find(function (obj) {
+    return obj.userId.toString() === args.currentUserId.toString();
+  });
 
   res['leaderBoard'] = data.slice(0, limit);
 
@@ -200,6 +161,7 @@ internals.getGeneralLeaderBoardES = async (args) => {
 
 }
 
+
 function transformESResponseToGraphql(data) {
 
   let res = []
@@ -207,13 +169,13 @@ function transformESResponseToGraphql(data) {
 
   data.forEach(function (item) {
     let convertItem = {
-      userId: _.get(item,'key'),
-      timeSpent: _.get(item,'timeSpent.value'),
-      totalExams: _.get(item,'totalExams.value'),
-      totalCorrectAnswers: _.get(item,'totalCorrectAnswers.value'),
-      score: _.get(item,'score.value'),
-      timeSpentAvg: _.get(item,'timeSpentAvg.value'),
-      rank:rank
+      userId: _.get(item, 'key'),
+      timeSpent: _.get(item, 'timeSpent.value'),
+      totalExams: _.get(item, 'totalExams.value'),
+      totalCorrectAnswers: _.get(item, 'totalCorrectAnswers.value'),
+      score: _.get(item, 'score.value'),
+      timeSpentAvg: _.get(item, 'timeSpentAvg.value'),
+      rank: rank
 
 
     }
