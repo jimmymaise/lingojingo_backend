@@ -1,13 +1,14 @@
 const quizService = require('../services/quiz.service');
 const deckService = require('../services/deck.service');
 const userStatisticsService = require('../services/user-statistics.service');
+const UserInfo = require('../models/user-info');
 
 // The GraphQL schema in string form
 const typeDefs = `
   input DeckSearchInput {
-    deckSearchName: String,
-    categoryId: Int
-  }
+    deckName: String,
+    categoryId: Int,
+    }
   type DeckPagination {
     data: [Deck],
     pages: PageInfo,
@@ -31,17 +32,14 @@ const typeDefs = `
     topicDetails: [Topic],
     cardDetails: [Card],
     wordStatistics:WordStatistics,
-    category:DeckCategory,
-    topicExamQuestions: String,
-    reviewExamQuestions: String,
-    finalExamQuestions: String,
+    category: DeckCategory,
     passScore: String
   }
   extend type Query {
     decks(pagination: PaginationInput): DeckPagination
     userStoreDecks(pagination: PaginationInput): DeckPagination,
     userOwnerDecks(pagination: PaginationInput): DeckPagination,
-    deckSearch(search: DeckSearchInput): DeckPagination,
+    deckSearch(search: DeckSearchInput, pagination: PaginationInput): DeckPagination,
     deck(id: ID!): Deck
   }
 `;
@@ -68,7 +66,11 @@ const resolvers = {
       return await deckService.getDeck(context.auth.credentials.uid, args.id);
     },
     deckSearch: async (parent, args, context) => {
+      context['userInfo'] = await UserInfo.findOne({
+        firebaseUserId: context.auth.credentials.uid
+      });
       return await deckService.searchDeck(args);
+
     },
   },
   Deck: {
@@ -84,9 +86,25 @@ const resolvers = {
       return data[0]
       // return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
     },
+
     category: async (parent, args, context) => {
+      if (parent.category) {
+        return parent.category
+      }
       data = await deckService.getDeckCategory(parent._id);
       return data
+    },
+    isOwned: async (parent, args, context) => {
+      let userInfo = context.userInfo
+
+      let firebaseUId = context.auth.credentials.uid
+      if (!userInfo || firebaseUId !== userInfo.firebaseUserId) {
+        userInfo = await UserInfo.findOne({
+          firebaseUserId: firebaseUId
+        });
+      }
+
+      return await deckService.isOwned(userInfo, parent._id);
     },
     cardDetails: async (parent, args, context) => {
       return await deckService.getListCardDetail(context.auth.credentials.uid, parent.cards);

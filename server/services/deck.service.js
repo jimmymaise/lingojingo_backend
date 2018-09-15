@@ -6,11 +6,16 @@ const sortBy = require('lodash/sortBy');
 const map = require('lodash/map');
 const reduce = require('lodash/reduce');
 const UserDeck = require('../models/user-deck');
+const _ = require('lodash')
 
 const UserInfo = require('../models/user-info');
 
 const Deck = require('../models/deck');
 const DeckCategory = require('../models/deck-category');
+const UserTopic = require('../models/user-topic');
+// Deck.syncDataES()
+// UserTopic.syncDataES()
+
 
 const Topic = require('../models/topic');
 const Card = require('../models/card');
@@ -66,19 +71,37 @@ internals.getDeck = async (firebaseUId, deckId) => {
 }
 
 internals.searchDeck = async (args) => {
+
   let body = await Deck.bodyBuilder()
-  if (args.deckName) {
+  let search = args.search || {}
+  let page = _.get(args, 'pagination.page') || 2
+  let limit =_.get(args, 'pagination.limit') || 10
+  // let from = size* (page - 1)
+  body.page(page)
+  body.limit(limit)
+
+  if (search.deckName) {
     // First query the almost match, will have boost score
     // Second query the words but not follow order
-    body.orQuery('match_phrase', 'deckName', {query: args.deckName, analyzer: 'deckNameIndexAnalyzer', 'boost': '5'})
-    body.orQuery('match', 'deckName', {query: args.deckName, operator: 'and'})
+    body.orQuery('match_phrase', 'deckName', {query: search.deckName, analyzer: 'deckNameIndexAnalyzer', 'boost': '5'})
+    body.orQuery('match', 'deckName', {query: search.deckName, operator: 'and'})
     body.queryMinimumShouldMatch(1)
   }
-  if (args.category) {
-    body.query('match', 'categoryId', args.category)
+  if (search.categoryId) {
+    body.query('match', 'category.id', search.categoryId)
   }
+
   let data = await Deck.searchWithBodyBuilder()
 
+  return data
+
+
+
+}
+
+internals.isOwned = async (userInfo, deckId) => {
+
+  return userInfo && userInfo.decks && userInfo.decks.indexOf(deckId.toString()) >= 0
 
 }
 
@@ -108,20 +131,27 @@ internals.getOneTopic = async (id) => {
 }
 
 internals.getDeckCategory = async (id) => {
-  let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});
-  return data[0]
+  if (typeof id === 'string' || id instanceof String) {
+
+   id =  ObjectID(id)
+  }
+
+    let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});return data[0]
 }
 
-// internals.searchDeck({deckName: 'vựng từ'})
 
 exports.register = function (server, options) {
 
   server.expose('getListTopicDetail', internals.getListTopicDetail);
   server.expose('buyDeck', internals.buyDeck);
   server.expose('getDeck', internals.getDeck);
+  server.expose('searchDeck', internals.searchDeck);
+
   server.expose('getListCardDetail', internals.getListCardDetail);
   server.expose('getOneTopic', internals.getOneTopic);
   server.expose('getDeckCategory', internals.getDeckCategory);
+  server.expose('isOwned', internals.isOwned);
+
 
 
   return;
@@ -133,6 +163,11 @@ exports.getDeck = internals.getDeck;
 exports.getListCardDetail = internals.getListCardDetail;
 exports.getOneTopic = internals.getOneTopic;
 exports.getDeckCategory = internals.getDeckCategory;
+exports.searchDeck = internals.searchDeck;
+exports.isOwned = internals.isOwned;
+
+
+
 
 
 exports.name = 'deck-service';
