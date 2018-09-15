@@ -1,7 +1,7 @@
 'use strict';
 
 const internals = {};
-const envAuth = process.env.NODE_ENV !== 'production' ? 'firebase' : null
+const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 
 internals.applyRoutes = function (server) {
   server.route({
