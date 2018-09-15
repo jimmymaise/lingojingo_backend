@@ -16,9 +16,16 @@ internals.applyRoutes = function (server) {
     path: '/syncES',
     handler: async function (request) {
       const Deck = require('../models/deck');
-      await Deck.syncDataES({},true)
-      const UserTopic = require('../models/user-topic');
-      await UserTopic.syncDataES()
+      try{
+        await Deck.syncDataES({},true)
+        const UserTopic = require('../models/user-topic');
+        await UserTopic.syncDataES({},true)
+      }
+      catch (e) {
+        return {e}
+
+      }
+
     }
   });
 
