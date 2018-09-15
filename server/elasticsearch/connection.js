@@ -3,8 +3,13 @@ let bodybuilder = require('bodybuilder')
 
 
 // Core ES variables for this project
-const port = 9200
-const host = process.env.ES_HOST || '13.76.130.203'
+
+let port = 9200
+let host = process.env.ES_HOST
+if (process.env.NODE_ENV === 'dev'){
+   host='https://stag-api.vomemo.com/proxyES'
+   port = 443
+}
 const es = new elasticsearch.Client({host: {host, port}})
 es['builder'] = bodybuilder
 
