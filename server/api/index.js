@@ -2,6 +2,8 @@
 
 const internals = {};
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
+const Wreck = require('wreck');
+
 
 internals.applyRoutes = function (server) {
   server.route({
@@ -46,6 +48,15 @@ internals.applyRoutes = function (server) {
             uri: `http://${process.env.ES_HOST || '13.76.130.203'}:9200/${request.params.p}`
           };
         },
+        onResponse: function (err, res, request, h, settings, ttl) {
+
+         return Wreck.read(res, {json: true}, function (err, payload) {
+
+             let response = h.response(payload);
+            response.headers = res.headers;
+            return response;
+          });
+        }
       }
     }
   });

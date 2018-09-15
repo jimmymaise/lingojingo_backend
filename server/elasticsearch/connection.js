@@ -6,11 +6,13 @@ let bodybuilder = require('bodybuilder')
 
 let port = 9200
 let host = process.env.ES_HOST
-if (process.env.NODE_ENV === 'dev'){
-   host='https://stag-api.vomemo.com/proxyES'
-   port = 443
+let es = new elasticsearch.Client({host: {host, port}})
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
+  host = 'https://stag-api.vomemo.com/proxyES'
+  es = new elasticsearch.Client({host:'https://stag-api.vomemo.com/proxyES'})
+
 }
-const es = new elasticsearch.Client({host: {host, port}})
 es['builder'] = bodybuilder
 
 /** Check the ES connection status */
@@ -67,3 +69,4 @@ es['resetIndex'] = async function (index, mappingSchema) {
 module.exports = {
   es
 }
+// checkConnection()
