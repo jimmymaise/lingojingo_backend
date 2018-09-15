@@ -2,11 +2,13 @@
 
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
+const esSchema = require('../elasticsearch/mapping/user-topic').userTopic
 
 class Topic extends MongoModels {
 };
 
 Topic.collectionName = 'topics';
+Topic.esSchema = esSchema;
 
 Topic.schema = Joi.object().keys({
   _id: Joi.object(),

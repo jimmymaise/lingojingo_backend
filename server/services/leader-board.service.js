@@ -146,8 +146,8 @@ internals.getGeneralLeaderBoardES = async (args) => {
   }
 
   let result = await
-    UserTopic.searchWithBodyBuilder(body)
-  let data = transformESResponseToGraphql(result.aggregations.by_user_id.buckets)
+    UserTopic.searchWithBodyBuilder()
+  let data = transformESResponseToGraphql(_.get(result,'aggregations.by_user_id.buckets')||[])
   let limit = (data.length > (args.top || 10)) ? (args.top || 10) : data.length;
   let res = {}
   res['currentUser'] = data.find(function (obj) {
