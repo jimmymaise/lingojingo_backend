@@ -11,6 +11,17 @@ internals.applyRoutes = function (server) {
     }
   });
 
+  server.route({
+    method: 'GET',
+    path: '/syncES',
+    handler: async function (request) {
+      const Deck = require('../models/deck');
+      await Deck.syncDataES({},true)
+      const UserTopic = require('../models/user-topic');
+      await UserTopic.syncDataES()
+    }
+  });
+
   return;
 };
 
