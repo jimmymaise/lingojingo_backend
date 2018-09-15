@@ -22,10 +22,18 @@ deck = {
           "type": "keyword",
           "null_value": "NULL"
         },
-        "categoryName": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
+        "category": {
+          "properties": {
+            "name": {
+              "type": "keyword",
+            },
+            "_id": {
+              "type": "keyword",
+            }
+
+          }
+        }
+        ,
 
         "topicExamQuestions": {
           "type": "keyword"

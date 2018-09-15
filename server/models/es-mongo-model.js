@@ -3,6 +3,7 @@
 const MongoModels = require('mongo-models');
 const es = require('../elasticsearch/connection').es
 const bodybuilder = require('bodybuilder')
+const _ = require('lodash')
 
 
 class ESMongoModels extends MongoModels {
@@ -42,16 +43,49 @@ class ESMongoModels extends MongoModels {
     })
   }
 
-  static async search(body) {
-    return await es.search({
-      index: this.collectionName,
-      body: body
-    });
+  static async search(args) {
+    let data = await es.search(args)
+    let from = args.body.from || 0
+    let size = args.body.size || 10
+    let totalItem = _.get(data, 'hits.total') || 0
+    let totalPage = Math.ceil(totalItem / size)
+    let currentPage = from / size + 1
+    data['pages'] = {
+      current: currentPage,
+      prev: currentPage - 1 || null,
+      hasPrev: Boolean(currentPage - 1 > 0),
+      next: currentPage + 1,
+      hasNext: Boolean(totalPage - currentPage > 0),
+      total: Math.ceil(totalPage)
+    }
+    data['items'] = {
+      limit: size,
+      begin: from + 1,
+      end: from + 1 + size,
+      total: totalItem
+    }
+    let hits = _.get(data, 'hits.hits')
+    data['data'] = []
+    for (let i = 0; i < hits.length; i++) {
+      let item = hits[i]._source || {}
+      item['_id'] = hits[i]._id
+      data['data'].push(item)
+    }
+
+    delete data.hits;
+    return data
+
 
   }
+
   static async searchWithBodyBuilder() {
     let body = this.body.build()
-    return await es.search({
+    if (this.body._page) {
+      let from = body.size * (this.body._page - 1)
+      this.body.from(from)
+      body = this.body.build()
+    }
+    return await this.search({
       index: this.collectionName,
       body: body
     });
@@ -61,12 +95,26 @@ class ESMongoModels extends MongoModels {
 
   static bodyBuilder() {
     this.body = bodybuilder()
+    let body = this.body
+    this.body['page'] = function (page) {
+      body['_page'] = page
+    }
+    this.body['limit'] = function (limit) {
+      body.size(limit)
+    }
+
     return this.body
 
   }
 
-  static async syncDataES(query = {}) {
-    await es.resetIndex(this.collectionName, this.esSchema)
+  static async syncDataES(query = {}, resetIndex = false) {
+    console.log(`Starting Sync Data from MongoDB to ES for ${this.collectionName}`)
+    if (resetIndex) {
+      await es.resetIndex(this.collectionName, this.esSchema)
+    }
+    else {
+      await es.initIndex(this.collectionName, this.esSchema)
+    }
     let page = 1
     while (page) {
       let resp = await this.pagedFind(query, page, 10)
@@ -74,7 +122,7 @@ class ESMongoModels extends MongoModels {
       for (let i = 0; i < data.length; i++) {
         await this.upsertES(data[i]._id)
       }
-      console.log(page)
+      console.log(`page: ${page}`)
       if (!resp.pages.hasNext) {
         break
       }
@@ -82,7 +130,7 @@ class ESMongoModels extends MongoModels {
 
 
     }
-
+    console.log(`Completed Sync Data from MongoDB to ES for ${this.collectionName}`)
 
   }
 };
