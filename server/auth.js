@@ -36,6 +36,9 @@ internals.applyStrategy = async function (server) {
       }
     }
   });
+  await server.register({
+    plugin: require('h2o2')
+  });
 
   await server.register({
     plugin: graphqlHapi,
