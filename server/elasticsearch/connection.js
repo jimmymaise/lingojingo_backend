@@ -3,9 +3,16 @@ let bodybuilder = require('bodybuilder')
 
 
 // Core ES variables for this project
-const port = 9200
-const host = process.env.ES_HOST || '13.76.130.203'
-const es = new elasticsearch.Client({host: {host, port}})
+
+let port = 9200
+let host = process.env.ES_HOST
+let es = new elasticsearch.Client({host: {host, port}})
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
+  host = 'https://stag-api.vomemo.com/proxyES'
+  es = new elasticsearch.Client({host:'https://stag-api.vomemo.com/proxyES'})
+
+}
 es['builder'] = bodybuilder
 
 /** Check the ES connection status */
@@ -62,3 +69,4 @@ es['resetIndex'] = async function (index, mappingSchema) {
 module.exports = {
   es
 }
+// checkConnection()
