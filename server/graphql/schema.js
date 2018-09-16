@@ -103,10 +103,10 @@ const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDe
   userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
   userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers);
-const logger = { log: e => console.error(e) }
-module.exports = graphqlTools.makeExecutableSchema({
+
+module.exports = {
   typeDefs,
-  resolvers,
-  logger
-});
+  resolvers
+}
+
 

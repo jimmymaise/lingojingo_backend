@@ -1,19 +1,40 @@
 'use strict';
 
 const composer = require('./index');
-let Raven = require('raven');
-Raven.config('https://d8c9d908c23144068f61a4152a7593ef@sentry.io/1281759').install();
+const { ApolloServer,makeExecutableSchema, gql } = require('apollo-server-hapi');
+const Hapi = require('hapi');
+const typeDefs = require('./server/graphql/schema.js').typeDefs
+const resolvers = require('./server/graphql/schema.js').resolvers
+
+
 
 const Config = require('./config');
 
-const startServer = async () => {
-  try {
-    const server = await composer();
 
-    await server.start();
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+
+
+
+
+const StartServer = async () => {
+  try {
+    const server = new ApolloServer({ schema, context: async ({ request, h }) => {
+        return {};
+      }});
+    const app = await composer();
+
+    await server.applyMiddleware({
+      app,
+    });
+    await server.installSubscriptionHandlers(app.listener);
+    await app.start();
 
     console.log(`${Config.get('/projectName')}`);
-    console.log(`Server running at: ${server.info.uri}`);
+    console.log(`Server running at: ${server.graphqlPath}`);
 
 
   }
@@ -23,4 +44,4 @@ const startServer = async () => {
   }
 };
 
-startServer();
+StartServer().catch(error => console.log(error));
