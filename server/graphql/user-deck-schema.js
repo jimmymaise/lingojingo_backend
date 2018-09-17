@@ -47,7 +47,7 @@ const resolvers = {
       return await quizService.getOneUserDeck(args.id);
     },
     getMyUserDeck: async (parent, args, context) => {
-      return await quizService.getOneMyUserDeckByDeckId(context.auth.credentials.uid, args.deckId);
+      return await quizService.getOneMyUserDeckByDeckId(context.request.auth.credentials.uid, args.deckId);
     },
 //Thống kê từ đang học, chưa học, đã học cho toàn bộ deck của user
     getUserDeckStatistics: async (parent, args) => {
