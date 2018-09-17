@@ -8,52 +8,55 @@ const Config = require('../config');
 const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
 const graphqlSchema = require('./graphql/schema');
 
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
-});
+// firebaseAdmin.initializeApp({
+//   credential: firebaseAdmin.credential.cert(serviceAccount),
+//   databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
+// });
 
 const internals = {};
 
 internals.applyStrategy = async function (server) {
-  server.auth.strategy('firebase', 'firebase', {
-    instance: firebaseAdmin
-  });
+  // server.auth.strategy('firebase', 'firebase', {
+  //   instance: firebaseAdmin
+  // });
 
   // TODO: Refactor - Startx
   // Because the GraphQL not support define in manifest
   // So need move it to here
   // And the Strategy must apply first
-  await server.register({
-    plugin: graphiqlHapi,
-    options: {
-      path: '/graphiql',
-      graphiqlOptions: {
-        endpointURL: '/graphql'
-      },
-      route: {
-        cors: true
-      }
-    }
-  });
+  // await server.register({
+  //   plugin: graphiqlHapi,
+  //   options: {
+  //     path: '/graphiql',
+  //     graphiqlOptions: {
+  //       endpointURL: '/graphql'
+  //     },
+  //     route: {
+  //       cors: true
+  //     }
+  //   }
+  // });
   await server.register({
     plugin: require('h2o2')
   });
-
   await server.register({
-    plugin: graphqlHapi,
-    options: {
-      path: '/graphql',
-      graphqlOptions: request => ({
-        schema: graphqlSchema,
-        context: request // hapi request
-      }),
-      route: {
-        auth: 'firebase',
-        cors: true
-      }
-    }
+    plugin: require('./utils/sentry')
   });
+
+  // await server.register({
+  //   plugin: graphqlHapi,
+  //   options: {
+  //     path: '/graphql',
+  //     graphqlOptions: request => ({
+  //       schema: graphqlSchema,
+  //       context: request // hapi request
+  //     }),
+  //     route: {
+  //       auth: 'firebase',
+  //       cors: true
+  //     }
+  //   }
+  // });
   // TODO: Refactor - End
 
   return;
