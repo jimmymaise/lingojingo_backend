@@ -55,19 +55,19 @@ const resolvers = {
     userStoreDecks: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getDeckPaginateMapWithUserInfo(context.auth.credentials.uid, limit, page);
+      return await quizService.getDeckPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
     },
     userOwnerDecks: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getUserOwnerDeckPaginate(context.auth.credentials.uid, limit, page);
+      return await quizService.getUserOwnerDeckPaginate(context.request.auth.credentials.uid, limit, page);
     },
     deck: async (parent, args, context) => {
-      return await deckService.getDeck(context.auth.credentials.uid, args.id);
+      return await deckService.getDeck(context.request.auth.credentials.uid, args.id);
     },
     deckSearch: async (parent, args, context) => {
       context['userInfo'] = await UserInfo.findOne({
-        firebaseUserId: context.auth.credentials.uid
+        firebaseUserId: context.request.auth.credentials.uid
       });
       return await deckService.searchDeck(args);
 
@@ -75,16 +75,16 @@ const resolvers = {
   },
   Deck: {
     topicDetails: async (parent, args, context) => {
-      return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
+      return await deckService.getListTopicDetail(context.request.auth.credentials.uid, parent.topics);
     },
     wordStatistics: async (parent, args, context) => {
       let queryData = {}
       queryData.deckId = parent._id
-      queryData.userId = context.auth.credentials.uid
+      queryData.userId = context.request.auth.credentials.uid
 
       data = await userStatisticsService.getWordStatics(queryData);
       return data[0]
-      // return await deckService.getListTopicDetail(context.auth.credentials.uid, parent.topics);
+      // return await deckService.getListTopicDetail(context.request.auth.credentials.uid, parent.topics);
     },
 
     category: async (parent, args, context) => {
@@ -97,7 +97,7 @@ const resolvers = {
     isOwned: async (parent, args, context) => {
       let userInfo = context.userInfo
 
-      let firebaseUId = context.auth.credentials.uid
+      let firebaseUId = context.request.auth.credentials.uid
       if (!userInfo || firebaseUId !== userInfo.firebaseUserId) {
         userInfo = await UserInfo.findOne({
           firebaseUserId: firebaseUId
@@ -107,7 +107,7 @@ const resolvers = {
       return await deckService.isOwned(userInfo, parent._id);
     },
     cardDetails: async (parent, args, context) => {
-      return await deckService.getListCardDetail(context.auth.credentials.uid, parent.cards);
+      return await deckService.getListCardDetail(context.request.auth.credentials.uid, parent.cards);
     }
   }
 };

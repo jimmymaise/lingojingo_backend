@@ -46,7 +46,7 @@ const resolvers = {
   Mutation: {
     addRewardEvent: async (parent, args, context) => {
       const rewardEvent = args.rewardEvent;
-      rewardEvent.userId = context.auth.credentials.uid;
+      rewardEvent.userId = context.request.auth.credentials.uid;
       rewardEvent.timeRewarded = new Date();
 
 
