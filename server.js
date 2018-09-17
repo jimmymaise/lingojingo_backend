@@ -7,6 +7,8 @@ const FIRE_BASE_CONFIG = require('./server/data/firebase_config')
 const firebaseAdmin = require('firebase-admin');
 const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
 
+const logger = require('./server/utils/logger.js').logger
+
 const typeDefs = require('./server/graphql/schema.js').typeDefs
 const resolvers = require('./server/graphql/schema.js').resolvers
 const schema = makeExecutableSchema({
@@ -23,9 +25,14 @@ const StartServer = async () => {
   try {
     const server = new ApolloServer({
       schema,
-      context: ({ request }) => {
+      context: ({request}) => {
         return request;
       },
+      formatError: error => {
+        logger.error(error.originalError, error.source);
+        console.error(error);
+        return new Error('Internal server error');
+      }
     });
     const app = await composer();
     app.auth.strategy('firebase', 'firebase', {
