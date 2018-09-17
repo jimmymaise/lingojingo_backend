@@ -1,44 +1,28 @@
 'use strict';
 
 const composer = require('./index');
+const Config = require('./config');
 const {ApolloServer, makeExecutableSchema, gql} = require('apollo-server-hapi');
-const Hapi = require('hapi');
+const FIRE_BASE_CONFIG = require('./server/data/firebase_config')
+const firebaseAdmin = require('firebase-admin');
+const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
+
 const typeDefs = require('./server/graphql/schema.js').typeDefs
 const resolvers = require('./server/graphql/schema.js').resolvers
-
-
-'use strict';
-const FIRE_BASE_CONFIG = require('./server/data/firebase_config')
-const Boom = require('boom');
-const {graphqlHapi, graphiqlHapi} = require('apollo-server-hapi');
-const firebaseAdmin = require('firebase-admin');
-
-// const Config = require('../config');
-const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
-const graphqlSchema = require('./server/graphql/schema');
-
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
-});
-// internals.applyStrategy = async function (server) {
-//   server.auth.strategy('firebase', 'firebase', {
-//     instance: firebaseAdmin
-//   });
-
-const Config = require('./config');
-
-
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
 
+firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(serviceAccount),
+  databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
+});
 
 const StartServer = async () => {
   try {
     const server = new ApolloServer({
-      schema, // You'll need to pass the request object and optionally the repsponse toolkit.
+      schema,
       context: ({ request }) => {
         return request;
       },
