@@ -15,7 +15,7 @@ const manifest = {
   $meta: 'This file defines the plot device.',
   server: {
     address: '0.0.0.0',
-    cache: { engine: require('catbox-memory') },
+    cache: {engine: require('catbox-memory')},
     debug: {
       request: ['error']
     },
@@ -28,6 +28,12 @@ const manifest = {
     plugins: [
       {
         plugin: require('inert')
+      },
+      {
+        plugin: require('./server/utils/sentry')
+      },
+      {
+        plugin: require('h2o2')
       },
       {
         plugin: require('vision')
