@@ -39,7 +39,9 @@ const StartServer = async () => {
   try {
     const server = new ApolloServer({
       schema, // You'll need to pass the request object and optionally the repsponse toolkit.
-      context: (request, h) => ({request, h}),
+      context: ({ request }) => {
+        return request;
+      },
     });
     const app = await composer();
     app.auth.strategy('firebase', 'firebase', {
@@ -48,7 +50,8 @@ const StartServer = async () => {
     await server.applyMiddleware({
       app,
       route: {
-        auth: 'firebase'
+        auth: 'firebase',
+        cors: true
       }
     });
     await server.installSubscriptionHandlers(app.listener);
