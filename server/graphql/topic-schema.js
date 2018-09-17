@@ -23,7 +23,7 @@ const resolvers = {
   },
   Topic: {
     cardDetails: async (parent, args, context) => {
-      return await deckService.getListCardDetail(context.auth.credentials.uid, parent.cards);
+      return await deckService.getListCardDetail(context.request.auth.credentials.uid, parent.cards);
     }
   }
 };

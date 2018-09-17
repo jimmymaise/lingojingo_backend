@@ -44,15 +44,15 @@ const resolvers = {
       return await quizService.getOneUserTopic(args.id);
     },
     getUserTopicByDeckAndTopic: async (parent, args, context) => {
-      return await quizService.getUserTopicByDeckAndTopic(context.auth.credentials.uid, args.deckId, args.topicId);
+      return await quizService.getUserTopicByDeckAndTopic(context.request.auth.credentials.uid, args.deckId, args.topicId);
     }
   },
   Mutation: {
     createMyUserTopic: async (parent, args, context) => {
-      return await quizService.addOneUserTopic(context.auth.credentials.uid, args.userTopic);
+      return await quizService.addOneUserTopic(context.request.auth.credentials.uid, args.userTopic);
     },
     createOrUpdateMyUserTopic: async (parent, args, context) => {
-      return await quizService.createOrUpdateUserTopic(context.auth.credentials.uid, args.userTopic);
+      return await quizService.createOrUpdateUserTopic(context.request.auth.credentials.uid, args.userTopic);
     },
     updateUserTopic: async (parent, args) => {
       return await quizService.updateOneUserTopic(args);

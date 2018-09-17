@@ -46,14 +46,14 @@ const resolvers = {
       return await userExamService.getOneUserExam(args.id);
     },
     getRecentlyUserExams: async (parent, args, context) => {
-      const userId = context.auth.credentials.uid;
+      const userId = context.request.auth.credentials.uid;
       return await userExamService.getRecentlyUserExams(userId, args.topicId, 10);
     }
   },
   Mutation: {
     createUserExam: async (parent, args, context) => {
       const userExam = args.userExam;
-      userExam.userId = context.auth.credentials.uid;
+      userExam.userId = context.request.auth.credentials.uid;
 
       return await userExamService.addOneUserExam(userExam);
     },

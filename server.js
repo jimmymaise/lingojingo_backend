@@ -1,6 +1,7 @@
 'use strict';
 
 const composer = require('./index');
+const _ = require('lodash')
 const Config = require('./config');
 const {ApolloServer, makeExecutableSchema, gql} = require('apollo-server-hapi');
 const FIRE_BASE_CONFIG = require('./server/data/firebase_config')
@@ -16,6 +17,25 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
+const GraphQLExtension = require('graphql-extensions').GraphQLExtension
+
+class MyErrorTrackingExtension extends GraphQLExtension {
+  willSendResponse(o) {
+    const {context, graphqlResponse} = o
+
+    context.trackErrors(graphqlResponse.errors)
+
+    return o
+  }
+
+  // Other lifecycle methods include
+  // requestDidStart
+  // parsingDidStart
+  // validationDidStart
+  // executionDidStart
+  // willSendResponse
+}
+
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
   databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
@@ -25,13 +45,39 @@ const StartServer = async () => {
   try {
     const server = new ApolloServer({
       schema,
+
+      extensions: [() => new MyErrorTrackingExtension()],
       context: ({request}) => {
-        return request;
-      },
-      formatError: error => {
-        logger.error(error.originalError, error.source);
-        console.error(error);
-        return new Error('Internal server error');
+        return {
+          request,
+          trackErrors(errors) {
+            if (errors) {
+              let other_errors = _.cloneDeep(errors)
+              other_errors.shift()
+              logger.error(errors[0].originalError, {
+                request: {
+                  method: this.request.method,
+                  headers: this.request.headers,
+                  cookies: this.request.state,
+                  url: this.request.path,
+                  body:this.request.payload.query,
+                },
+                extra: {
+                  timestamp: this.request.info.received,
+                  id: this.request.info.id,
+                  remoteAddress: this.request.info.remoteAddress,
+                  userInfo:request.auth,
+                  otherErrors: JSON.stringify(other_errors)
+
+                },
+              })
+
+
+            }
+            // Track the errors
+          },
+
+        }
       }
     });
     const app = await composer();

@@ -12,15 +12,16 @@ const myPlugin = {
       logger.error(event.error, {
         request: {
           method: request.method,
-          query_string: request.query,
+          body: request.query,
           headers: request.headers,
           cookies: request.state,
-          url: baseUrl + request.path
+          url: request.path
         },
         extra: {
           timestamp: request.info.received,
           id: request.id,
-          remoteAddress: request.info.remoteAddress
+          remoteAddress: request.info.remoteAddress,
+          userInfo:request.auth
         },
         tags: options.tags
       })
