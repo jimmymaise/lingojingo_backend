@@ -13,12 +13,14 @@ internals.createOrUpdate = async (firebaseUId, data) => {
   return await UserInfo.findOneAndUpdate({
     firebaseUserId: firebaseUId
   }, {
-    firebaseUserId: firebaseUId,
-    ...currentInfo,
-    ...data,
-    ...{
-      timeUpdated: new Date(),
-      timeCreated: new Date()
+    $set: {
+      firebaseUserId: firebaseUId,
+      ...currentInfo,
+      ...data,
+      ...{
+        timeUpdated: new Date(),
+        timeCreated: new Date()
+      }
     }
   }, {
     upsert: true,

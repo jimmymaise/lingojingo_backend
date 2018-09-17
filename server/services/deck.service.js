@@ -52,12 +52,12 @@ internals.buyDeck = async (firebaseUId, deckId) => {
 
     return await UserInfo.findOneAndUpdate({
       firebaseUserId: firebaseUId
-    }, {
+    }, { $set: {
       firebaseUserId: firebaseUId,
       ...currentInfo,
 
       timeUpdated: new Date()
-    }, {
+    }}, {
       upsert: true,
       setDefaultsOnInsert: true
     });
