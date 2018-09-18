@@ -50,7 +50,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency(['auth', 'support-service'], internals.applyRoutes);
+  server.dependency([ 'support-service'], internals.applyRoutes);
 
   return;
 };

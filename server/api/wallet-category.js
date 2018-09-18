@@ -81,7 +81,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency(['auth', 'wallet-service'], internals.applyRoutes);
+  server.dependency([ 'wallet-service'], internals.applyRoutes);
 
   return;
 };

@@ -74,9 +74,6 @@ const manifest = {
         }
       },
       {
-        plugin: './server/auth'
-      },
-      {
         plugin: './server/services/user-info.service'
       },
       {

@@ -70,7 +70,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency(['auth', 'user-info-service'], internals.applyRoutes);
+  server.dependency([ 'user-info-service'], internals.applyRoutes);
 
   return;
 };
