@@ -65,7 +65,7 @@ internals.applyRoutes = function (server) {
 };
 
 exports.register = function (server, options) {
-  server.dependency(['auth', 'hapi-mongo-models'], internals.applyRoutes);
+  server.dependency([ 'hapi-mongo-models'], internals.applyRoutes);
 
   return;
 };
