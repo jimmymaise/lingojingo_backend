@@ -109,7 +109,7 @@ internals.getGeneralLeaderBoardES = async (args) => {
         agg
           .aggregation('sum', "highestResult.totalCorrectAnswers", 'totalCorrectAnswers')
           .aggregation('sum', 'highestResult.timeSpent', 'timeSpent')
-          .aggregation('sum', "highestResult.totalExams", 'totalExams')
+          .aggregation('sum', "totalExams", 'totalExams')
           .aggregation('avg', 'highestResult.score', 'score')
           .aggregation('avg', 'highestResult.timeSpentAvg', 'timeSpentAvg')
           .aggregation('bucket_sort', {

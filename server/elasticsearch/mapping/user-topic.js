@@ -48,11 +48,6 @@ userTopic = {
             },
             "totalCorrectAnswers": {
               "type": "float"
-
-            },
-            "totalExams": {
-              "type": "float"
-
             }
 
           },
