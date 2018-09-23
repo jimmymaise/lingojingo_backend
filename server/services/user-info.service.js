@@ -85,8 +85,18 @@ internals.getOneById = async (id) => {
 }
 
 
-internals.getOneForClient = async (firebaseUId) => {
-  return UserInfo.transformToClientResponseData(await internals.getOne(firebaseUId));
+internals.getOneForClient = async (request) => {
+  let firebaseUId = request.auth.credentials.uid
+  let data = UserInfo.transformToClientResponseData(await internals.getOne(firebaseUId));
+  if (!data.email) {
+    data['email'] = request.auth.credentials.email
+    data['fullName'] = request.auth.credentials.name
+    data['avatarUrl'] = request.auth.credentials.picture
+    return internals.createOrUpdateForClient(firebaseUId, data)
+  }
+  return data
+
+
 }
 
 exports.register = function (server, options) {

@@ -22,8 +22,8 @@ internals.applyRoutes = function (server, next) {
         payload: {
           avatarUrl: Joi.string().optional().allow(null), 
           fullName: Joi.string().optional().allow(null),
-          phone: Joi.string().optional().allow(null),
-          aboutContent: Joi.string().optional().allow(null),
+          phone: Joi.string().optional().allow(null).allow(''),
+          aboutContent: Joi.string().optional().allow(null).allow(''),
           isLearnMailNotify: Joi.boolean().optional().allow(null),
           isNewBlogMailNotify: Joi.boolean().optional().allow(null),
           isGeneralMailNotify: Joi.boolean().optional().allow(null)
@@ -58,7 +58,7 @@ internals.applyRoutes = function (server, next) {
     },
     handler: async (request) => {
       try {
-        const result = await UserInfoService.getOneForClient(request.auth.credentials.uid);
+        const result = await UserInfoService.getOneForClient(request);
         return result;
       } catch (err) {
         return Boom.internal('Get user info error', err);
@@ -66,7 +66,7 @@ internals.applyRoutes = function (server, next) {
     }
   });
 
-  return;
+  return ;
 };
 
 exports.register = function (server, options) {

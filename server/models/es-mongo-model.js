@@ -13,6 +13,11 @@ class ESMongoModels extends MongoModels {
     await this.upsertES(arguments[0])
     return data
   }
+  static async findOneAndUpdate() {
+    let data = await super.findOneAndUpdate.apply(this, arguments)
+    await this.upsertES(data['_id'])
+    return data
+  }
 
   static async findByIdAndDelete() {
     let data = await super.findByIdAndDelete.apply(this, arguments)
