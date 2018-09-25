@@ -37,7 +37,7 @@ UserInfo.schema = Joi.object().keys({
   _id: Joi.object(),
   firebaseUserId: Joi.string().required(),
   fullName: Joi.string().optional().allow(null),
-  email: Joi.string(),
+  email: Joi.string().optional().allow(null).allow(''),
   phone: Joi.string().optional().allow(null).allow(''),
   avatarUrl: Joi.string().optional().allow(null),
   aboutContent: Joi.string().optional().allow(null).allow(''),
