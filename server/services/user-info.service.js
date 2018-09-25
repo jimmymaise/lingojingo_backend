@@ -88,7 +88,7 @@ internals.getOneById = async (id) => {
 internals.getOneForClient = async (request) => {
   let firebaseUId = request.auth.credentials.uid
   let data = UserInfo.transformToClientResponseData(await internals.getOne(firebaseUId));
-  if (!data.email) {
+  if (!data.email && !data.fullName) {
     data['email'] = request.auth.credentials.email
     data['fullName'] = request.auth.credentials.name
     data['avatarUrl'] = request.auth.credentials.picture
