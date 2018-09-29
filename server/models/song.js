@@ -24,6 +24,7 @@ Song.schema = Joi.object().keys({
   songLevel: Joi.number(),
   cardTotal: Joi.number(),
   listLyric: Joi.array().items(lyricObj),
+  cards: Joi.array(),
   link: Joi.string(),
   youtubeId: Joi.string(),
   songName: Joi.string(),
