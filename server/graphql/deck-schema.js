@@ -50,17 +50,17 @@ const resolvers = {
     decks: async (parent, args) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getDeckPaginate(limit, page);
+      return await deckService.getDeckPaginate(limit, page);
     },
     userStoreDecks: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getDeckPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
+      return await deckService.getDeckPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
     },
     userOwnerDecks: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getUserOwnerDeckPaginate(context.request.auth.credentials.uid, limit, page);
+      return await deckService.getUserOwnerDeckPaginate(context.request.auth.credentials.uid, limit, page);
     },
     deck: async (parent, args, context) => {
       return await deckService.getDeck(context.request.auth.credentials.uid, args.id);

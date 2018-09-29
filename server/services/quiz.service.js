@@ -1,8 +1,5 @@
 'use strict';
 
-const Async = require('async');
-const forEach = require('lodash/forEach');
-const ObjectID = require('mongodb').ObjectID;
 
 const Card = require('../models/card');
 const Deck = require('../models/deck');
@@ -33,7 +30,7 @@ internals.getUserTopicByDeckAndTopic = async (userId, deckId, topicId) => {
 internals.addOneUserTopic = async (userId, userTopicData) => {
   let topicData = await Deck.findById(userTopicData.topicId)
 
-  userTopicData.topicType=topicData.type
+  userTopicData.topicType = topicData.type
 
   let result = await UserTopic.insertOne({
     userId,
@@ -131,53 +128,11 @@ internals.updateOneUserDeck = async (args) => {
   return result
 
 }
-//DeckPaginate
-
-internals.getDeckPaginate = async (limit, page) => {
-  let _limit = limit || 5;
-  let _page = page || 1;
-  return await Deck.pagedFind({}, _page, _limit, {});
-}
-
-internals.getDeckPaginateMapWithUserInfo = async (firebaseUId, limit, page) => {
-  let _limit = limit || 5;
-  let _page = page || 1;
-
-  const paginateData = await Deck.pagedFind({}, _page, _limit, {});
-  const userInfo = await UserInfo.findOne({
-    firebaseUserId: firebaseUId
-  });
-
-  forEach(paginateData.data, (deckItem) => {
-    if (userInfo && userInfo.decks && userInfo.decks.indexOf(deckItem._id.toString()) >= 0) {
-      deckItem.isOwned = true;
-    } else {
-      deckItem.isOwned = false;
-    }
-  })
-
-  return paginateData;
-}
-
-internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
-  let _limit = limit || 5;
-  let _page = page || 1;
-
-  const userInfo = await UserInfo.findOne({
-    firebaseUserId: firebaseUId
-  });
-
-  const ids = userInfo && userInfo.decks ? userInfo.decks.map((id) => ObjectID(id)) : [];
-  return await Deck.pagedFind({_id: {$in: ids}}, _page, _limit, {});
-}
 
 exports.register = function (server, options) {
 
   server.expose('getOneCard', internals.getOneCard);
 
-  server.expose('getDeckPaginate', internals.getDeckPaginate);
-  server.expose('getDeckPaginateMapWithUserInfo', internals.getDeckPaginateMapWithUserInfo);
-  server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
   server.expose('getOneUserTopic', internals.getOneUserTopic);
   server.expose('getUserTopicByDeckAndTopic', internals.getUserTopicByDeckAndTopic);
@@ -195,10 +150,6 @@ exports.register = function (server, options) {
 
 };
 
-
-exports.getDeckPaginate = internals.getDeckPaginate;
-exports.getDeckPaginateMapWithUserInfo = internals.getDeckPaginateMapWithUserInfo;
-exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
 
 exports.getOneCard = internals.getOneCard;
 
