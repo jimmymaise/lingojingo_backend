@@ -5,6 +5,8 @@ const cardSchema = require('./card-schema');
 const sentry = require('../utils/logger').logger;
 
 const deckSchema = require('./deck-schema');
+const songSchema = require('./song-schema');
+
 const topicSchema = require('./topic-schema');
 const userTopicSchema = require('./user-topic-schema');
 const examSchema = require('./user-exam-schema');
@@ -100,9 +102,9 @@ const externalType = `
 `
 
 const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,
-  userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs];
+  userTopicSchema.typeDefs, examSchema.typeDefs, userDeckSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs,songSchema.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
-  userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers);
+  userTopicSchema.resolvers, examSchema.resolvers, userDeckSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers,songSchema.resolvers);
 
 module.exports = {
   typeDefs,
