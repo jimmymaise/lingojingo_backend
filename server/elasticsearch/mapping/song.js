@@ -14,9 +14,7 @@ song = {
           "analyzer": "songNameIndexAnalyzer",
           "search_analyzer": "songNameSearchAnalyzer"
         },
-        "cards": {
-          "type": "array",
-        },
+
         "img": {
           "type": "keyword",
           "null_value": "NULL"
