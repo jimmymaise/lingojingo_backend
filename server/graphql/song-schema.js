@@ -13,6 +13,13 @@ const typeDefs = `
     pages: PageInfo,
     items: PageItemInfo
   }
+  type Lyric {
+   number: Int
+   timeStart: Int
+   timeEnd: Int
+   strLyricEn: String
+   strLyricVi: String
+  }
   type EsSongList {
   offset: Int,
   start: Int,
@@ -26,7 +33,13 @@ const typeDefs = `
     tags: [String],
     topics: [JSON],
     songName: String,
+    bandSingerId: Int,
     isOwned: Boolean,
+    songLevel: Int,
+    youtubeId: String,
+    cardTotal: Int,
+    listLyric: [Lyric]
+    
     img: String,
     cardDetails: [Card],
     passScore: String
