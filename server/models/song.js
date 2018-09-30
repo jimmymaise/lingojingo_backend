@@ -14,7 +14,9 @@ class Song extends ESMongoModels {
     indexData['bandSingerInfo'] = {
       name: bandSingerInfo['name'],
       avatar: bandSingerInfo['avatar'],
-      id: bandSingerInfo['singerId']
+      _id: bandSingerInfo['_id'].toString(),
+      singerId: bandSingerInfo['singerId']
+
     }
     await super.upsertES(_id, indexData)
   }
