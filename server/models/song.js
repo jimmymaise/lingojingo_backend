@@ -13,7 +13,8 @@ class Song extends ESMongoModels {
     let bandSingerInfo = await BandSinger.findOne({singerId:indexData.bandSingerId });
     indexData['bandSingerInfo'] = {
       name: bandSingerInfo['name'],
-      avatar: bandSingerInfo['avatar']
+      avatar: bandSingerInfo['avatar'],
+      id: bandSingerInfo['singerId']
     }
     await super.upsertES(_id, indexData)
   }

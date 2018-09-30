@@ -42,7 +42,7 @@ const typeDefs = `
     listLyric: [Lyric],
     link: String,
     youtubeId: String,
-    band: [JSON],
+    bandSingerInfo: [JSON],
     img: String,
     cardDetails: [Card],
     passScore: String
