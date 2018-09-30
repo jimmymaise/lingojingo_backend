@@ -36,7 +36,6 @@ const typeDefs = `
     bandSingerId: Int,
     isOwned: Boolean,
     songLevel: Int,
-    youtubeId: String,
     cardTotal: Int,
     duration: Int,
     cards: [String],
