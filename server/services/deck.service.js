@@ -139,6 +139,47 @@ internals.getDeckCategory = async (id) => {
     let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});return data[0]
 }
 
+//DeckPaginate
+
+internals.getDeckPaginate = async (limit, page) => {
+  let _limit = limit || 5;
+  let _page = page || 1;
+  return await Deck.pagedFind({}, _page, _limit, {});
+}
+
+internals.getDeckPaginateMapWithUserInfo = async (firebaseUId, limit, page) => {
+  let _limit = limit || 5;
+  let _page = page || 1;
+
+  const paginateData = await Deck.pagedFind({}, _page, _limit, {});
+  const userInfo = await UserInfo.findOne({
+    firebaseUserId: firebaseUId
+  });
+
+  forEach(paginateData.data, (deckItem) => {
+    if (userInfo && userInfo.decks && userInfo.decks.indexOf(deckItem._id.toString()) >= 0) {
+      deckItem.isOwned = true;
+    } else {
+      deckItem.isOwned = false;
+    }
+  })
+
+  return paginateData;
+}
+
+internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
+  let _limit = limit || 5;
+  let _page = page || 1;
+
+  const userInfo = await UserInfo.findOne({
+    firebaseUserId: firebaseUId
+  });
+
+  const ids = userInfo && userInfo.decks ? userInfo.decks.map((id) => ObjectID(id)) : [];
+  return await Deck.pagedFind({_id: {$in: ids}}, _page, _limit, {});
+}
+
+
 
 exports.register = function (server, options) {
 
@@ -152,6 +193,9 @@ exports.register = function (server, options) {
   server.expose('getDeckCategory', internals.getDeckCategory);
   server.expose('isOwned', internals.isOwned);
 
+  server.expose('getDeckPaginate', internals.getDeckPaginate);
+  server.expose('getDeckPaginateMapWithUserInfo', internals.getDeckPaginateMapWithUserInfo);
+  server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
 
   return;
@@ -165,6 +209,10 @@ exports.getOneTopic = internals.getOneTopic;
 exports.getDeckCategory = internals.getDeckCategory;
 exports.searchDeck = internals.searchDeck;
 exports.isOwned = internals.isOwned;
+
+exports.getDeckPaginate = internals.getDeckPaginate;
+exports.getDeckPaginateMapWithUserInfo = internals.getDeckPaginateMapWithUserInfo;
+exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
 
 
 

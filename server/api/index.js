@@ -22,10 +22,14 @@ internals.applyRoutes = function (server) {
     },
     handler: async function (request) {
       const Deck = require('../models/deck');
+      const UserTopic = require('../models/user-topic');
+      const Song = require('../models/song');
+
+
       try {
         await Deck.syncDataES({}, true)
-        const UserTopic = require('../models/user-topic');
         await UserTopic.syncDataES({}, true)
+        await Song.syncDataES({}, true)
       }
       catch (e) {
         return {e}
@@ -50,9 +54,9 @@ internals.applyRoutes = function (server) {
         },
         onResponse: function (err, res, request, h, settings, ttl) {
 
-         return Wreck.read(res, {json: true}, function (err, payload) {
+          return Wreck.read(res, {json: true}, function (err, payload) {
 
-             let response = h.response(payload);
+            let response = h.response(payload);
             response.headers = res.headers;
             return response;
           });
@@ -65,7 +69,7 @@ internals.applyRoutes = function (server) {
 };
 
 exports.register = function (server, options) {
-  server.dependency([ 'hapi-mongo-models'], internals.applyRoutes);
+  server.dependency(['hapi-mongo-models'], internals.applyRoutes);
 
   return;
 };

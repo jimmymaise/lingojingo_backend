@@ -25,7 +25,6 @@ Deck.esSchema = esSchema;
 
 Deck.schema = Joi.object().keys({
   _id: Joi.object(),
-  images: Joi.array(),
   total: Joi.number(),
   tags: Joi.array(),
   deckName: Joi.string(),
