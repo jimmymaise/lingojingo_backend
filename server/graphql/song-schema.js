@@ -60,17 +60,17 @@ const resolvers = {
     songs: async (parent, args) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getSongPaginate(limit, page);
+      return await songService.getSongPaginate(limit, page);
     },
     userStoreSongs: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getSongPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
+      return await songService.getSongPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
     },
     userOwnerSongs: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await quizService.getUserOwnerSongPaginate(context.request.auth.credentials.uid, limit, page);
+      return await songService.getUserOwnerSongPaginate(context.request.auth.credentials.uid, limit, page);
     },
     song: async (parent, args, context) => {
       return await songService.getSong(context.request.auth.credentials.uid, args.id);
