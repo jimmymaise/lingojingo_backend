@@ -3,8 +3,21 @@
 const Joi = require('joi');
 const ESMongoModels = require('./es-mongo-model');
 const esSchema = require('../elasticsearch/mapping/song').song
+const BandSinger = require('../models/band-singer');
 
 class Song extends ESMongoModels {
+
+  static async upsertES(_id) {
+    let indexData = await this.findById(_id)
+    //Add more fields from other table
+    let bandSingerInfo = await BandSinger.findOne({singerId:indexData.bandSingerId });
+    indexData['bandSingerInfo'] = {
+      name: bandSingerInfo['name'],
+      avatar: bandSingerInfo['avatar']
+    }
+    await super.upsertES(_id, indexData)
+  }
+
 
 }
 
