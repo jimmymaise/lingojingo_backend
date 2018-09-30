@@ -101,6 +101,9 @@ const manifest = {
         plugin: './server/api/deck'
       },
       {
+        plugin: './server/api/song'
+      },
+      {
         plugin: './server/api/support'
       }
     ]

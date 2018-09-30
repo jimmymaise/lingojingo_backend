@@ -38,9 +38,12 @@ const typeDefs = `
     songLevel: Int,
     youtubeId: String,
     cardTotal: Int,
+    duration: Int,
     cards: [String],
-    listLyric: [Lyric]
-    
+    listLyric: [Lyric],
+    link: String,
+    youtubeId: String,
+    band: [JSON],
     img: String,
     cardDetails: [Card],
     passScore: String

@@ -32,6 +32,9 @@ song = {
         "cardTotal": {
           "type": "keyword",
         },
+        "duration": {
+          "type": "keyword",
+        },
         "listLyric": {
           "properties": {
 
