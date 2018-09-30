@@ -29,7 +29,8 @@ Song.schema = Joi.object().keys({
   youtubeId: Joi.string(),
   songName: Joi.string(),
   topics: Joi.array(),
-  passScore: Joi.number()// pass score to evaluate exam passed or failed,eg:80 mean exam score must be >=80 to pass
+  passScore: Joi.number(),// pass score to evaluate exam passed or failed,eg:80 mean exam score must be >=80 to pass,
+  duration: Joi.number()
 }).options({stripUnknown: true});
 
 Song['buider'] = require('bodybuilder')
