@@ -41,6 +41,29 @@ firebaseAdmin.initializeApp({
   databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
 });
 
+function checkSecurty(request) {
+  if (request.headers['x-tag'] === 'vomemo@Admin') {
+    return request
+  }
+  let vmmPassPort = parseInt(request.headers['x-tag'], 10)
+  let beTimeStamp = Math.floor(Date.now() / 1000)
+  let feTimeStamp = 0
+  // let timestamp = Math.floor(Date.now() / 1000)
+  //
+  // let vmmPassport = (timestamp-98765) * 2018 - 12345
+
+  if (vmmPassPort) {
+    feTimeStamp = ((vmmPassPort + 12345) / 2018) + 98765
+    let diff = Math.abs(beTimeStamp - feTimeStamp)
+    if (diff < 1800) {
+      return request
+    }
+  }
+  throw Error(`Error code 911: Some issue happens.`)
+
+
+}
+
 const StartServer = async () => {
   try {
     const server = new ApolloServer({
@@ -49,7 +72,7 @@ const StartServer = async () => {
       extensions: [() => new MyErrorTrackingExtension()],
       context: ({request}) => {
         return {
-          request,
+          request: checkSecurty(request),
           trackErrors(errors) {
             if (errors) {
               let other_errors = _.cloneDeep(errors)
@@ -60,13 +83,13 @@ const StartServer = async () => {
                   headers: this.request.headers,
                   cookies: this.request.state,
                   url: this.request.path,
-                  body:this.request.payload.query,
+                  body: this.request.payload.query,
                 },
                 extra: {
                   timestamp: this.request.info.received,
                   id: this.request.info.id,
                   remoteAddress: this.request.info.remoteAddress,
-                  userInfo:request.auth,
+                  userInfo: request.auth,
                   otherErrors: JSON.stringify(other_errors)
 
                 },
@@ -88,7 +111,10 @@ const StartServer = async () => {
       app,
       route: {
         auth: 'firebase',
-        cors: true
+        cors: {
+          origin: ['*'],
+          additionalHeaders: ['cache-control', 'x-tag']
+        }
       }
     });
     await server.installSubscriptionHandlers(app.listener);
