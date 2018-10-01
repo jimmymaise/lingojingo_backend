@@ -40,7 +40,7 @@ const typeDefs = `
     cardTotal: Int,
     cards: [String],
     listLyric: [Lyric]
-    
+    link: String,
     img: String,
     cardDetails: [Card],
     passScore: String
