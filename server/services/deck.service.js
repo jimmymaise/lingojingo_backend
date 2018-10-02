@@ -198,7 +198,6 @@ exports.register = function (server, options) {
   server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
 
-  return;
 };
 
 exports.getListTopicDetail = internals.getListTopicDetail;

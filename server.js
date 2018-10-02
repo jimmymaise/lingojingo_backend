@@ -28,12 +28,6 @@ class MyErrorTrackingExtension extends GraphQLExtension {
     return o
   }
 
-  // Other lifecycle methods include
-  // requestDidStart
-  // parsingDidStart
-  // validationDidStart
-  // executionDidStart
-  // willSendResponse
 }
 
 firebaseAdmin.initializeApp({
@@ -45,21 +39,22 @@ function checkSecurty(request) {
   if (request.headers['x-tag'] === 'vomemo@Admin') {
     return request
   }
-  let vmmPassPort = parseInt(request.headers['x-tag'], 10)
+  let xTag = parseInt(request.headers['x-tag'], 10)
   let beTimeStamp = Math.floor(Date.now() / 1000)
   let feTimeStamp = 0
   // let timestamp = Math.floor(Date.now() / 1000)
   //
   // let vmmPassport = (timestamp-98765) * 2018 - 12345
 
-  if (vmmPassPort) {
-    feTimeStamp = ((vmmPassPort + 12345) / 2018) + 98765
+  if (xTag) {
+    feTimeStamp = ((xTag + 12345) / 2018) + 98765
     let diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < 1800) {
+    if (diff < 20) {
       return request
     }
   }
-  throw Error(`Error code 911: Some issue happens.`)
+  logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request))
+  throw Error(`Error code 911: Some issue happens. Contact support@vomemo.com for more detail`)
 
 
 }
@@ -77,23 +72,7 @@ const StartServer = async () => {
             if (errors) {
               let other_errors = _.cloneDeep(errors)
               other_errors.shift()
-              logger.error(errors[0].originalError, {
-                request: {
-                  method: this.request.method,
-                  headers: this.request.headers,
-                  cookies: this.request.state,
-                  url: this.request.path,
-                  body: this.request.payload.query,
-                },
-                extra: {
-                  timestamp: this.request.info.received,
-                  id: this.request.info.id,
-                  remoteAddress: this.request.info.remoteAddress,
-                  userInfo: request.auth,
-                  otherErrors: JSON.stringify(other_errors)
-
-                },
-              })
+              logger.error(errors[0].originalError, logger.requestToSentryLog(this.request, other_errors))
 
 
             }

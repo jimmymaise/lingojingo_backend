@@ -1,4 +1,4 @@
-const winston  = require('winston');
+const winston = require('winston');
 const Sentry = require('winston-raven-sentry');
 
 const options = {
@@ -11,6 +11,26 @@ const logger = new winston.Logger({
     new Sentry(options)
   ]
 });
+logger['requestToSentryLog'] = function (request,other_errors) {
+  return {
+    request: {
+      method: request.method,
+      headers: request.headers,
+      cookies: request.state,
+      url: request.path,
+      body: request.payload.query,
+    },
+    extra: {
+      timestamp: request.info.received,
+      id: request.info.id,
+      remoteAddress: request.info.remoteAddress,
+      userInfo: request.auth,
+      otherErrors: JSON.stringify(other_errors)
+
+    },
+  }
+
+}
 module.exports.logger = logger;
 
 // const log = new (winston.Logger)({
