@@ -59,6 +59,9 @@ function checkSecurty(request) {
       return request
     }
   }
+  else {
+    return request
+  }
   throw Error(`Error code 911: Some issue happens.`)
 
 
