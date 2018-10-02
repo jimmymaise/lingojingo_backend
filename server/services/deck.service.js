@@ -77,6 +77,9 @@ internals.searchDeck = async (args) => {
   let page = _.get(args, 'pagination.page') || 2
   let limit =_.get(args, 'pagination.limit') || 10
   // let from = size* (page - 1)
+  if (limit >50) {
+    throw Error('Limit should be lower than 50')
+  }
   body.page(page)
   body.limit(limit)
 
@@ -198,7 +201,6 @@ exports.register = function (server, options) {
   server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
 
 
-  return;
 };
 
 exports.getListTopicDetail = internals.getListTopicDetail;
