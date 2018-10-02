@@ -76,6 +76,9 @@ internals.searchSong = async (args) => {
   let search = args.search || {}
   let page = _.get(args, 'pagination.page') || 2
   let limit =_.get(args, 'pagination.limit') || 10
+  if (limit >50) {
+    throw Error('Limit should be lower than 50')
+  }
   // let from = size* (page - 1)
   body.page(page)
   body.limit(limit)
