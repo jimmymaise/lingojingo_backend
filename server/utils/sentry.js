@@ -9,22 +9,7 @@ const myPlugin = {
         (request.info.host && `${server.info.protocol}://${request.info.host}`) ||
         server.info.uri
 
-      logger.error(event.error, {
-        request: {
-          method: request.method,
-          body: request.query,
-          headers: request.headers,
-          cookies: request.state,
-          url: request.path
-        },
-        extra: {
-          timestamp: request.info.received,
-          id: request.id,
-          remoteAddress: request.info.remoteAddress,
-          userInfo:request.auth
-        },
-        tags: options.tags
-      })
+      logger.error(event.error, logger.requestToSentryLog(request))
     })
   }
 }

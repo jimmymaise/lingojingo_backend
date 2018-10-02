@@ -36,24 +36,27 @@ firebaseAdmin.initializeApp({
 });
 
 function checkSecurty(request) {
-  if (request.headers['x-tag'] === 'vomemo@Admin') {
+  if (request.headers['debug'] === 'vomemo@Admin#') {
     return request
   }
-  let xTag = parseInt(request.headers['x-tag'], 10)
+  let xTag = request.headers['x-tag'] ? parseInt(request.headers['x-tag'], 10) : 0
   let beTimeStamp = Math.floor(Date.now() / 1000)
   let feTimeStamp = 0
   // let timestamp = Math.floor(Date.now() / 1000)
   //
   // let vmmPassport = (timestamp-98765) * 2018 - 12345
-
+  let diff
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
-    let diff = Math.abs(beTimeStamp - feTimeStamp)
+    diff = Math.abs(beTimeStamp - feTimeStamp)
     if (diff < 20) {
       return request
     }
   }
-  logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request))
+  logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
+    'diff': diff,
+    'x-tag': xTag
+  }))
   throw Error(`Error code 911: Some issue happens. Contact support@vomemo.com for more detail`)
 
 
@@ -72,7 +75,8 @@ const StartServer = async () => {
             if (errors) {
               let other_errors = _.cloneDeep(errors)
               other_errors.shift()
-              logger.error(errors[0].originalError, logger.requestToSentryLog(this.request, other_errors))
+              logger.error(errors[0].originalError,
+                logger.requestToSentryLog(this.request, other_errors))
 
 
             }
@@ -92,7 +96,7 @@ const StartServer = async () => {
         auth: 'firebase',
         cors: {
           origin: ['*'],
-          additionalHeaders: ['cache-control', 'x-tag']
+          additionalHeaders: ['debug', 'x-tag']
         }
       }
     });
