@@ -42,14 +42,12 @@ function checkSecurty(request) {
   let xTag = request.headers['x-tag'] ? parseInt(request.headers['x-tag'], 10) : 0
   let beTimeStamp = Math.floor(Date.now() / 1000)
   let feTimeStamp = 0
-  // let timestamp = Math.floor(Date.now() / 1000)
-  //
-  // let vmmPassport = (timestamp-98765) * 2018 - 12345
+
   let diff
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
     diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < 20) {
+    if (diff < 12) {
       return request
     }
   }
@@ -57,7 +55,7 @@ function checkSecurty(request) {
     'diff': diff,
     'x-tag': xTag
   }))
-  throw Error(`Error code 911: Some issue happens. Contact support@vomemo.com for more detail`)
+  throw Error(`Error code 911: Some issue happens`)
 
 
 }
