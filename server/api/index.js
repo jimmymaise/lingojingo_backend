@@ -24,6 +24,8 @@ internals.applyRoutes = function (server) {
       const Deck = require('../models/deck');
       const UserTopic = require('../models/user-topic');
       const Song = require('../models/song');
+      const Article = require('../models/article');
+
 
 
       try {
