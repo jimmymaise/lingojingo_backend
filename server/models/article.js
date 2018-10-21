@@ -10,7 +10,6 @@ class Article extends ESMongoModels {
     let indexData = await this.findById(_id)
     //Remove some fields not need to put ES
     delete indexData['content']
-    delete indexData['content']
     delete indexData['textDependentQuestions']
     delete indexData['discussionQuestions']
     delete indexData['checkForUnderstandingQuestions']
