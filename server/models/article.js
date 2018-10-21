@@ -13,6 +13,8 @@ class Article extends ESMongoModels {
     delete indexData['textDependentQuestions']
     delete indexData['discussionQuestions']
     delete indexData['checkForUnderstandingQuestions']
+    delete indexData['reference']
+
 
     await super.upsertES(_id, indexData)
   }
@@ -31,14 +33,16 @@ Article.schema = Joi.object().keys({
   publicationYear: Joi.string(),
   grade: Joi.string(),
   genre: Joi.string(),
-  permissionsLine: Joi.string(),
+  permissionsLine: Joi.string().optional().allow(null).allow(''),
   image: Joi.string(),
   description: Joi.string(),
   language: Joi.string(),
   content: Joi.object(),
-  checkForUnderstandingQuestions: Joi.array(),
-  discussionQuestions: Joi.array(),
-  textDependentQuestions: Joi.array(),
+  checkForUnderstandingQuestions: Joi.array().allow(null).allow(''),
+  discussionQuestions: Joi.array().optional().allow(null).allow(''),
+  textDependentQuestions: Joi.array().optional().allow(null).allow(''),
+  reference: Joi.array().optional().allow(null).allow(''),
+
 
 }).options({stripUnknown: true});
 

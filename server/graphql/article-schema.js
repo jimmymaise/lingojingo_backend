@@ -51,6 +51,8 @@ const typeDefs = `
     checkForUnderstandingQuestions: [JSON],
     discussionQuestions: [JSON],
     textDependentQuestions: [JSON],
+    reference: [JSON],
+
   }
   extend type Query {
     articles(pagination: PaginationInput): ArticlePagination
