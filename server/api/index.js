@@ -3,8 +3,8 @@
 const internals = {};
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 const Wreck = require('wreck');
-let esAddr=`${process.env.ES_HOST }:9200`
-let esAddr = (process.env.ES_HOST)?`${process.env.ES_HOST }:9200`:`https://stag-api.vomemo.com/es`
+// let esAddr=`${process.env.ES_HOST }:9200`
+// let esAddr = (process.env.ES_HOST)?`${process.env.ES_HOST }:9200`:`https://stag-api.vomemo.com/es`
 
 internals.applyRoutes = function (server) {
   server.route({
