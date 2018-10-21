@@ -86,8 +86,8 @@ internals.searchArticle = async (args) => {
   if (search.articleName) {
     // First query the almost match, will have boost score
     // Second query the words but not follow order
-    body.orQuery('match_phrase', 'articleName', {query: search.articleName, analyzer: 'articleNameIndexAnalyzer', 'boost': '5'})
-    body.orQuery('match', 'articleName', {query: search.articleName, operator: 'and'})
+    body.orQuery('match_phrase', 'title', {query: search.articleName, analyzer: 'articleNameIndexAnalyzer', 'boost': '5'})
+    body.orQuery('match', 'title', {query: search.articleName, operator: 'and'})
     body.queryMinimumShouldMatch(1)
   }
   // if (search.categoryId) {

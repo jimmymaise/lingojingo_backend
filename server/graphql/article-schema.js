@@ -12,12 +12,12 @@ const typeDefs = `
     pages: PageInfo,
     items: PageItemInfo
   }
-  type EsArticleList {
-  offset: Int,
-  start: Int,
-  data:[Article]
-  
+    type ArticleESPagination {
+    data: [ArticleSummary],
+    pages: PageInfo,
+    items: PageItemInfo
   }
+
   type ArticleSummary {
     _id: String,
     title: String,
@@ -58,7 +58,7 @@ const typeDefs = `
     articles(pagination: PaginationInput): ArticlePagination
     userStoreArticles(pagination: PaginationInput): ArticlePagination,
     userOwnerArticles(pagination: PaginationInput): ArticlePagination,
-    articleSearch(search: ArticleSearchInput, pagination: PaginationInput): ArticlePagination,
+    articleSearch(search: ArticleSearchInput, pagination: PaginationInput): ArticleESPagination,
     article(id: ID!): Article
   }
 `;
