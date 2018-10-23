@@ -1,7 +1,7 @@
 const jiraConfig = require('./setting').JIRA_CONFIG
 const bodyTemplate = require('./templates').bodyData
 const Mustache = require('mustache')
-const sentry = require('../utils/logger').logger;
+const sentry = require('../../utils/logger').logger;
 
 const fs = require('fs')
 Mustache.escape = function (value) {
