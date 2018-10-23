@@ -59,7 +59,9 @@ async function createJiraTicket(body) {
   };
 
   let resp = await baseRequest(options);
-  sentry.requestToSentryLog(options, resp)
+
+  sentry.info(resp, sentry.requestToSentryLog(options, resp))
+
 
   return resp.body.key
 
