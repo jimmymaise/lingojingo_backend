@@ -3,7 +3,8 @@
 const internals = {};
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 const Wreck = require('wreck');
-
+// let esAddr=`${process.env.ES_HOST }:9200`
+// let esAddr = (process.env.ES_HOST)?`${process.env.ES_HOST }:9200`:`https://stag-api.vomemo.com/es`
 
 internals.applyRoutes = function (server) {
   server.route({
@@ -24,12 +25,16 @@ internals.applyRoutes = function (server) {
       const Deck = require('../models/deck');
       const UserTopic = require('../models/user-topic');
       const Song = require('../models/song');
+      const Article = require('../models/article');
+
 
 
       try {
+        await Article.syncDataES({}, true)
+        await Song.syncDataES({}, true)
         await Deck.syncDataES({}, true)
         await UserTopic.syncDataES({}, true)
-        await Song.syncDataES({}, true)
+
       }
       catch (e) {
         return {e}
