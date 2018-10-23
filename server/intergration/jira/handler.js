@@ -1,6 +1,8 @@
 const jiraConfig = require('./setting').JIRA_CONFIG
 const bodyTemplate = require('./templates').bodyData
 const Mustache = require('mustache')
+const sentry = require('../utils/logger').logger;
+
 const fs = require('fs')
 Mustache.escape = function (value) {
   return value;
@@ -44,6 +46,7 @@ function convertFileUpload(files) {
 async function createJiraTicket(body) {
   body['projectKey'] = jiraConfig.projectKey
 
+
   let bodyData = Mustache.render(bodyTemplate, body);
   bodyData = JSON.parse(bodyData)
   let options = {
@@ -55,7 +58,8 @@ async function createJiraTicket(body) {
     body: bodyData,
   };
 
-  resp = await baseRequest(options);
+  let resp = await baseRequest(options);
+  sentry.requestToSentryLog(options, resp)
 
   return resp.body.key
 
