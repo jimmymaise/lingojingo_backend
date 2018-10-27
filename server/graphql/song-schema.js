@@ -6,7 +6,7 @@ const UserInfo = require('../models/user-info');
 // The GraphQL schema in string form
 const typeDefs = `
   input SongSearchInput {
-    songName: String,
+    name: String,
     }
   type SongPagination {
     data: [Song],
@@ -32,7 +32,7 @@ const typeDefs = `
     level: Int,
     tags: [String],
     topics: [JSON],
-    songName: String,
+    name: String,
     bandSingerId: Int,
     isOwned: Boolean,
     songLevel: Int,

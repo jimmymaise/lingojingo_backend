@@ -50,9 +50,9 @@ internals.searchUserItem = async (args) => {
   let body = await UserItem.bodyBuilder()
   let search = args.search || {}
   let page = _.get(args, 'pagination.page') || 2
-  let limit =_.get(args, 'pagination.limit') || 10
+  let limit = _.get(args, 'pagination.limit') || 10
   // let from = size* (page - 1)
-  if (limit >50) {
+  if (limit > 50) {
     throw Error('Limit should be lower than 50')
   }
   body.page(page)
@@ -74,7 +74,6 @@ internals.searchUserItem = async (args) => {
   return data
 
 
-
 }
 
 exports.register = function (server, options) {
@@ -86,10 +85,10 @@ exports.register = function (server, options) {
   server.expose('updateOneUserItem', internals.updateOneUserItem);
   server.expose('deleteOneUserItem', internals.deleteOneUserItem);
   server.expose('createOrUpdateUserTopic', internals.createOrUpdateUserTopic);
+  server.expose('searchUserItem', internals.searchUserItem);
+
 
 };
-
-
 
 
 exports.getOneMyUserItemByItemId = internals.getOneMyUserItemByItemId;
@@ -98,6 +97,7 @@ exports.addOneUserItem = internals.addOneUserItem;
 exports.updateOneUserItem = internals.updateOneUserItem;
 exports.deleteOneUserItem = internals.deleteOneUserItem;
 exports.createOrUpdateUserTopic = internals.createOrUpdateUserTopic;
+exports.searchUserItem = internals.searchUserItem;
 
 
 exports.name = 'user-item-service';

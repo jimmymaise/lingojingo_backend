@@ -7,8 +7,8 @@ const GraphQLJSON = require('graphql-type-json');
 const typeDefs = `
  
   extend type Query {
-    getUserItemList(userId: ID!, type: String!): [UserItem],
-    getMyUserItemList(type: String!): [UserItem],
+    searchUserItemList(userId: ID!, type: String!): [UserItem],
+    searchMyUserItemList(type: String!): [UserItem],
     getMyUserItemByItemId(itemId: ID!, type: String!): UserItem,
     getUserItemDetail(id: ID!): UserItem,
   }
@@ -49,11 +49,12 @@ const resolvers = {
     getMyUserItemByItemId: async (parent, args, context) => {
       return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId);
     },
-    getUserItemList: async (parent, args, context) => {
-      return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId);
+    getUserItemList: async (parent, args) => {
+      return await userItemService.searchUserItem(args);
     },
     getMyUserItemList: async (parent, args, context) => {
-      return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId);
+      args['userId'] = context.request.auth.credentials.uid;
+      return await userItemService.searchUserItem(args);
     }
   },
   UserItem:

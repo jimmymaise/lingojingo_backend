@@ -83,11 +83,11 @@ internals.searchDeck = async (args) => {
   body.page(page)
   body.limit(limit)
 
-  if (search.deckName) {
+  if (search.name) {
     // First query the almost match, will have boost score
     // Second query the words but not follow order
-    body.orQuery('match_phrase', 'deckName', {query: search.deckName, analyzer: 'deckNameIndexAnalyzer', 'boost': '5'})
-    body.orQuery('match', 'deckName', {query: search.deckName, operator: 'and'})
+    body.orQuery('match_phrase', 'name', {query: search.name, analyzer: 'nameIndexAnalyzer', 'boost': '5'})
+    body.orQuery('match', 'name', {query: search.name, operator: 'and'})
     body.queryMinimumShouldMatch(1)
   }
   if (search.categoryId) {

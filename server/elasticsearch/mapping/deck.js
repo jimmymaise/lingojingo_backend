@@ -4,15 +4,15 @@ deck = {
       "dynamic":  false,
       "properties": {
 
-        "deckName": {
+        "name": {
           "type": "text",
           "fields": {
             "keyword": {
               "type": "keyword"
             }
           },
-          "analyzer": "deckNameIndexAnalyzer",
-          "search_analyzer": "deckNameSearchAnalyzer"
+          "analyzer": "nameIndexAnalyzer",
+          "search_analyzer": "nameSearchAnalyzer"
         },
         "img": {
           "type": "keyword",
@@ -55,17 +55,17 @@ deck = {
     "index": {
       "analysis": {
         "analyzer": {
-          "deckNameIndexAnalyzer": {
+          "nameIndexAnalyzer": {
             "filter": [
               "lowercase"
             ],
-            "tokenizer": "deckNameIndexTokenizer"
+            "tokenizer": "nameIndexTokenizer"
           },
-          "deckNameSearchAnalyzer": {
+          "nameSearchAnalyzer": {
             "filter": [
               "lowercase"
             ],
-            "tokenizer": "deckNameSearchTokenizer"
+            "tokenizer": "nameSearchTokenizer"
           },
           "lowercaseAnalyzer": {
             "type": "custom",
@@ -76,7 +76,7 @@ deck = {
           }
         },
         "tokenizer": {
-          "deckNameIndexTokenizer": {
+          "nameIndexTokenizer": {
             "token_chars": [
               "letter",
               "digit",
@@ -87,7 +87,7 @@ deck = {
             "type": "ngram",
             "max_gram": "3"
           },
-          "deckNameSearchTokenizer": {
+          "nameSearchTokenizer": {
             "token_chars": [
               "letter",
               "digit",

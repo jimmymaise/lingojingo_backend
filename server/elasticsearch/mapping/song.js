@@ -4,15 +4,15 @@ song = {
       "dynamic": false,
       "properties": {
 
-        "songName": {
+        "name": {
           "type": "text",
           "fields": {
             "keyword": {
               "type": "keyword"
             }
           },
-          "analyzer": "songNameIndexAnalyzer",
-          "search_analyzer": "songNameSearchAnalyzer"
+          "analyzer": "nameIndexAnalyzer",
+          "search_analyzer": "nameSearchAnalyzer"
         },
 
         "img": {
@@ -69,17 +69,17 @@ song = {
     "index": {
       "analysis": {
         "analyzer": {
-          "songNameIndexAnalyzer": {
+          "nameIndexAnalyzer": {
             "filter": [
               "lowercase"
             ],
-            "tokenizer": "songNameIndexTokenizer"
+            "tokenizer": "nameIndexTokenizer"
           },
-          "songNameSearchAnalyzer": {
+          "nameSearchAnalyzer": {
             "filter": [
               "lowercase"
             ],
-            "tokenizer": "songNameSearchTokenizer"
+            "tokenizer": "nameSearchTokenizer"
           },
           "lowercaseAnalyzer": {
             "type": "custom",
@@ -90,7 +90,7 @@ song = {
           }
         },
         "tokenizer": {
-          "songNameIndexTokenizer": {
+          "nameIndexTokenizer": {
             "token_chars": [
               "letter",
               "digit",
@@ -101,7 +101,7 @@ song = {
             "type": "ngram",
             "max_gram": "3"
           },
-          "songNameSearchTokenizer": {
+          "nameSearchTokenizer": {
             "token_chars": [
               "letter",
               "digit",
