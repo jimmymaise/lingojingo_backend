@@ -25,9 +25,9 @@ Deck.esSchema = esSchema;
 
 Deck.schema = Joi.object().keys({
   _id: Joi.object(),
+  name: Joi.string(),
   total: Joi.number(),
   tags: Joi.array(),
-  deckName: Joi.string(),
   topics: Joi.array(),
   img: [Joi.string().optional(), Joi.allow(null)],
   topicExamQuestions: Joi.number(),//Zero mean 100%
