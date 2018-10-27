@@ -37,9 +37,10 @@ class ESMongoModels extends MongoModels {
       indexData = await this.findById(_id)
     }
     delete indexData['_id'];
-    await es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData}, doc_as_upsert: true
+    let data = await es.update({
+      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData,doc_as_upsert: true}
     })
+    return data
   }
 
   static async deleteES(_id) {

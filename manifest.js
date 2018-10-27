@@ -89,6 +89,9 @@ const manifest = {
         plugin: './server/services/song.service'
       },
       {
+        plugin: './server/services/article.service'
+      },
+      {
         plugin: './server/services/support-service'
       },
       {
@@ -105,6 +108,9 @@ const manifest = {
       },
       {
         plugin: './server/api/song'
+      },
+      {
+        plugin: './server/api/article'
       },
       {
         plugin: './server/api/support'
