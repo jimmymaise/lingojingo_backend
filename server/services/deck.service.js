@@ -5,16 +5,15 @@ const ObjectID = require('mongodb').ObjectID;
 const sortBy = require('lodash/sortBy');
 const map = require('lodash/map');
 const reduce = require('lodash/reduce');
-const UserDeck = require('../models/user-deck');
+const UserItem = require('../models/user-item');
 const _ = require('lodash')
 
 const UserInfo = require('../models/user-info');
 
 const Deck = require('../models/deck');
 const DeckCategory = require('../models/deck-category');
-const UserTopic = require('../models/user-topic');
 // Deck.syncDataES()
-// UserTopic.syncDataES()
+
 
 
 const Topic = require('../models/topic');
@@ -44,7 +43,7 @@ internals.buyDeck = async (firebaseUId, deckId) => {
     } else {
       return currentInfo;
     }
-    let addUserDeckResult = await UserDeck.insertOne({"userId": firebaseUId, "deckId": deckId});
+    let addUserDeckResult = await UserItem.insertOne({"userId": firebaseUId, "itemId": deckId});
 
     if (!addUserDeckResult) {
       throw Error('Cannot Add UserDeck');
@@ -83,11 +82,11 @@ internals.searchDeck = async (args) => {
   body.page(page)
   body.limit(limit)
 
-  if (search.deckName) {
+  if (search.name) {
     // First query the almost match, will have boost score
     // Second query the words but not follow order
-    body.orQuery('match_phrase', 'deckName', {query: search.deckName, analyzer: 'deckNameIndexAnalyzer', 'boost': '5'})
-    body.orQuery('match', 'deckName', {query: search.deckName, operator: 'and'})
+    body.orQuery('match_phrase', 'name', {query: search.name, analyzer: 'nameIndexAnalyzer', 'boost': '5'})
+    body.orQuery('match', 'name', {query: search.name, operator: 'and'})
     body.queryMinimumShouldMatch(1)
   }
   if (search.categoryId) {

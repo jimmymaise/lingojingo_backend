@@ -10,7 +10,7 @@ let es = new elasticsearch.Client({host: {host, port}})
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
   host = 'https://stag-api.vomemo.com/proxyES'
-  es = new elasticsearch.Client({host:'https://stag-api.vomemo.com/proxyES'})
+  es = new elasticsearch.Client({host:'http://localhost:3200/proxyES'})
 
 }
 es['builder'] = bodybuilder

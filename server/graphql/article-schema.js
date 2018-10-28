@@ -5,7 +5,7 @@ const UserInfo = require('../models/user-info');
 // The GraphQL schema in string form
 const typeDefs = `
   input ArticleSearchInput {
-    articleName: String,
+    name: String,
     }
   type ArticlePagination {
     data: [Article],
@@ -20,7 +20,7 @@ const typeDefs = `
 
   type ArticleSummary {
     _id: String,
-    title: String,
+    name: String,
     author: String,
     isOwned: Boolean,
     id: Int,
@@ -36,7 +36,7 @@ const typeDefs = `
   
   type Article {
     _id: String,
-    title: String,
+    name: String,
     author: String,
     id: Int,
     isOwned: Boolean,
