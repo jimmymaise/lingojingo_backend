@@ -25,14 +25,18 @@ internals.applyRoutes = function (server) {
       const UserTopic = require('../models/user-topic');
       const Song = require('../models/song');
       const Article = require('../models/article');
+      const UserItem = require('../models/user-item');
 
 
 
       try {
+
+        await UserItem.syncDataES({}, true)
+        //
         await Article.syncDataES({}, true)
-        await Song.syncDataES({}, true)
-        await Deck.syncDataES({}, true)
-        await UserTopic.syncDataES({}, true)
+        // await Song.syncDataES({}, true)
+        // await Deck.syncDataES({}, true)
+        // await UserTopic.syncDataES({}, true)
 
       }
       catch (e) {

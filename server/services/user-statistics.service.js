@@ -39,6 +39,10 @@ internals.getWordStatics = async (queryData) => {
     delete query[0]['$match']['topicId']
 
   }
+  if (queryData.userId === undefined) {
+    delete query[0]['$match']['userId']
+
+  }
 
 
   let data = await UserTopic.aggregate(
