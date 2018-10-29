@@ -47,7 +47,7 @@ function checkSecurty(request) {
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
     diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < 12) {
+    if (diff < 120) {
       return request
     }
   }
