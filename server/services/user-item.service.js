@@ -66,7 +66,10 @@ internals.searchUserItem = async (args) => {
     body.queryMinimumShouldMatch(1)
   }
   if (search.type) {
-    body.query('match', 'category.id', search.type)
+    body.query('match', 'itemType', search.type)
+  }
+  if (search.userId) {
+    body.query('match', 'userId', search.userId)
   }
 
   let data = await UserItem.searchWithBodyBuilder()
