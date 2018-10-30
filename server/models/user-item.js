@@ -4,7 +4,7 @@ const Joi = require('joi');
 const ESMongoModels = require('./es-mongo-model');
 const esSchema = require('../elasticsearch/mapping/user-item').userItem
 const userStatisticsService = require('../services/user-statistics.service');
-let keyRemoveDeckArray = ['topics']
+let keyRemoveDeckArray = ['topics','tags']
 let keyRemoveSongArray = ['listLyric', 'cards']
 let keyRemoveArticleArray = ['checkForUnderstandingQuestions', 'discussionQuestions', 'textDependentQuestions', 'reference']
 let keyRemoveArray = keyRemoveDeckArray.concat(keyRemoveSongArray, keyRemoveArticleArray);
@@ -19,7 +19,7 @@ class UserItem extends ESMongoModels {
     indexData['name'] = indexData['itemInfo']['name']
     keyRemoveArray.forEach(e => delete indexData['itemInfo'][e]);
     if (indexData.itemType === 'deck') {
-      indexData['WordStatistics'] = await userStatisticsService.getWordStatics({deckId: indexData.itemId});
+      indexData['wordStatistics'] = (await userStatisticsService.getWordStatics({deckId: indexData.itemId}))[0];
     }
     await super.upsertES(_id, indexData)
   }
