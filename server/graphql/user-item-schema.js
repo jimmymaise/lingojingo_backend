@@ -5,11 +5,26 @@ const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
 const typeDefs = `
+
+  input UserItemSearchInput {
+    name: String,
+    itemType: String,
+    userId: String,
+  }
+  input MyUserItemSearchInput {
+  name: String,
+  itemType: String,
+  }
+  type UserItemPagination {
+  data: [UserItemSummary],
+  pages: PageInfo,
+  items: PageItemInfo
+}
  
   extend type Query {
-    searchUserItemList(userId: ID!, type: String!): [UserItem],
-    searchMyUserItemList(type: String!): [UserItem],
     getMyUserItemByItemId(itemId: ID!, type: String!): UserItem,
+    userItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
+    myUserItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     getUserItemDetail(id: ID!): UserItem,
   }
 
@@ -22,6 +37,7 @@ const typeDefs = `
     userId: String,
     itemId: String,
     favorite: Int,
+    itemInfo: JSON,
     completedTopics: JSON,
     wordStatistics: WordStatistics,
     createdAt:String,
@@ -49,11 +65,11 @@ const resolvers = {
     getMyUserItemByItemId: async (parent, args, context) => {
       return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId);
     },
-    getUserItemList: async (parent, args) => {
+    userItemSearch: async (parent, args, context) => {
       return await userItemService.searchUserItem(args);
     },
-    getMyUserItemList: async (parent, args, context) => {
-      args['userId'] = context.request.auth.credentials.uid;
+    myUserItemSearch: async (parent, args, context) => {
+      args['search']['userId'] = context.request.auth.credentials.uid;
       return await userItemService.searchUserItem(args);
     }
   },

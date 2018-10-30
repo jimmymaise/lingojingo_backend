@@ -32,7 +32,6 @@ internals.applyRoutes = function (server) {
       try {
 
         await UserItem.syncDataES({}, true)
-        //
         await Article.syncDataES({}, true)
         // await Song.syncDataES({}, true)
         // await Deck.syncDataES({}, true)
