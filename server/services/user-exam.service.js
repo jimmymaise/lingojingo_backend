@@ -5,7 +5,7 @@ const Constant = require('../utils/constants')
 const UserInfo = require('../models/user-info');
 const UserExam = require('../models/user-exam');
 const UserTopic = require('../models/user-topic');
-const UserDeck = require('../models/user-deck');
+const UserDeck = require('../models/user-item');
 const Deck = require('../models/deck');
 const LeaderBoardService = require('../services/leader-board.service')
 const RewardService = require('../services/reward.service')
@@ -131,8 +131,9 @@ async function updateDataWhenCompletingUserExam(userExam) {
   //update userDeck
   if (userExam.result === EXAM.RESULT.PASSED) {
     let userDeckData = await UserDeck.find({
-      deckId: userExam.deckId,
-      userId: userExam.userId
+      itemId: userExam.deckId,
+      userId: userExam.userId,
+      itemType:'deck'
     })
     userDeckData = userDeckData[0]
     userDeckData.completedTopics = userDeckData.completedTopics || {}
