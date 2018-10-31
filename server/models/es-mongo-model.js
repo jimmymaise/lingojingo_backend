@@ -34,14 +34,28 @@ class ESMongoModels extends MongoModels {
   }
 
   static async upsertES(_id, indexData) {
-    await es.initIndex(this.collectionName, this.esSchema)
+    try{
+      await es.initIndex(this.collectionName, this.esSchema)
+
+    }
+    catch (e) {
+      logger.error(e)
+
+    }
     if (!indexData) {
       indexData = await this.findById(_id)
     }
     delete indexData['_id'];
-    let data = await es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData, doc_as_upsert: true}
-    })
+    try{
+      let data = await es.update({
+        index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData, doc_as_upsert: true}
+      })
+    }
+    catch (e) {
+      logger.error(e)
+
+    }
+
     return data
   }
 
