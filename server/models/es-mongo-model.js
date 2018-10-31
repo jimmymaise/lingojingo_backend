@@ -1,4 +1,5 @@
 'use strict';
+let logger = require('./logger').logger
 
 const MongoModels = require('mongo-models');
 const es = require('../elasticsearch/connection').es
@@ -13,6 +14,7 @@ class ESMongoModels extends MongoModels {
     await this.upsertES(arguments[0])
     return data
   }
+
   static async findOneAndUpdate() {
     let data = await super.findOneAndUpdate.apply(this, arguments)
     await this.upsertES(data['_id'])
@@ -38,7 +40,7 @@ class ESMongoModels extends MongoModels {
     }
     delete indexData['_id'];
     let data = await es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData,doc_as_upsert: true}
+      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData, doc_as_upsert: true}
     })
     return data
   }
@@ -126,7 +128,15 @@ class ESMongoModels extends MongoModels {
       let resp = await this.pagedFind(query, page, 10)
       let data = resp.data
       for (let i = 0; i < data.length; i++) {
-        await this.upsertES(data[i]._id)
+        try {
+          await this.upsertES(data[i]._id)
+
+        }
+        catch (e) {
+          logger.error(e)
+
+
+        }
       }
       console.log(`page: ${page}`)
       if (!resp.pages.hasNext) {
