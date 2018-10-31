@@ -26,7 +26,7 @@ class ESMongoModels extends MongoModels {
   }
 
   static async insertOne() {
-    let data = await super.insertOne().apply(this, arguments)
+    let data = await super.insertOne.apply(this, arguments)
     await this.upsertES(data['_id'])
     return data
   }
@@ -37,9 +37,10 @@ class ESMongoModels extends MongoModels {
       indexData = await this.findById(_id)
     }
     delete indexData['_id'];
-    await es.update({
-      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData}, doc_as_upsert: true
+    let data = await es.update({
+      index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData,doc_as_upsert: true}
     })
+    return data
   }
 
   static async deleteES(_id) {

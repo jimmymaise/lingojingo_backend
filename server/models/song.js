@@ -35,6 +35,7 @@ let lyricObj = Joi.object().keys({
 })
 Song.schema = Joi.object().keys({
   _id: Joi.object(),
+  name: Joi.string(),
   img: Joi.string(),
   bandSingerId: Joi.number(),
   songLevel: Joi.number(),
@@ -43,7 +44,6 @@ Song.schema = Joi.object().keys({
   cards: Joi.array(),
   link: Joi.string(),
   youtubeId: Joi.string(),
-  songName: Joi.string(),
   topics: Joi.array(),
   passScore: Joi.number(),// pass score to evaluate exam passed or failed,eg:80 mean exam score must be >=80 to pass,
   duration: Joi.number()

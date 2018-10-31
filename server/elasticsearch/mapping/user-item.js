@@ -1,53 +1,45 @@
-deck = {
+userItem = {
   "mappings": {
     "_doc": {
-      "dynamic":  false,
+      "dynamic": false,
       "properties": {
 
-        "name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          },
-          "analyzer": "nameIndexAnalyzer",
-          "search_analyzer": "nameSearchAnalyzer"
-        },
-        "img": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
-        "categoryId": {
-          "type": "keyword",
-          "null_value": "NULL"
-        },
-        "category": {
+        "itemInfo": {
           "properties": {
             "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              },
+              "analyzer": "nameIndexAnalyzer",
+              "search_analyzer": "nameSearchAnalyzer"
+            },
+            "level": {
               "type": "keyword",
             },
-            "_id": {
-              "type": "keyword",
-            }
 
           }
-        }
-        ,
-
-        "topicExamQuestions": {
-          "type": "keyword"
         },
-        "reviewExamQuestions": {
-          "type": "keyword"
-        },
-        "finalExamQuestions": {
+        "itemId": {
           "type": "keyword",
-          "null_value": "NULL"
         },
-        "passScore": {
+        "itemType": {
           "type": "keyword",
-        }
+        },
+        "userId": {
+          "type": "keyword",
+        },
+        "favorite": {
+          "type": "keyword",
+        },
+        "createdAt": {
+          "type": "keyword",
+        },
+        "expiredAt": {
+          "type": "keyword",
+        },
       }
     }
   },
@@ -110,5 +102,5 @@ deck = {
   }
 }
 module.exports = {
-  deck
+  userItem
 }

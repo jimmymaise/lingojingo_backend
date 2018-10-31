@@ -6,7 +6,7 @@ const UserInfo = require('../models/user-info');
 // The GraphQL schema in string form
 const typeDefs = `
   input DeckSearchInput {
-    deckName: String,
+    name: String,
     categoryId: Int,
     }
   type DeckPagination {
@@ -26,7 +26,7 @@ const typeDefs = `
     level: Int,
     tags: [String],
     topics: [JSON],
-    deckName: String,
+    name: String,
     isOwned: Boolean,
     img: String,
     topicDetails: [Topic],
@@ -55,7 +55,7 @@ const resolvers = {
     userStoreDecks: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};
 
-      return await deckService.getDeckPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
+      return await deckService.getDeckPaginatexMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
     },
     userOwnerDecks: async (parent, args, context) => {
       const {limit, page} = args.pagination || {};

@@ -5,16 +5,14 @@ const ObjectID = require('mongodb').ObjectID;
 const sortBy = require('lodash/sortBy');
 const map = require('lodash/map');
 const reduce = require('lodash/reduce');
-const UserDeck = require('../models/user-deck');
+const UserItem = require('../models/user-item');
 const _ = require('lodash')
 
 const UserInfo = require('../models/user-info');
 
 const Deck = require('../models/deck');
 const DeckCategory = require('../models/deck-category');
-const UserTopic = require('../models/user-topic');
 // Deck.syncDataES()
-// UserTopic.syncDataES()
 
 
 const Topic = require('../models/topic');
@@ -44,7 +42,17 @@ internals.buyDeck = async (firebaseUId, deckId) => {
     } else {
       return currentInfo;
     }
-    let addUserDeckResult = await UserDeck.insertOne({"userId": firebaseUId, "deckId": deckId});
+    let userItemData = {
+      userId: firebaseUId,
+      itemId: deckId,
+      itemType: 'deck'
+    }
+    let addUserDeckResult = await UserItem.findOneAndUpdate(userItemData, {
+      $set: userItemData
+    }, {
+      upsert: true
+    });
+
 
     if (!addUserDeckResult) {
       throw Error('Cannot Add UserDeck');
@@ -52,12 +60,14 @@ internals.buyDeck = async (firebaseUId, deckId) => {
 
     return await UserInfo.findOneAndUpdate({
       firebaseUserId: firebaseUId
-    }, { $set: {
-      firebaseUserId: firebaseUId,
-      ...currentInfo,
+    }, {
+      $set: {
+        firebaseUserId: firebaseUId,
+        ...currentInfo,
 
-      timeUpdated: new Date()
-    }}, {
+        timeUpdated: new Date()
+      }
+    }, {
       upsert: true,
       setDefaultsOnInsert: true
     });
@@ -75,19 +85,19 @@ internals.searchDeck = async (args) => {
   let body = await Deck.bodyBuilder()
   let search = args.search || {}
   let page = _.get(args, 'pagination.page') || 2
-  let limit =_.get(args, 'pagination.limit') || 10
+  let limit = _.get(args, 'pagination.limit') || 10
   // let from = size* (page - 1)
-  if (limit >50) {
+  if (limit > 50) {
     throw Error('Limit should be lower than 50')
   }
   body.page(page)
   body.limit(limit)
 
-  if (search.deckName) {
+  if (search.name) {
     // First query the almost match, will have boost score
     // Second query the words but not follow order
-    body.orQuery('match_phrase', 'deckName', {query: search.deckName, analyzer: 'deckNameIndexAnalyzer', 'boost': '5'})
-    body.orQuery('match', 'deckName', {query: search.deckName, operator: 'and'})
+    body.orQuery('match_phrase', 'name', {query: search.name, analyzer: 'nameIndexAnalyzer', 'boost': '5'})
+    body.orQuery('match', 'name', {query: search.name, operator: 'and'})
     body.queryMinimumShouldMatch(1)
   }
   if (search.categoryId) {
@@ -97,7 +107,6 @@ internals.searchDeck = async (args) => {
   let data = await Deck.searchWithBodyBuilder()
 
   return data
-
 
 
 }
@@ -136,10 +145,11 @@ internals.getOneTopic = async (id) => {
 internals.getDeckCategory = async (id) => {
   if (typeof id === 'string' || id instanceof String) {
 
-   id =  ObjectID(id)
+    id = ObjectID(id)
   }
 
-    let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});return data[0]
+  let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});
+  return data[0]
 }
 
 //DeckPaginate
@@ -183,7 +193,6 @@ internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
 }
 
 
-
 exports.register = function (server, options) {
 
   server.expose('getListTopicDetail', internals.getListTopicDetail);
@@ -215,9 +224,6 @@ exports.isOwned = internals.isOwned;
 exports.getDeckPaginate = internals.getDeckPaginate;
 exports.getDeckPaginateMapWithUserInfo = internals.getDeckPaginateMapWithUserInfo;
 exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
-
-
-
 
 
 exports.name = 'deck-service';

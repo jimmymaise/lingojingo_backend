@@ -4,15 +4,15 @@ article = {
       "dynamic": false,
       "properties": {
 
-        "title": {
+        "name": {
           "type": "text",
           "fields": {
             "keyword": {
               "type": "keyword"
             }
           },
-          "analyzer": "articleNameIndexAnalyzer",
-          "search_analyzer": "articleNameSearchAnalyzer"
+          "analyzer": "nameIndexAnalyzer",
+          "search_analyzer": "nameSearchAnalyzer"
         },
 
         "author": {
@@ -52,17 +52,17 @@ article = {
     "index": {
       "analysis": {
         "analyzer": {
-          "articleNameIndexAnalyzer": {
+          "nameIndexAnalyzer": {
             "filter": [
               "lowercase"
             ],
-            "tokenizer": "articleNameIndexTokenizer"
+            "tokenizer": "nameIndexTokenizer"
           },
-          "articleNameSearchAnalyzer": {
+          "nameSearchAnalyzer": {
             "filter": [
               "lowercase"
             ],
-            "tokenizer": "articleNameSearchTokenizer"
+            "tokenizer": "nameSearchTokenizer"
           },
           "lowercaseAnalyzer": {
             "type": "custom",
@@ -73,7 +73,7 @@ article = {
           }
         },
         "tokenizer": {
-          "articleNameIndexTokenizer": {
+          "nameIndexTokenizer": {
             "token_chars": [
               "letter",
               "digit",
@@ -84,7 +84,7 @@ article = {
             "type": "ngram",
             "max_gram": "3"
           },
-          "articleNameSearchTokenizer": {
+          "nameSearchTokenizer": {
             "token_chars": [
               "letter",
               "digit",
