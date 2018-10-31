@@ -15,7 +15,6 @@ const DeckCategory = require('../models/deck-category');
 // Deck.syncDataES()
 
 
-
 const Topic = require('../models/topic');
 const Card = require('../models/card');
 
@@ -43,7 +42,17 @@ internals.buyDeck = async (firebaseUId, deckId) => {
     } else {
       return currentInfo;
     }
-    let addUserDeckResult = await UserItem.insertOne({"userId": firebaseUId, "itemId": deckId});
+    let userItemData = {
+      userId: firebaseUId,
+      itemId: deckId,
+      itemType: 'deck'
+    }
+    let addUserDeckResult = await UserItem.findOneAndUpdate(userItemData, {
+      $set: userItemData
+    }, {
+      upsert: true
+    });
+
 
     if (!addUserDeckResult) {
       throw Error('Cannot Add UserDeck');
@@ -51,12 +60,14 @@ internals.buyDeck = async (firebaseUId, deckId) => {
 
     return await UserInfo.findOneAndUpdate({
       firebaseUserId: firebaseUId
-    }, { $set: {
-      firebaseUserId: firebaseUId,
-      ...currentInfo,
+    }, {
+      $set: {
+        firebaseUserId: firebaseUId,
+        ...currentInfo,
 
-      timeUpdated: new Date()
-    }}, {
+        timeUpdated: new Date()
+      }
+    }, {
       upsert: true,
       setDefaultsOnInsert: true
     });
@@ -74,9 +85,9 @@ internals.searchDeck = async (args) => {
   let body = await Deck.bodyBuilder()
   let search = args.search || {}
   let page = _.get(args, 'pagination.page') || 2
-  let limit =_.get(args, 'pagination.limit') || 10
+  let limit = _.get(args, 'pagination.limit') || 10
   // let from = size* (page - 1)
-  if (limit >50) {
+  if (limit > 50) {
     throw Error('Limit should be lower than 50')
   }
   body.page(page)
@@ -96,7 +107,6 @@ internals.searchDeck = async (args) => {
   let data = await Deck.searchWithBodyBuilder()
 
   return data
-
 
 
 }
@@ -135,10 +145,11 @@ internals.getOneTopic = async (id) => {
 internals.getDeckCategory = async (id) => {
   if (typeof id === 'string' || id instanceof String) {
 
-   id =  ObjectID(id)
+    id = ObjectID(id)
   }
 
-    let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});return data[0]
+  let data = await DeckCategory.find({decks: {$elemMatch: {id: id}}});
+  return data[0]
 }
 
 //DeckPaginate
@@ -182,7 +193,6 @@ internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
 }
 
 
-
 exports.register = function (server, options) {
 
   server.expose('getListTopicDetail', internals.getListTopicDetail);
@@ -214,9 +224,6 @@ exports.isOwned = internals.isOwned;
 exports.getDeckPaginate = internals.getDeckPaginate;
 exports.getDeckPaginateMapWithUserInfo = internals.getDeckPaginateMapWithUserInfo;
 exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
-
-
-
 
 
 exports.name = 'deck-service';
