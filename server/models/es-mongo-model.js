@@ -26,7 +26,7 @@ class ESMongoModels extends MongoModels {
   }
 
   static async insertOne() {
-    let data = await super.insertOne().apply(this, arguments)
+    let data = await super.insertOne.apply(this, arguments)
     await this.upsertES(data['_id'])
     return data
   }
