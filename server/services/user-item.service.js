@@ -7,10 +7,11 @@ const internals = {};
 
 
 //User Item
-internals.getOneMyUserItemByItemId = async (userId, itemId) => {
+internals.getOneMyUserItemByItemId = async (userId, itemId, itemType) => {
   return await UserItem.findOne({
     userId,
-    itemId
+    itemId,
+    itemType
   });
 }
 
