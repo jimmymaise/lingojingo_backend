@@ -131,7 +131,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
   //update userDeck
   if (userExam.result === EXAM.RESULT.PASSED) {
     let userDeckData = await UserDeck.find({
-      deckId: userExam.deckId,
+      itemId: userExam.deckId,
       userId: userExam.userId,
       itemType:'deck'
     })
