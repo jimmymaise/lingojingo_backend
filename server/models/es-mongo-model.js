@@ -1,5 +1,5 @@
 'use strict';
-let logger = require('./logger').logger
+let logger = require('../utils/logger').logger
 
 const MongoModels = require('mongo-models');
 const es = require('../elasticsearch/connection').es
