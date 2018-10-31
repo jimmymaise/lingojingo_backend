@@ -16,7 +16,7 @@ internals.applyRoutes = function (server) {
 
   server.route({
     method: 'GET',
-    path: '/syncES',
+    path: '/syncES/{p*}',
     config: {
       auth: envAuth
     },
@@ -28,14 +28,22 @@ internals.applyRoutes = function (server) {
       const UserItem = require('../models/user-item');
 
 
-
       try {
-        await Deck.syncDataES({}, true)
-        await UserItem.syncDataES({}, true)
-        await Article.syncDataES({}, true)
-        // await Song.syncDataES({}, true)
-        // await UserTopic.syncDataES({}, true)
-
+        if (request.params.p === 'deck' || request.params.p === 'all') {
+          return await Deck.syncDataES({}, true)
+        }
+        if (request.params.p === 'user-item' || request.params.p === 'all') {
+          return await UserItem.syncDataES({}, true)
+        }
+        if (request.params.p === 'article' || request.params.p === 'all') {
+          return await UserItem.syncDataES({}, true)
+        }
+        if (request.params.p === 'song' || request.params.p === 'all') {
+          return await Song.syncDataES({}, true)
+        }
+        if (request.params.p === 'user-topic' || request.params.p === 'all') {
+          return await UserTopic.syncDataES({}, true)
+        }
       }
       catch (e) {
         return {e}
