@@ -54,7 +54,10 @@ internals.applyRoutes = function (server, next) {
       description: 'Get current user info',
       notes: 'Returns current user info',
       tags: ['api'],
-      auth: 'firebase'
+      auth: 'firebase',
+      cors: {
+        additionalExposedHeaders: ['Date']
+      }
     },
     handler: async (request) => {
       try {

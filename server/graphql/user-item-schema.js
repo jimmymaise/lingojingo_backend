@@ -22,7 +22,7 @@ const typeDefs = `
 }
  
   extend type Query {
-    getMyUserItemByItemId(itemId: ID!, type: String!): UserItem,
+    getMyUserItemByItemId(itemId: ID!, itemType: String!): UserItem,
     userItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     myUserItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     getUserItemDetail(id: ID!): UserItem,
@@ -63,7 +63,7 @@ const resolvers = {
       return await userItemService.getOneUserItem(args.id);
     },
     getMyUserItemByItemId: async (parent, args, context) => {
-      return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId);
+      return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId, args.itemType);
     },
     userItemSearch: async (parent, args, context) => {
       return await userItemService.searchUserItem(args);
