@@ -34,25 +34,20 @@ class ESMongoModels extends MongoModels {
   }
 
   static async upsertES(_id, indexData) {
-    try{
-      await es.initIndex(this.collectionName, this.esSchema)
-
-    }
-    catch (e) {
-      logger.error(e)
-
-    }
+    await es.initIndex(this.collectionName, this.esSchema)
     if (!indexData) {
       indexData = await this.findById(_id)
     }
     delete indexData['_id'];
-    try{
-      let data = await es.update({
+    let data
+    try {
+      data = await es.update({
         index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData, doc_as_upsert: true}
       })
+
     }
     catch (e) {
-      logger.error(e)
+      logger.error(_id.toString() + e.toString())
 
     }
 
@@ -147,7 +142,7 @@ class ESMongoModels extends MongoModels {
 
         }
         catch (e) {
-          logger.error(e)
+          logger.error(data[i]._id + e.toString())
 
 
         }
