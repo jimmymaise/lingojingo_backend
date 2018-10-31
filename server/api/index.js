@@ -30,11 +30,10 @@ internals.applyRoutes = function (server) {
 
 
       try {
-
+        await Deck.syncDataES({}, true)
         await UserItem.syncDataES({}, true)
         await Article.syncDataES({}, true)
         // await Song.syncDataES({}, true)
-        // await Deck.syncDataES({}, true)
         // await UserTopic.syncDataES({}, true)
 
       }
