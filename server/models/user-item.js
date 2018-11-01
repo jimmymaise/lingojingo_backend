@@ -26,7 +26,7 @@ class UserItem extends ESMongoModels {
     if (indexData.itemType === 'deck') {
       indexData['wordStatistics'] = (await userStatisticsService.getWordStatics({
         deckId: indexData.itemId,
-        userid: indexData.userId
+        userId: indexData.userId
       }))[0];
     }
     await super.upsertES(_id, indexData)
