@@ -1,10 +1,11 @@
 'use strict';
+let logger = require('../utils/logger').logger
 
 const Joi = require('joi');
 const ESMongoModels = require('./es-mongo-model');
 const esSchema = require('../elasticsearch/mapping/user-item').userItem
 const userStatisticsService = require('../services/user-statistics.service');
-let keyRemoveDeckArray = ['topics','tags']
+let keyRemoveDeckArray = ['topics', 'tags']
 let keyRemoveSongArray = ['listLyric', 'cards']
 let keyRemoveArticleArray = ['checkForUnderstandingQuestions', 'discussionQuestions', 'textDependentQuestions', 'reference']
 let keyRemoveArray = keyRemoveDeckArray.concat(keyRemoveSongArray, keyRemoveArticleArray);
@@ -15,11 +16,18 @@ class UserItem extends ESMongoModels {
     let indexData = await this.findById(_id)
     const Item = require(`../models/${indexData.itemType}`);
     //Add more fields from other table
+
     indexData['itemInfo'] = await Item.findById(indexData.itemId);
+    if (!indexData['itemInfo']) {
+      logger.error(indexData.itemId)
+    }
     indexData['name'] = indexData['itemInfo']['name']
     keyRemoveArray.forEach(e => delete indexData['itemInfo'][e]);
     if (indexData.itemType === 'deck') {
-      indexData['wordStatistics'] = (await userStatisticsService.getWordStatics({deckId: indexData.itemId}))[0];
+      indexData['wordStatistics'] = (await userStatisticsService.getWordStatics({
+        deckId: indexData.itemId,
+        userid: indexData.userId
+      }))[0];
     }
     await super.upsertES(_id, indexData)
   }
