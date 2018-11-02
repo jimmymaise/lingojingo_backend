@@ -10,6 +10,9 @@ class Song extends ESMongoModels {
   static async upsertES(_id) {
     let indexData = await this.findById(_id)
     //Add more fields from other table
+    //Remove some fields not need to put ES
+    delete indexData['listLyric']
+
     let bandSingerInfo = await BandSinger.findOne({singerId:indexData.bandSingerId });
     indexData['bandSingerInfo'] = {
       name: bandSingerInfo['name'],
