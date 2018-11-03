@@ -20,10 +20,6 @@ internals.getOneUserItem = async (id) => {
 }
 
 internals.addOneUserItem = async (args) => {
-  let userInfo = await UserInfo.findById(args.userInfo);
-  if (!userInfo.items || !(args.itemId in userInfo.items)) {
-    throw new Error(`User must own the item ${args.itemId} to learn it`);
-  }
   let result = await UserItem.insertOne(args);
   return result[0]
 
@@ -36,11 +32,10 @@ internals.deleteOneUserItem = async (id) => {
 }
 
 internals.updateOneUserItem = async (args) => {
-  let id = args.id
   let updateObj = _.cloneDeep(args)
   delete updateObj['id']
   let result = await UserItem.findByIdAndUpdate(
-    id, {$set: updateObj});
+    args.id, {$set: updateObj});
   return result
 
 }
@@ -71,6 +66,9 @@ internals.searchUserItem = async (args) => {
   }
   if (search.userId) {
     body.query('match', 'userId', search.userId)
+  }
+  if (search.userId) {
+    body.query('match', 'favorite', search.favorite)
   }
 
   let data = await UserItem.searchWithBodyBuilder()

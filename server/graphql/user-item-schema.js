@@ -10,6 +10,7 @@ const typeDefs = `
     name: String,
     itemType: String,
     userId: String,
+    favorite: Int
   }
   input MyUserItemSearchInput {
   name: String,
@@ -28,9 +29,10 @@ const typeDefs = `
     getUserItemDetail(id: ID!): UserItem,
   }
 
-  extend type Mutation { createUserItem(userId: String, itemId: String, itemId: String, latestStudy: JSON): UserItem }
-  extend type Mutation { updateUserItem(id: ID!, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
-  extend type Mutation { deleteUserItem(id: ID!): UserItem}
+  extend type Mutation { createMyUserItem(itemId: String, itemId: String, latestStudy: JSON): UserItem }
+  extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
+  
+  extend type Mutation { deleteMyUserItem(_id: ID!): UserItem}
 
   type UserItem {
     _id: String,
@@ -87,15 +89,16 @@ const resolvers = {
       }
     },
   Mutation: {
-    createUserItem: async (parent, args) => {
+    createMyUserItem: async (parent, args) => {
+      args.userId = context.request.auth.credentials.uid;
       return await userItemService.addOneUserItem(args
       );
     },
-    updateUserItem: async (parent, args) => {
+    updateMyUserItem: async (parent, args) => {
       return await userItemService.updateOneUserItem(args
       );
     },
-    deleteUserItem: async (parent, args) => {
+    deleteMyUserItem: async (parent, args) => {
       return await userItemService.deleteOneUserItem(args.id
       );
     },
