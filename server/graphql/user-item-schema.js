@@ -30,7 +30,7 @@ const typeDefs = `
     getUserItemDetail(id: ID!): UserItem,
   }
 
-  extend type Mutation { createMyUserItem(itemId: String, latestStudy: JSON): UserItem }
+  extend type Mutation { createMyUserItem(itemId: String, itemType: String, latestStudy: JSON): UserItem }
 
   extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
   
@@ -92,16 +92,18 @@ const resolvers = {
       }
     },
   Mutation: {
-    createMyUserItem: async (parent, args) => {
+    createMyUserItem: async (parent, args, context) => {
       args.userId = context.request.auth.credentials.uid;
       return await userItemService.addOneUserItem(args
       );
     },
-    updateMyUserItem: async (parent, args) => {
+    updateMyUserItem: async (parent, args, context) => {
+      args.userId = context.request.auth.credentials.uid;
       return await userItemService.updateOneUserItem(args
       );
     },
-    deleteMyUserItem: async (parent, args) => {
+    deleteMyUserItem: async (parent, args, context) => {
+      args.userId = context.request.auth.credentials.uid;
       return await userItemService.deleteOneUserItem(args.id
       );
     },

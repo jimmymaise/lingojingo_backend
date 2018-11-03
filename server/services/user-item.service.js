@@ -4,6 +4,7 @@
 const UserItem = require('../models/user-item');
 const _ = require('lodash');
 const internals = {};
+const ObjectID = require('mongodb').ObjectID;
 
 
 //User Item
@@ -26,7 +27,7 @@ internals.addOneUserItem = async (args) => {
 }
 
 internals.deleteOneUserItem = async (id) => {
-  let result = await UserItem.findByIdAndDelete(id);
+  let result = await UserItem.findOneAndDelete({_id: ObjectID(args.id), userId: args.userId});
   if (result === undefined) result = {"_id": null}
   return result
 }
@@ -34,8 +35,10 @@ internals.deleteOneUserItem = async (id) => {
 internals.updateOneUserItem = async (args) => {
   let updateObj = _.cloneDeep(args)
   delete updateObj['id']
-  let result = await UserItem.findByIdAndUpdate(
-    args.id, {$set: updateObj});
+  delete updateObj['userId']
+
+  let result = await UserItem.findOneAndUpdate(
+    {_id: ObjectID(args.id), userId: args.userId}, {$set: updateObj});
   return result
 
 }
