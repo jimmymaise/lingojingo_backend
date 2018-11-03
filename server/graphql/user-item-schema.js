@@ -12,15 +12,17 @@ const typeDefs = `
     userId: String,
     favorite: Int
   }
+
   input MyUserItemSearchInput {
     name: String,
     itemType: String,
   }
+
   type UserItemPagination {
-  data: [UserItemSummary],
-  pages: PageInfo,
-  items: PageItemInfo
-}
+    data: [UserItemSummary],
+    pages: PageInfo,
+    items: PageItemInfo
+  }
  
   extend type Query {
     getMyUserItemByItemId(itemId: ID!, itemType: String!): UserItem,
@@ -28,7 +30,8 @@ const typeDefs = `
     getUserItemDetail(id: ID!): UserItem,
   }
 
-  extend type Mutation { createMyUserItem(itemId: String, itemId: String, latestStudy: JSON): UserItem }
+  extend type Mutation { createMyUserItem(itemId: String, latestStudy: JSON): UserItem }
+
   extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
   
   extend type Mutation { deleteMyUserItem(_id: ID!): UserItem}
@@ -44,7 +47,8 @@ const typeDefs = `
     createdAt:String,
     expiredAt:String
   }
-    type UserItemSummary {
+
+  type UserItemSummary {
     _id: String,
     userId: String,
     itemId: String,
