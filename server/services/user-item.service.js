@@ -67,7 +67,7 @@ internals.searchUserItem = async (args) => {
   if (search.userId) {
     body.query('match', 'userId', search.userId)
   }
-  if (search.userId) {
+  if (search.favorite) {
     body.query('match', 'favorite', search.favorite)
   }
 

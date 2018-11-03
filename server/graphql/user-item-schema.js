@@ -13,8 +13,8 @@ const typeDefs = `
     favorite: Int
   }
   input MyUserItemSearchInput {
-  name: String,
-  itemType: String,
+    name: String,
+    itemType: String,
   }
   type UserItemPagination {
   data: [UserItemSummary],
@@ -24,7 +24,6 @@ const typeDefs = `
  
   extend type Query {
     getMyUserItemByItemId(itemId: ID!, itemType: String!): UserItem,
-    userItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     myUserItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     getUserItemDetail(id: ID!): UserItem,
   }
@@ -67,9 +66,9 @@ const resolvers = {
     getMyUserItemByItemId: async (parent, args, context) => {
       return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId, args.itemType);
     },
-    userItemSearch: async (parent, args, context) => {
-      return await userItemService.searchUserItem(args);
-    },
+    // userItemSearch: async (parent, args, context) => {
+    //   return await userItemService.searchUserItem(args);
+    // },
     myUserItemSearch: async (parent, args, context) => {
       args['search']['userId'] = context.request.auth.credentials.uid;
       return await userItemService.searchUserItem(args);
