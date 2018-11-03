@@ -13,7 +13,7 @@ class Song extends ESMongoModels {
     //Remove some fields not need to put ES
     delete indexData['listLyric']
 
-    let bandSingerInfo = await BandSinger.findOne({singerId:indexData.bandSingerId });
+    let bandSingerInfo = await BandSinger.findOne({singerId: indexData.bandSingerId});
     indexData['bandSingerInfo'] = {
       name: bandSingerInfo['name'],
       avatar: bandSingerInfo['avatar'],
@@ -39,6 +39,7 @@ let lyricObj = Joi.object().keys({
 Song.schema = Joi.object().keys({
   _id: Joi.object(),
   name: Joi.string(),
+  mainLevel: Joi.number(),
   img: Joi.string(),
   bandSingerId: Joi.number(),
   songLevel: Joi.number(),

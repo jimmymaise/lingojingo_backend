@@ -7,7 +7,8 @@ const UserInfo = require('../models/user-info');
 const typeDefs = `
   input DeckSearchInput {
     name: String,
-    categoryId: Int,
+    categoryId: [Int],
+    mainLevel: [Int],
     }
   type DeckPagination {
     data: [Deck],
@@ -23,7 +24,7 @@ const typeDefs = `
   type Deck {
     _id: String,
     total: Int,
-    level: Int,
+    mainLevel: Int,
     tags: [String],
     topics: [JSON],
     name: String,
@@ -52,16 +53,7 @@ const resolvers = {
 
       return await deckService.getDeckPaginate(limit, page);
     },
-    userStoreDecks: async (parent, args, context) => {
-      const {limit, page} = args.pagination || {};
 
-      return await deckService.getDeckPaginatexMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
-    },
-    userOwnerDecks: async (parent, args, context) => {
-      const {limit, page} = args.pagination || {};
-
-      return await deckService.getUserOwnerDeckPaginate(context.request.auth.credentials.uid, limit, page);
-    },
     deck: async (parent, args, context) => {
       return await deckService.getDeck(context.request.auth.credentials.uid, args.id);
     },

@@ -103,6 +103,9 @@ internals.searchDeck = async (args) => {
   if (search.categoryId) {
     body.query('match', 'category.id', search.categoryId)
   }
+  if (search.mainLevel) {
+    body.query('terms', 'mainLevel', search.mainLevel)
+  }
 
   let data = await Deck.searchWithBodyBuilder()
 
