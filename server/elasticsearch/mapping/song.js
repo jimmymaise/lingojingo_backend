@@ -19,6 +19,10 @@ song = {
           "type": "keyword",
           "null_value": "NULL"
         },
+        "mainLevel": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
 
         "link": {
           "type": "keyword",

@@ -7,6 +7,7 @@ const UserInfo = require('../models/user-info');
 const typeDefs = `
   input SongSearchInput {
     name: String,
+    mainLevel: [Int],
     }
   type SongPagination {
     data: [Song],
@@ -29,13 +30,12 @@ const typeDefs = `
   type Song {
     _id: String,
     total: Int,
-    level: Int,
+    mainLevel: Int,
     tags: [String],
     topics: [JSON],
     name: String,
     bandSingerId: Int,
     isOwned: Boolean,
-    songLevel: Int,
     cardTotal: Int,
     duration: Int,
     cards: [String],
@@ -63,16 +63,6 @@ const resolvers = {
       const {limit, page} = args.pagination || {};
 
       return await songService.getSongPaginate(limit, page);
-    },
-    userStoreSongs: async (parent, args, context) => {
-      const {limit, page} = args.pagination || {};
-
-      return await songService.getSongPaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
-    },
-    userOwnerSongs: async (parent, args, context) => {
-      const {limit, page} = args.pagination || {};
-
-      return await songService.getUserOwnerSongPaginate(context.request.auth.credentials.uid, limit, page);
     },
     song: async (parent, args, context) => {
       return await songService.getSong(context.request.auth.credentials.uid, args.id);

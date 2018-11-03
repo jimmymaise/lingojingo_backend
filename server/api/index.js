@@ -36,7 +36,7 @@ internals.applyRoutes = function (server) {
           return await UserItem.syncDataES({}, true)
         }
         if (request.params.p === 'article' || request.params.p === 'all') {
-          return await UserItem.syncDataES({}, true)
+          return await Article.syncDataES({}, true)
         }
         if (request.params.p === 'song' || request.params.p === 'all') {
           return await Song.syncDataES({}, true)

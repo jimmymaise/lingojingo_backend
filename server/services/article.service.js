@@ -90,9 +90,10 @@ internals.searchArticle = async (args) => {
     body.orQuery('match', 'name', {query: search.name, operator: 'and'})
     body.queryMinimumShouldMatch(1)
   }
-  // if (search.categoryId) {
-  //   body.query('match', 'category.id', search.categoryId)
-  // }
+  if (search.mainLevel) {
+    body.query('terms', 'mainLevel', search.mainLevel)
+  }
+
 
   let data = await Article.searchWithBodyBuilder()
 

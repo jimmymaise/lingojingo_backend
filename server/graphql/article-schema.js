@@ -6,6 +6,7 @@ const UserInfo = require('../models/user-info');
 const typeDefs = `
   input ArticleSearchInput {
     name: String,
+    mainLevel: [Int],
     }
   type ArticlePagination {
     data: [Article],
@@ -21,6 +22,7 @@ const typeDefs = `
   type ArticleSummary {
     _id: String,
     name: String,
+    mainLevel: Int,
     author: String,
     isOwned: Boolean,
     id: Int,
@@ -38,6 +40,7 @@ const typeDefs = `
     _id: String,
     name: String,
     author: String,
+    mainLevel: Int,
     id: Int,
     isOwned: Boolean,
     publicationYear: String,
@@ -71,16 +74,7 @@ const resolvers = {
 
       return await articleService.getArticlePaginate(limit, page);
     },
-    userStoreArticles: async (parent, args, context) => {
-      const {limit, page} = args.pagination || {};
 
-      return await articleService.getArticlePaginateMapWithUserInfo(context.request.auth.credentials.uid, limit, page);
-    },
-    userOwnerArticles: async (parent, args, context) => {
-      const {limit, page} = args.pagination || {};
-
-      return await articleService.getUserOwnerArticlePaginate(context.request.auth.credentials.uid, limit, page);
-    },
     article: async (parent, args, context) => {
       return await articleService.getArticle(context.request.auth.credentials.uid, args.id);
     },

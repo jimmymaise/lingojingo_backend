@@ -5,7 +5,6 @@ const ObjectID = require('mongodb').ObjectID;
 const sortBy = require('lodash/sortBy');
 const map = require('lodash/map');
 const reduce = require('lodash/reduce');
-const UserSong = require('../models/user-song');
 const _ = require('lodash')
 
 const UserInfo = require('../models/user-info');
@@ -89,6 +88,9 @@ internals.searchSong = async (args) => {
     body.orQuery('match_phrase', 'name', {query: search.name, analyzer: 'nameIndexAnalyzer', 'boost': '5'})
     body.orQuery('match', 'name', {query: search.name, operator: 'and'})
     body.queryMinimumShouldMatch(1)
+  }
+  if (search.mainLevel) {
+    body.query('terms', 'mainLevel', search.mainLevel)
   }
   // if (search.categoryId) {
   //   body.query('match', 'category.id', search.categoryId)
