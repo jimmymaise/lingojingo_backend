@@ -11,7 +11,7 @@ internals.applyRoutes = function (server, next) {
 
   server.route({
     method: 'POST',
-    path: '/user-item/create/{id}',
+    path: '/user-item/{itemType}/{itemId}',
     config: {
       auth: 'firebase',
       description: 'Create User-Item for User',
@@ -22,7 +22,7 @@ internals.applyRoutes = function (server, next) {
 
       try {
 
-        const result = await UserItemService.createMyUserItem(request.auth.credentials.uid, request.params.itemId.request.params.itemType);
+        const result = await UserItemService.createMyUserItem(request.auth.credentials.uid, request.params.itemId, request.params.itemType);
         return {
           success: true,
           message: 'successfully',
@@ -42,7 +42,6 @@ exports.register = function (server, options) {
 
   return;
 };
-
 
 
 exports.name = 'user-item';
