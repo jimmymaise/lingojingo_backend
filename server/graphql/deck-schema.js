@@ -2,6 +2,8 @@ const quizService = require('../services/quiz.service');
 const deckService = require('../services/deck.service');
 const userStatisticsService = require('../services/user-statistics.service');
 const UserInfo = require('../models/user-info');
+const UserItem = require('../models/user-item');
+
 
 // The GraphQL schema in string form
 const typeDefs = `
@@ -87,16 +89,13 @@ const resolvers = {
       return data
     },
     isOwned: async (parent, args, context) => {
-      let userInfo = context.userInfo
+      let userItem = await UserItem.findOne({
+        userId: context.request.auth.credentials.uid,
+        itemType: 'deck',
+        itemId: parent._id
+      });
 
-      let firebaseUId = context.request.auth.credentials.uid
-      if (!userInfo || firebaseUId !== userInfo.firebaseUserId) {
-        userInfo = await UserInfo.findOne({
-          firebaseUserId: firebaseUId
-        });
-      }
-
-      return await deckService.isOwned(userInfo, parent._id);
+      return !!userItem;
     },
     cardDetails: async (parent, args, context) => {
       return await deckService.getListCardDetail(context.request.auth.credentials.uid, parent.cards);
