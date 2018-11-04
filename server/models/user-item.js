@@ -7,7 +7,7 @@ const esSchema = require('../elasticsearch/mapping/user-item').userItem
 const userStatisticsService = require('../services/user-statistics.service');
 let keyRemoveDeckArray = ['topics', 'tags']
 let keyRemoveSongArray = ['listLyric', 'cards']
-let keyRemoveArticleArray = ['checkForUnderstandingQuestions', 'discussionQuestions', 'textDependentQuestions', 'reference']
+let keyRemoveArticleArray = ['content','checkForUnderstandingQuestions', 'discussionQuestions', 'textDependentQuestions', 'reference']
 let keyRemoveArray = keyRemoveDeckArray.concat(keyRemoveSongArray, keyRemoveArticleArray);
 
 
