@@ -52,6 +52,7 @@ const typeDefs = `
     _id: String,
     userId: String,
     itemId: String,
+    itemType: String,
     favorite: Int,
     wordStatistics: WordStatistics,
     createdAt: String,
