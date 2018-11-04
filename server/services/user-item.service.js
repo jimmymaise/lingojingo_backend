@@ -21,7 +21,9 @@ internals.getOneUserItem = async (id) => {
 }
 
 internals.addOneUserItem = async (args) => {
-  let result = await UserItem.insertOne(args);
+  let result = await UserItem.findOne({itemId: args.itemId, userId: args.userId, itemType: args.itemType});
+  if (result) return result
+  result = await UserItem.insertOne(args);
   return result[0]
 
 }
