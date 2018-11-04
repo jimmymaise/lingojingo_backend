@@ -4,6 +4,7 @@
 const UserItem = require('../models/user-item');
 const _ = require('lodash');
 const internals = {};
+const ObjectID = require('mongodb').ObjectID;
 
 
 //User Item
@@ -20,27 +21,26 @@ internals.getOneUserItem = async (id) => {
 }
 
 internals.addOneUserItem = async (args) => {
-  let userInfo = await UserInfo.findById(args.userInfo);
-  if (!userInfo.items || !(args.itemId in userInfo.items)) {
-    throw new Error(`User must own the item ${args.itemId} to learn it`);
-  }
-  let result = await UserItem.insertOne(args);
+  let result = await UserItem.findOne({itemId: args.itemId, userId: args.userId, itemType: args.itemType});
+  if (result) return result
+  result = await UserItem.insertOne(args);
   return result[0]
 
 }
 
 internals.deleteOneUserItem = async (id) => {
-  let result = await UserItem.findByIdAndDelete(id);
+  let result = await UserItem.findOneAndDelete({_id: ObjectID(args.id), userId: args.userId});
   if (result === undefined) result = {"_id": null}
   return result
 }
 
 internals.updateOneUserItem = async (args) => {
-  let id = args.id
   let updateObj = _.cloneDeep(args)
   delete updateObj['id']
-  let result = await UserItem.findByIdAndUpdate(
-    id, {$set: updateObj});
+  delete updateObj['userId']
+
+  let result = await UserItem.findOneAndUpdate(
+    {_id: ObjectID(args.id), userId: args.userId}, {$set: updateObj});
   return result
 
 }
@@ -71,6 +71,9 @@ internals.searchUserItem = async (args) => {
   }
   if (search.userId) {
     body.query('match', 'userId', search.userId)
+  }
+  if (search.favorite) {
+    body.query('match', 'favorite', search.favorite)
   }
 
   let data = await UserItem.searchWithBodyBuilder()

@@ -10,27 +10,31 @@ const typeDefs = `
     name: String,
     itemType: String,
     userId: String,
+    favorite: Int
   }
+
   input MyUserItemSearchInput {
-  name: String,
-  itemType: String,
+    name: String,
+    itemType: String,
   }
+
   type UserItemPagination {
-  data: [UserItemSummary],
-  pages: PageInfo,
-  items: PageItemInfo
-}
+    data: [UserItemSummary],
+    pages: PageInfo,
+    items: PageItemInfo
+  }
  
   extend type Query {
     getMyUserItemByItemId(itemId: ID!, itemType: String!): UserItem,
-    userItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     myUserItemSearch(search: UserItemSearchInput, pagination: PaginationInput): UserItemPagination,
     getUserItemDetail(id: ID!): UserItem,
   }
 
-  extend type Mutation { createUserItem(userId: String, itemId: String, itemId: String, latestStudy: JSON): UserItem }
-  extend type Mutation { updateUserItem(id: ID!, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
-  extend type Mutation { deleteUserItem(id: ID!): UserItem}
+  extend type Mutation { createMyUserItem(itemId: String!, itemType: String!, latestStudy: JSON): UserItem }
+
+  extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
+  
+  extend type Mutation { deleteMyUserItem(_id: ID!): UserItem}
 
   type UserItem {
     _id: String,
@@ -43,10 +47,12 @@ const typeDefs = `
     createdAt:String,
     expiredAt:String
   }
-    type UserItemSummary {
+
+  type UserItemSummary {
     _id: String,
     userId: String,
     itemId: String,
+    itemType: String,
     favorite: Int,
     wordStatistics: WordStatistics,
     createdAt: String,
@@ -65,9 +71,9 @@ const resolvers = {
     getMyUserItemByItemId: async (parent, args, context) => {
       return await userItemService.getOneMyUserItemByItemId(context.request.auth.credentials.uid, args.itemId, args.itemType);
     },
-    userItemSearch: async (parent, args, context) => {
-      return await userItemService.searchUserItem(args);
-    },
+    // userItemSearch: async (parent, args, context) => {
+    //   return await userItemService.searchUserItem(args);
+    // },
     myUserItemSearch: async (parent, args, context) => {
       args['search']['userId'] = context.request.auth.credentials.uid;
       return await userItemService.searchUserItem(args);
@@ -87,15 +93,18 @@ const resolvers = {
       }
     },
   Mutation: {
-    createUserItem: async (parent, args) => {
+    createMyUserItem: async (parent, args, context) => {
+      args.userId = context.request.auth.credentials.uid;
       return await userItemService.addOneUserItem(args
       );
     },
-    updateUserItem: async (parent, args) => {
+    updateMyUserItem: async (parent, args, context) => {
+      args.userId = context.request.auth.credentials.uid;
       return await userItemService.updateOneUserItem(args
       );
     },
-    deleteUserItem: async (parent, args) => {
+    deleteMyUserItem: async (parent, args, context) => {
+      args.userId = context.request.auth.credentials.uid;
       return await userItemService.deleteOneUserItem(args.id
       );
     },

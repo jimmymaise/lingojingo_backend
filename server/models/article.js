@@ -28,6 +28,7 @@ Article.esSchema = esSchema;
 Article.schema = Joi.object().keys({
   _id: Joi.object(),
   name: Joi.string(),
+  mainLevel: Joi.number(),
   author: Joi.string().allow(null).allow(''),
   id: Joi.number(),
   publicationYear: Joi.string().allow(null).allow(''),

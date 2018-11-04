@@ -18,6 +18,10 @@ deck = {
           "type": "keyword",
           "null_value": "NULL"
         },
+        "mainLevel": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
         "categoryId": {
           "type": "keyword",
           "null_value": "NULL"
