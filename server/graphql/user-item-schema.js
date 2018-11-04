@@ -30,7 +30,7 @@ const typeDefs = `
     getUserItemDetail(id: ID!): UserItem,
   }
 
-  extend type Mutation { createMyUserItem(itemId: String, itemType: String, latestStudy: JSON): UserItem }
+  extend type Mutation { createMyUserItem(itemId: String!, itemType: String!, latestStudy: JSON): UserItem }
 
   extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
   
