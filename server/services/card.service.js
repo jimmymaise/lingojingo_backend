@@ -1,6 +1,6 @@
 'use strict';
 
-
+const ObjectID = require('mongodb').ObjectID;
 const Card = require('../models/card');
 const _ = require('lodash');
 const internals = {};
@@ -18,12 +18,16 @@ internals.createOneCard = async (cardData) => {
 
 
 internals.updateOneCard = async (_id, cardData) => {
-    return await Card.findOneAndUpdate({
-        _id: _id,
+    let result = await Card.findOneAndUpdate({
+        _id: ObjectID(_id),
     }, {
         $set: cardData
 
     });
+    if (!result) {
+        throw Error('Cannot update! Perhaps Card Not Found');
+    }
+    return result
 }
 
 
