@@ -1,10 +1,27 @@
-const quizService = require('../services/quiz.service');
+const cardService = require('../services/card.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
   extend type Query { card(id: ID!): Card }
+  extend type Mutation { createOneCard(input: CardInput): Card }
+  extend type Mutation { updateOneCard(_id: ID!,input: CardInput): Card }
+
+  input CardInput {
+    description: String,
+    voca: String,
+    transcript: String,
+    img: [String],
+    ukAudio: String,
+    usAudio: String,
+    type: String,
+    viMeaning: String,
+    enMeaning: String,
+    sample: [JSON]
+  }
+  
   type Card {
     _id: String,
+    description: String,
     voca: String,
     transcript: String,
     img: [String],
@@ -14,7 +31,8 @@ const typeDefs = `
     viMeaning: String,
     enMeaning: String,
     sample: [CardSample]
-  },
+  }
+  
   type CardSample {
     phrases: String,
     phraseAudio: String,
@@ -29,14 +47,23 @@ const typeDefs = `
 
 // The resolvers
 const resolvers = {
-  Query: {
-    card: async (parent, args) => {
-      return await quizService.getOneCard(args.id);
-    }
-  },
+    Query: {
+        card: async (parent, args) => {
+            return await cardService.getOneCard(args.id);
+        }
+    },
+    Mutation: {
+        updateOneCard: async (parent, args) => {
+            return await cardService.updateOneCard(args._id, args.input);
+        },
+        createOneCard: async (parent, args) => {
+            return await cardService.createOneCard(args.input);
+        },
+    },
+
 };
 
 module.exports = {
-  typeDefs,
-  resolvers
+    typeDefs,
+    resolvers
 }

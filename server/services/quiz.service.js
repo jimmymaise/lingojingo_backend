@@ -1,15 +1,11 @@
 'use strict';
 
 
-const Card = require('../models/card');
 const Deck = require('../models/deck');
 const UserTopic = require('../models/user-topic');
 const _ = require('lodash');
 const internals = {};
 
-internals.getOneCard = async (id) => {
-  return await Card.findById(id);
-}
 
 //Topic
 
@@ -90,9 +86,6 @@ internals.updateOneUserTopic = async (args) => {
 
 exports.register = function (server, options) {
 
-  server.expose('getOneCard', internals.getOneCard);
-
-
   server.expose('getOneUserTopic', internals.getOneUserTopic);
   server.expose('getUserTopicByDeckAndTopic', internals.getUserTopicByDeckAndTopic);
   server.expose('addOneUserTopic', internals.addOneUserTopic);
@@ -103,7 +96,6 @@ exports.register = function (server, options) {
 };
 
 
-exports.getOneCard = internals.getOneCard;
 
 exports.getOneUserTopic = internals.getOneUserTopic;
 exports.getUserTopicByDeckAndTopic = internals.getUserTopicByDeckAndTopic;
@@ -113,7 +105,6 @@ exports.deleteOneUserTopic = internals.deleteOneUserTopic;
 
 
 
-exports.deleteOneUserDeck = internals.deleteOneUserDeck;
 exports.createOrUpdateUserTopic = internals.createOrUpdateUserTopic;
 
 

@@ -22,6 +22,7 @@ const typeDefs = `
   type ArticleSummary {
     _id: String,
     name: String,
+    description: String,
     mainLevel: Int,
     author: String,
     isOwned: Boolean,
@@ -31,13 +32,13 @@ const typeDefs = `
     genre: String,
     permissionsLine: String,
     image: String,
-    description: String,
     language: String,
   
   }
   
   type Article {
     _id: String,
+    description: String,
     name: String,
     author: String,
     mainLevel: Int,
@@ -48,7 +49,6 @@ const typeDefs = `
     genre: String,
     permissionsLine: String,
     image: String,
-    description: String,
     language: String,
     content: JSON,
     checkForUnderstandingQuestions: [JSON],
@@ -86,6 +86,7 @@ const resolvers = {
 
     },
   },
+
   Article: {
 
     isOwned: async (parent, args, context) => {

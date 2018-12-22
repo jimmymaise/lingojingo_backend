@@ -25,6 +25,7 @@ const typeDefs = `
   }
   type Deck {
     _id: String,
+    description: String,
     total: Int,
     mainLevel: Int,
     tags: [String],
