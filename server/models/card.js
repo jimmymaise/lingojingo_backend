@@ -10,7 +10,8 @@ Card.collectionName = 'cards';
 
 Card.schema = Joi.object().keys({
   _id: Joi.object(),
-  voca: Joi.string(),
+  description: Joi.string(),
+  voca: Joi.string().required(),
   transcript: [Joi.string().optional(), Joi.allow(null)],
   img: [Joi.array().optional(), Joi.allow(null)],
   ukAudio: [Joi.string().optional(), Joi.allow(null)],

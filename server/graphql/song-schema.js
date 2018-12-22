@@ -29,6 +29,7 @@ const typeDefs = `
   }
   type Song {
     _id: String,
+    description: String,
     total: Int,
     mainLevel: Int,
     tags: [String],

@@ -6,6 +6,7 @@ const typeDefs = `
   type Topic {
     _id: String,
     topic: String,
+    description: String,
     img: String,
     tag: String,
     deck: String,

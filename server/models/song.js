@@ -38,6 +38,7 @@ let lyricObj = Joi.object().keys({
 })
 Song.schema = Joi.object().keys({
   _id: Joi.object(),
+  description: Joi.string(),
   name: Joi.string(),
   mainLevel: Joi.number(),
   img: Joi.string(),
