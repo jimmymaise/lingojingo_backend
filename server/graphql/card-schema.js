@@ -1,4 +1,5 @@
 const cardService = require('../services/card.service');
+const { rule, shield, and, or, not }  = require('graphql-shield')
 
 // The GraphQL schema in string form
 const typeDefs = `
@@ -47,6 +48,7 @@ const typeDefs = `
   }
 `;
 
+
 // The resolvers
 const resolvers = {
     Query: {
@@ -68,6 +70,8 @@ const resolvers = {
     },
 
 };
+
+
 
 module.exports = {
     typeDefs,
