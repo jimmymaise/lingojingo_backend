@@ -33,6 +33,9 @@ internals.applyRoutes = function (server, next) {
     handler: async (request) => {
       const data = request.payload;
       data.email = request.auth.credentials.email;
+      setClaimToFireBase = require ('../utils/general').setClaimToFireBase
+      await setClaimToFireBase(request.auth.credentials.user_id)
+
       try {
         const result = await UserInfoService.createOrUpdateForClient(request.auth.credentials.uid, data);
         return {
