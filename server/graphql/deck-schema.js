@@ -1,4 +1,3 @@
-const quizService = require('../services/quiz.service');
 const deckService = require('../services/deck.service');
 const userStatisticsService = require('../services/user-statistics.service');
 const UserInfo = require('../models/user-info');
@@ -46,6 +45,27 @@ const typeDefs = `
     deckSearch(search: DeckSearchInput, pagination: PaginationInput): DeckPagination,
     deck(id: ID!): Deck
   }
+  
+  extend type Mutation { createOneDeck(input: DeckInput): Deck }
+  extend type Mutation { updateOneDeck(_id: ID!,input: DeckInput): Deck }
+  extend type Mutation { deleteOneDeck(_id: ID!): Deck }
+  
+  input DeckInput {
+  description: String,
+  total: Int,
+  mainLevel: Int,
+  tags: [String],
+  topics: [JSON],
+  name: String,
+  isOwned: Boolean,
+  img: String,
+  topicDetails: [JSON],
+  cardDetails: [JSON],
+  wordStatistics:JSON,
+  category: JSON,
+  passScore: String
+}
+  
 `;
 
 // The resolvers
@@ -66,6 +86,18 @@ const resolvers = {
       });
       return await deckService.searchDeck(args);
 
+    },
+  },
+  // Mutation for administrator
+  Mutation: {
+    updateOneDeck: async (parent, args) => {
+      return await deckService.updateOneDeck(args._id, args.input);
+    },
+    createOneDeck: async (parent, args) => {
+      return await deckService.createOneDeck(args.input);
+    },
+    deleteOneDeck: async (parent, args) => {
+      return await deckService.deleteOneDeck(args._id);
     },
   },
   Deck: {

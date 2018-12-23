@@ -1,4 +1,3 @@
-const quizService = require('../services/quiz.service');
 const articleService = require('../services/article.service');
 const UserInfo = require('../models/user-info');
 

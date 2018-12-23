@@ -1,0 +1,30 @@
+# Write your query or mutation here
+mutation {createOneTopic(input:{
+  description:"abc",
+  topic:"conga"
+
+}){
+  description
+
+}}
+
+# Write your query or mutation here
+mutation {updateOneTopic(_id:"5c1f0f5571c2f34aa7d89d43",input:{
+  description:"abc",
+  topic:"conga"
+
+}){
+  description,
+  _id
+
+}}
+# Write your query or mutation here
+mutation {deleteOneTopic(_id:"5c1f0f5571c2f34aa7d89d43"){
+  description,
+  _id
+  topic
+
+}}
+
+{"Authorization": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE4NGM0NWM4ZWJmOGRkYmU1NTY5OTE1YzYzNzk5ZDUxZjMyMzY1OTUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdm9jYS1tZW1vIiwiYXVkIjoidm9jYS1tZW1vIiwiYXV0aF90aW1lIjoxNTQ1NTAxNzkyLCJ1c2VyX2lkIjoiZ2ZRSW9RYmY4Q2JXRVJMdGJXWXFwNkdUYUF3MSIsInN1YiI6ImdmUUlvUWJmOENiV0VSTHRiV1lxcDZHVGFBdzEiLCJpYXQiOjE1NDU1MzY5MzgsImV4cCI6MTU0NTU0MDUzOCwiZW1haWwiOiJkZW1vQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImRlbW9AZXhhbXBsZS5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.DGhQsO2pTE1sd98c0fKQc0FwAYfWMU2lJBsMRp3EnoLpFxqUeB9iqsXCvyvX88W-uZDEjYP0uXSOD67m7wawkEqEjmmgX1ydhbsHLt9JIW3fnL9PegUZ4pfJvsl-wC99XSYkMZRiJ5DB43YtFiQu-EkDyPbyr09oEqJ7GJ81_qaA_zwK8b0aWY7Wx3T3VZzJxEA-1qg9pLEzba91dfKfye_W0b8b-FYSdFhukRMt1IB6-epo-jqWQCrqubPHfxeA5kbw9eQnrjaL2InEnAfxJd_PZqOS8DX1eSyj1c-2JHo6q9JX9pexAczTg7t_YRQhq1g4DIQwAOP97YQ3qgAW7g",
+}

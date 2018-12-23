@@ -1,4 +1,4 @@
-const quizService = require('../services/quiz.service');
+const userTopicService = require('../services/user-topic.service');
 const GraphQLJSON = require('graphql-type-json');
 
 // The GraphQL schema in string form
@@ -41,24 +41,24 @@ const resolvers = {
   JSON: GraphQLJSON,
   Query: {
     getUserTopic: async (parent, args) => {
-      return await quizService.getOneUserTopic(args.id);
+      return await userTopicService.getOneUserTopic(args.id);
     },
     getUserTopicByDeckAndTopic: async (parent, args, context) => {
-      return await quizService.getUserTopicByDeckAndTopic(context.request.auth.credentials.uid, args.deckId, args.topicId);
+      return await userTopicService.getUserTopicByDeckAndTopic(context.request.auth.credentials.uid, args.deckId, args.topicId);
     }
   },
   Mutation: {
     createMyUserTopic: async (parent, args, context) => {
-      return await quizService.addOneUserTopic(context.request.auth.credentials.uid, args.userTopic);
+      return await userTopicService.addOneUserTopic(context.request.auth.credentials.uid, args.userTopic);
     },
     createOrUpdateMyUserTopic: async (parent, args, context) => {
-      return await quizService.createOrUpdateUserTopic(context.request.auth.credentials.uid, args.userTopic);
+      return await userTopicService.createOrUpdateUserTopic(context.request.auth.credentials.uid, args.userTopic);
     },
     updateUserTopic: async (parent, args) => {
-      return await quizService.updateOneUserTopic(args);
+      return await userTopicService.updateOneUserTopic(args);
     },
     deleteUserTopic: async (parent, args) => {
-      return await quizService.deleteOneUserTopic(args.id);
+      return await userTopicService.deleteOneUserTopic(args.id);
     },
   }
 

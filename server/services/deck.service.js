@@ -141,9 +141,6 @@ internals.getListCardDetail = async (firebaseUId, cardIds) => {
   const ids = cardIds.map((id) => ObjectID(id));
   return await Card.find({_id: {$in: ids}});
 }
-internals.getOneTopic = async (id) => {
-  return await Topic.findById(id);
-}
 
 internals.getDeckCategory = async (id) => {
   if (typeof id === 'string' || id instanceof String) {
@@ -196,6 +193,36 @@ internals.getUserOwnerDeckPaginate = async (firebaseUId, limit, page) => {
 }
 
 
+//Mutation for administrator
+internals.createOneDeck = async (deckData) => {
+  let result = await Deck.insertOne(deckData);
+  return result[0]
+}
+
+
+internals.updateOneDeck = async (_id, deckData) => {
+  let result = await Deck.findOneAndUpdate({
+    _id: ObjectID(_id),
+  }, {
+    $set: deckData
+
+  });
+  if (!result) {
+    throw Error('Cannot update! Perhaps Deck Not Found');
+  }
+  return result
+}
+
+internals.deleteOneDeck = async (_id) => {
+  let result = await Deck.findOneAndDelete({_id: ObjectID(_id)});
+  if (!result) {
+    throw Error('Cannot delete! Perhaps Deck Not Found');
+  }
+  return result
+}
+
+
+
 exports.register = function (server, options) {
 
   server.expose('getListTopicDetail', internals.getListTopicDetail);
@@ -204,13 +231,17 @@ exports.register = function (server, options) {
   server.expose('searchDeck', internals.searchDeck);
 
   server.expose('getListCardDetail', internals.getListCardDetail);
-  server.expose('getOneTopic', internals.getOneTopic);
   server.expose('getDeckCategory', internals.getDeckCategory);
   server.expose('isOwned', internals.isOwned);
 
   server.expose('getDeckPaginate', internals.getDeckPaginate);
   server.expose('getDeckPaginateMapWithUserInfo', internals.getDeckPaginateMapWithUserInfo);
   server.expose('getUserOwnerDeckPaginate', internals.getUserOwnerDeckPaginate);
+
+  server.expose('updateOneDeck', internals.updateOneDeck);
+  server.expose('createOneDeck', internals.createOneDeck);
+  server.expose('deleteOneDeck', internals.deleteOneDeck);
+
 
 
 };
@@ -219,7 +250,6 @@ exports.getListTopicDetail = internals.getListTopicDetail;
 exports.buyDeck = internals.buyDeck;
 exports.getDeck = internals.getDeck;
 exports.getListCardDetail = internals.getListCardDetail;
-exports.getOneTopic = internals.getOneTopic;
 exports.getDeckCategory = internals.getDeckCategory;
 exports.searchDeck = internals.searchDeck;
 exports.isOwned = internals.isOwned;
@@ -228,5 +258,9 @@ exports.getDeckPaginate = internals.getDeckPaginate;
 exports.getDeckPaginateMapWithUserInfo = internals.getDeckPaginateMapWithUserInfo;
 exports.getUserOwnerDeckPaginate = internals.getUserOwnerDeckPaginate;
 
+
+exports.updateOneDeck = internals.updateOneDeck;
+exports.createOneDeck = internals.createOneDeck;
+exports.deleteOneDeck = internals.deleteOneDeck;
 
 exports.name = 'deck-service';

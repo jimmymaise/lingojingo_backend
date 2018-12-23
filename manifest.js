@@ -80,7 +80,7 @@ const manifest = {
         plugin: './server/services/wallet.service'
       },
       {
-        plugin: './server/services/quiz.service'
+        plugin: './server/services/user-topic.service'
       },
       {
         plugin: './server/services/deck.service'
