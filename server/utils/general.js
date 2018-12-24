@@ -9,7 +9,7 @@ async function setClaimToFireBase(user_id) {
     const getUserByFireBaseId = require('../services/user-info.service').getOne;
     const userDBInfo = await getUserByFireBaseId(user_id)
     let claims = {
-        groups: userDBInfo['groups']
+        groups: userDBInfo['groups'] || []
     }
     try {
         await admin.auth().setCustomUserClaims(user_id,

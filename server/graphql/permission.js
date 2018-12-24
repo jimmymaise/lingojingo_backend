@@ -7,7 +7,7 @@ const isAdmin = rule()(async (parent, args, ctx, info) => {
         setClaimToFireBase = require ('../utils/general').setClaimToFireBase
         claims = await setClaimToFireBase(credentials.user_id)
     }
-    if (claims.groups.includes('ADMIN')) {
+    if (claims.groups && claims.groups.includes('ADMIN')) {
         return true
     }
     return false
