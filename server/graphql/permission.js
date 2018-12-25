@@ -4,13 +4,10 @@ const isAdmin = rule()(async (parent, args, ctx, info) => {
   let credentials = ctx.request.auth.credentials
   let claims = credentials.claims
   if (!claims) {
-    setClaimToFireBase = require('../utils/general').setClaimToFireBase
+    let setClaimToFireBase = require('../utils/general').setClaimToFireBase
     claims = await setClaimToFireBase(credentials.user_id)
   }
-  if (claims.groups && claims.groups.includes('ADMIN')) {
-    return true
-  }
-  return false
+  return (claims.groups||[]).includes('ADMIN')
 })
 
 const permissions = shield({
