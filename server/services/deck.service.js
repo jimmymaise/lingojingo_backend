@@ -222,7 +222,6 @@ internals.deleteOneDeck = async (_id) => {
 }
 
 
-
 exports.register = function (server, options) {
 
   server.expose('getListTopicDetail', internals.getListTopicDetail);
@@ -241,7 +240,6 @@ exports.register = function (server, options) {
   server.expose('updateOneDeck', internals.updateOneDeck);
   server.expose('createOneDeck', internals.createOneDeck);
   server.expose('deleteOneDeck', internals.deleteOneDeck);
-
 
 
 };

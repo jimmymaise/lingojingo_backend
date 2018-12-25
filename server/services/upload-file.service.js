@@ -4,11 +4,10 @@ const Async = require('async');
 const gcloudHandler = require('../intergration/gcloud/handler')
 
 
-
 const internals = {};
 
-internals.uploadFile = async (content, file, path='') => {
-    return await gcloudHandler.uploadFile(file, path)
+internals.uploadFile = async (content, file, path = '') => {
+  return await gcloudHandler.uploadFile(file, path)
 
 
 }
@@ -16,10 +15,10 @@ internals.uploadFile = async (content, file, path='') => {
 
 exports.register = function (server, options) {
 
-    server.expose('uploadFile', internals.uploadFile);
+  server.expose('uploadFile', internals.uploadFile);
 
 
-    return;
+  return;
 };
 
 exports.uploadFile = internals.uploadFile;

@@ -50,7 +50,7 @@ UserInfo.schema = Joi.object().keys({
   totalExams: Joi.number(),
   timeSpent: Joi.number(),
   score: Joi.number(),
-  level:Joi.number(),
+  level: Joi.number(),
   timeUpdated: Joi.date().required().default(new Date()),
   timeCreated: Joi.date().required().default(new Date())
 }).options({stripUnknown: true});

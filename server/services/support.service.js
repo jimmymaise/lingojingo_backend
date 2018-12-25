@@ -4,7 +4,6 @@ const Async = require('async');
 const jiraHandler = require('../intergration/jira/handler')
 
 
-
 const internals = {};
 
 internals.addTicket = async (content, file) => {

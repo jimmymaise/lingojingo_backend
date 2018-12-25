@@ -20,7 +20,7 @@ internals.applyRoutes = function (server, next) {
       tags: ['api'],
       validate: {
         payload: {
-          avatarUrl: Joi.string().optional().allow(null), 
+          avatarUrl: Joi.string().optional().allow(null),
           fullName: Joi.string().optional().allow(null),
           phone: Joi.string().optional().allow(null).allow(''),
           aboutContent: Joi.string().optional().allow(null).allow(''),
@@ -69,11 +69,11 @@ internals.applyRoutes = function (server, next) {
     }
   });
 
-  return ;
+  return;
 };
 
 exports.register = function (server, options) {
-  server.dependency([ 'user-info-service'], internals.applyRoutes);
+  server.dependency(['user-info-service'], internals.applyRoutes);
 
   return;
 };

@@ -20,6 +20,7 @@ class ESMongoModels extends MongoModels {
     await this.upsertES(data['_id'])
     return data
   }
+
   static async findOneAndDelete() {
     let data = await super.findOneAndDelete.apply(this, arguments)
     await this.deleteES(data['_id'])
@@ -50,8 +51,7 @@ class ESMongoModels extends MongoModels {
         index: this.collectionName, type: '_doc', id: _id.toString(), body: {doc: indexData, doc_as_upsert: true}
       })
 
-    }
-    catch (e) {
+    } catch (e) {
       logger.error(_id.toString() + e.toString())
 
     }
@@ -133,8 +133,7 @@ class ESMongoModels extends MongoModels {
     console.log(`Starting Sync Data from MongoDB to ES for ${this.collectionName}`)
     if (resetIndex) {
       await es.resetIndex(this.collectionName, this.esSchema)
-    }
-    else {
+    } else {
       await es.initIndex(this.collectionName, this.esSchema)
     }
     let page = 1
@@ -145,8 +144,7 @@ class ESMongoModels extends MongoModels {
         try {
           await this.upsertES(data[i]._id)
 
-        }
-        catch (e) {
+        } catch (e) {
           logger.error(data[i]._id + e.toString())
 
 

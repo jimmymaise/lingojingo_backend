@@ -40,9 +40,11 @@ const resolvers = {
       return await rewardService.getUserPoint(args.userId);
     },
   },
-  UserPoint:{ details: async (parent, args) => {
-    return await rewardService.getDetail(parent._id);
-  }},
+  UserPoint: {
+    details: async (parent, args) => {
+      return await rewardService.getDetail(parent._id);
+    }
+  },
   Mutation: {
     addRewardEvent: async (parent, args, context) => {
       const rewardEvent = args.rewardEvent;
@@ -50,7 +52,7 @@ const resolvers = {
       rewardEvent.timeRewarded = new Date();
 
 
-      return await rewardService.addRewardEvent(rewardEvent.userId,args.rewardEvent);
+      return await rewardService.addRewardEvent(rewardEvent.userId, args.rewardEvent);
     },
   }
 

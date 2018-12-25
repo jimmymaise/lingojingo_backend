@@ -32,10 +32,10 @@ internals.getOneUserExam = async (id) => {
 }
 
 internals.getUserExams = async (args) => {
-  return await UserExam.find({ args });
+  return await UserExam.find({args});
 }
 
-internals.getRecentlyUserExams = async(userId, topicId, limit) => {
+internals.getRecentlyUserExams = async (userId, topicId, limit) => {
   return await UserExam.find({
     userId,
     topicId
@@ -105,7 +105,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
       score: userExam.score,
       result: userExam.result,
       timeSpentAvg: userExam.timeSpentAvg,
-      timeSpent:userExam.timeSpent,
+      timeSpent: userExam.timeSpent,
       totalQuestions: userExam.totalQuestions,
       knownAnswer: userExam.knownAnswer,
       totalCorrectAnswers: userExam.totalCorrectAnswers
@@ -133,7 +133,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
     let userDeckData = await UserDeck.find({
       itemId: userExam.deckId,
       userId: userExam.userId,
-      itemType:'deck'
+      itemType: 'deck'
     })
     userDeckData = userDeckData[0]
     userDeckData.completedTopics = userDeckData.completedTopics || {}

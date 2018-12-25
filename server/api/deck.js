@@ -39,7 +39,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency([ 'deck-service'], internals.applyRoutes);
+  server.dependency(['deck-service'], internals.applyRoutes);
 
   return;
 };

@@ -38,7 +38,7 @@ const resolvers = {
     // getTopicLeaderBoard: async (parent, args) => {
     //   return await leaderBoardService.getTopicLeaderBoard(args);
     // },
-    getGeneralLeaderBoard: async (parent, args,context) => {
+    getGeneralLeaderBoard: async (parent, args, context) => {
       args['currentUserId'] = context.request.auth.credentials.user_id
       return await leaderBoardService.getGeneralLeaderBoard(args);
     },

@@ -51,12 +51,14 @@ internals.buySong = async (firebaseUId, songId) => {
 
     return await UserInfo.findOneAndUpdate({
       firebaseUserId: firebaseUId
-    }, { $set: {
+    }, {
+      $set: {
         firebaseUserId: firebaseUId,
         ...currentInfo,
 
         timeUpdated: new Date()
-      }}, {
+      }
+    }, {
       upsert: true,
       setDefaultsOnInsert: true
     });
@@ -74,8 +76,8 @@ internals.searchSong = async (args) => {
   let body = await Song.bodyBuilder()
   let search = args.search || {}
   let page = _.get(args, 'pagination.page') || 2
-  let limit =_.get(args, 'pagination.limit') || 10
-  if (limit >50) {
+  let limit = _.get(args, 'pagination.limit') || 10
+  if (limit > 50) {
     throw Error('Limit should be lower than 50')
   }
   // let from = size* (page - 1)
@@ -101,7 +103,6 @@ internals.searchSong = async (args) => {
   return data
 
 
-
 }
 
 internals.isOwned = async (userInfo, songId) => {
@@ -109,7 +110,6 @@ internals.isOwned = async (userInfo, songId) => {
   return userInfo && userInfo.songs && userInfo.songs.indexOf(songId.toString()) >= 0
 
 }
-
 
 
 // TODO: please protect user don't have permission in this song
@@ -159,7 +159,6 @@ internals.getUserOwnerSongPaginate = async (firebaseUId, limit, page) => {
 }
 
 
-
 // internals.getSongCategory = async (id) => {
 //   if (typeof id === 'string' || id instanceof String) {
 //
@@ -185,7 +184,6 @@ exports.register = function (server, options) {
   server.expose('getUserOwnerSongPaginate', internals.getUserOwnerSongPaginate);
 
 
-
   return;
 };
 
@@ -201,9 +199,6 @@ exports.isOwned = internals.isOwned;
 exports.getSongPaginate = internals.getSongPaginate;
 exports.getSongPaginateMapWithUserInfo = internals.getSongPaginateMapWithUserInfo;
 exports.getUserOwnerSongPaginate = internals.getUserOwnerSongPaginate;
-
-
-
 
 
 exports.name = 'song-service';

@@ -83,7 +83,6 @@ internals.updateOneUserTopic = async (args) => {
 }
 
 
-
 exports.register = function (server, options) {
 
   server.expose('getOneUserTopic', internals.getOneUserTopic);
@@ -96,13 +95,11 @@ exports.register = function (server, options) {
 };
 
 
-
 exports.getOneUserTopic = internals.getOneUserTopic;
 exports.getUserTopicByDeckAndTopic = internals.getUserTopicByDeckAndTopic;
 exports.addOneUserTopic = internals.addOneUserTopic;
 exports.updateOneUserTopic = internals.updateOneUserTopic;
 exports.deleteOneUserTopic = internals.deleteOneUserTopic;
-
 
 
 exports.createOrUpdateUserTopic = internals.createOrUpdateUserTopic;

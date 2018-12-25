@@ -11,7 +11,7 @@ const logger = new winston.Logger({
     new Sentry(options)
   ]
 });
-logger['requestToSentryLog'] = function (request,other_errors) {
+logger['requestToSentryLog'] = function (request, other_errors) {
   return {
     request: {
       method: request.method,

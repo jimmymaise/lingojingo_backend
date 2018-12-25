@@ -1,7 +1,7 @@
 deck = {
   "mappings": {
     "_doc": {
-      "dynamic":  false,
+      "dynamic": false,
       "properties": {
 
         "name": {

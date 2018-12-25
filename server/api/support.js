@@ -35,8 +35,7 @@ internals.applyRoutes = function (server, next) {
             message: 'successfully',
             data: result
           };
-        }
-        else {
+        } else {
           return Boom.internal('Cannot create support ticket')
         }
 
@@ -50,7 +49,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency([ 'support-service'], internals.applyRoutes);
+  server.dependency(['support-service'], internals.applyRoutes);
 
   return;
 };

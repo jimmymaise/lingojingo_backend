@@ -52,12 +52,14 @@ internals.buyArticle = async (firebaseUId, articleId) => {
 
     return await UserInfo.findOneAndUpdate({
       firebaseUserId: firebaseUId
-    }, { $set: {
+    }, {
+      $set: {
         firebaseUserId: firebaseUId,
         ...currentInfo,
 
         timeUpdated: new Date()
-      }}, {
+      }
+    }, {
       upsert: true,
       setDefaultsOnInsert: true
     });
@@ -75,8 +77,8 @@ internals.searchArticle = async (args) => {
   let body = await Article.bodyBuilder()
   let search = args.search || {}
   let page = _.get(args, 'pagination.page') || 2
-  let limit =_.get(args, 'pagination.limit') || 10
-  if (limit >50) {
+  let limit = _.get(args, 'pagination.limit') || 10
+  if (limit > 50) {
     throw Error('Limit should be lower than 50')
   }
   // let from = size* (page - 1)
@@ -100,7 +102,6 @@ internals.searchArticle = async (args) => {
   return data
 
 
-
 }
 
 internals.isOwned = async (userInfo, articleId) => {
@@ -108,7 +109,6 @@ internals.isOwned = async (userInfo, articleId) => {
   return userInfo && userInfo.articles && userInfo.articles.indexOf(articleId.toString()) >= 0
 
 }
-
 
 
 // TODO: please protect user don't have permission in this article
@@ -158,7 +158,6 @@ internals.getUserOwnerArticlePaginate = async (firebaseUId, limit, page) => {
 }
 
 
-
 // internals.getArticleCategory = async (id) => {
 //   if (typeof id === 'string' || id instanceof String) {
 //
@@ -184,7 +183,6 @@ exports.register = function (server, options) {
   server.expose('getUserOwnerArticlePaginate', internals.getUserOwnerArticlePaginate);
 
 
-
   return;
 };
 
@@ -200,9 +198,6 @@ exports.isOwned = internals.isOwned;
 exports.getArticlePaginate = internals.getArticlePaginate;
 exports.getArticlePaginateMapWithUserInfo = internals.getArticlePaginateMapWithUserInfo;
 exports.getUserOwnerArticlePaginate = internals.getUserOwnerArticlePaginate;
-
-
-
 
 
 exports.name = 'article-service';
