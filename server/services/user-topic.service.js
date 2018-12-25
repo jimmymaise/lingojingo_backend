@@ -105,4 +105,4 @@ exports.deleteOneUserTopic = internals.deleteOneUserTopic;
 exports.createOrUpdateUserTopic = internals.createOrUpdateUserTopic;
 
 
-exports.name = 'quiz-service';
+exports.name = 'user-topic-service';
