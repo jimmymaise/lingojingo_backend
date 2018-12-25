@@ -10,39 +10,38 @@ EXAM = {
   }
 }
 
-TOPIC={
-  TYPE:{
-    TOPIC:0,
-    REVIEW:1,
-    FINAL:2
+TOPIC = {
+  TYPE: {
+    TOPIC: 0,
+    REVIEW: 1,
+    FINAL: 2
   }
 
 }
-LEVEL_SCORE= {
-  LV1:1000,
-  LV2:2000,
-  LV3:3000,
-  LV4:4000,
-  LV5:5000,
-  LV6:6000,
-  LV7:7000,
-  LV8:8000
+LEVEL_SCORE = {
+  LV1: 1000,
+  LV2: 2000,
+  LV3: 3000,
+  LV4: 4000,
+  LV5: 5000,
+  LV6: 6000,
+  LV7: 7000,
+  LV8: 8000
 }
-LEVEL_NAME= {
-  LV1:'Beginner',
-  LV2:'High Beginner',
-  LV3:'Low Intermediate',
-  LV4:'Intermediate',
-  LV5:'High Intermediate',
-  LV6:'Low Advanced',
-  LV7:'Advanced',
-  LV8:'Expert'
+LEVEL_NAME = {
+  LV1: 'Beginner',
+  LV2: 'High Beginner',
+  LV3: 'Low Intermediate',
+  LV4: 'Intermediate',
+  LV5: 'High Intermediate',
+  LV6: 'Low Advanced',
+  LV7: 'Advanced',
+  LV8: 'Expert'
 }
 
 REWARD_TYPE_NAME = {
-  GOOD_RESULT_TOPIC_EXAM:"GOOD_RESULT_TOPIC_EXAM",
-  UPDATE_LEVEL:"UPDATE_LEVEL"
-
+  GOOD_RESULT_TOPIC_EXAM: "GOOD_RESULT_TOPIC_EXAM",
+  UPDATE_LEVEL: "UPDATE_LEVEL"
 
 
 }

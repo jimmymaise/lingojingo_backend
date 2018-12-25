@@ -1,7 +1,7 @@
 userTopic = {
   "mappings": {
     "_doc": {
-      "dynamic":  false,
+      "dynamic": false,
       "properties": {
         // "_id": {
         //   "type": "keyword"

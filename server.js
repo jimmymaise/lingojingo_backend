@@ -22,8 +22,8 @@ const schema = makeExecutableSchema({
 
 
 const schemaWithMiddleware = applyMiddleware(
-    schema,
-    permissions
+  schema,
+  permissions
 )
 
 
@@ -113,8 +113,7 @@ const StartServer = async () => {
     console.log(`Server running at: ${server.graphqlPath}`);
 
 
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
     process.exit(1);
   }

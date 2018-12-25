@@ -19,7 +19,7 @@ internals.getDetail = async (userId) => {
 }
 
 
-internals.addRewardEvent = async (userId,rewardEvent) => {
+internals.addRewardEvent = async (userId, rewardEvent) => {
   let result = await RewardEvent.insertOne({
     userId,
     ...rewardEvent
@@ -35,7 +35,6 @@ exports.register = function (server, options) {
   server.expose('getUserPoint', internals.getUserPoint);
   server.expose('getDetail', internals.getDetail);
   server.expose('addRewardEvent', internals.addRewardEvent);
-
 
 
 };

@@ -44,8 +44,7 @@ internals.applyRoutes = function (server) {
         if (request.params.p === 'user-topic' || request.params.p === 'all') {
           return await UserTopic.syncDataES({}, true)
         }
-      }
-      catch (e) {
+      } catch (e) {
         return {e}
 
       }

@@ -38,7 +38,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency([ 'article-service'], internals.applyRoutes);
+  server.dependency(['article-service'], internals.applyRoutes);
 
   return;
 };

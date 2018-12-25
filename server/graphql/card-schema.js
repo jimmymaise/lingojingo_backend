@@ -1,5 +1,5 @@
 const cardService = require('../services/card.service');
-const { rule, shield, and, or, not }  = require('graphql-shield')
+const {rule, shield, and, or, not} = require('graphql-shield')
 
 // The GraphQL schema in string form
 const typeDefs = `
@@ -51,29 +51,28 @@ const typeDefs = `
 
 // The resolvers
 const resolvers = {
-    Query: {
-        card: async (parent, args) => {
-            return await cardService.getOneCard(args.id);
-        }
+  Query: {
+    card: async (parent, args) => {
+      return await cardService.getOneCard(args.id);
+    }
+  },
+  // Mutation for administrator
+  Mutation: {
+    updateOneCard: async (parent, args) => {
+      return await cardService.updateOneCard(args._id, args.input);
     },
-    // Mutation for administrator
-    Mutation: {
-        updateOneCard: async (parent, args) => {
-            return await cardService.updateOneCard(args._id, args.input);
-        },
-        createOneCard: async (parent, args) => {
-            return await cardService.createOneCard(args.input);
-        },
-        deleteOneCard: async (parent, args) => {
-            return await cardService.deleteOneCard(args._id);
-        },
+    createOneCard: async (parent, args) => {
+      return await cardService.createOneCard(args.input);
     },
+    deleteOneCard: async (parent, args) => {
+      return await cardService.deleteOneCard(args._id);
+    },
+  },
 
 };
 
 
-
 module.exports = {
-    typeDefs,
-    resolvers
+  typeDefs,
+  resolvers
 }
