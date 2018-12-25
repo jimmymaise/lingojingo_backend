@@ -36,6 +36,7 @@ UserInfo.collectionName = 'user_infos';
 UserInfo.schema = Joi.object().keys({
   _id: Joi.object(),
   firebaseUserId: Joi.string().required(),
+  groups: Joi.array(),
   fullName: Joi.string().optional().allow(null),
   email: Joi.string().optional().allow(null).allow(''),
   phone: Joi.string().optional().allow(null).allow(''),

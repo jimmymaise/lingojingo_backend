@@ -7,17 +7,25 @@ const {ApolloServer, makeExecutableSchema, gql} = require('apollo-server-hapi');
 const FIRE_BASE_CONFIG = require('./server/data/firebase_config')
 const firebaseAdmin = require('firebase-admin');
 const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
+const applyMiddleware = require("graphql-middleware").applyMiddleware;
+const GraphQLExtension = require('graphql-extensions').GraphQLExtension
 
 const logger = require('./server/utils/logger.js').logger
 
 const typeDefs = require('./server/graphql/schema.js').typeDefs
 const resolvers = require('./server/graphql/schema.js').resolvers
+const permissions = require('./server/graphql/permission.js').permissions
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
 
-const GraphQLExtension = require('graphql-extensions').GraphQLExtension
+
+const schemaWithMiddleware = applyMiddleware(
+  schema,
+  permissions
+)
+
 
 class MyErrorTrackingExtension extends GraphQLExtension {
   willSendResponse(o) {
@@ -63,7 +71,7 @@ function checkSecurty(request) {
 const StartServer = async () => {
   try {
     const server = new ApolloServer({
-      schema,
+      schema: schemaWithMiddleware,
 
       extensions: [() => new MyErrorTrackingExtension()],
       context: ({request}) => {

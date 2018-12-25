@@ -2,6 +2,7 @@
 
 const Boom = require('boom');
 const internals = {};
+let get = require("lodash.get");
 
 internals.applyRoutes = function (server, next) {
   const UploadService = server.plugins['upload-file-service'];
@@ -22,7 +23,12 @@ internals.applyRoutes = function (server, next) {
       },
     },
     handler: async (request) => {
+
       const data = request.payload;
+
+      if (!(get(request, 'auth.credentials.claims.groups', [])).includes('ADMIN')) {
+        return Boom.unauthorized('Only Admin Can Upload Image!');
+      }
       let content = {}
       // let content = JSON.parse(data.content)
       // content['email'] = request.auth.credentials.email;
