@@ -40,10 +40,10 @@ async function uploadBucket(file, path) {
 }
 
 async function batchUpload(files, path) {
-  result = {}
+  let result = {}
   for (let i = 0; i < files.length; i++) {
     try {
-      destination = await uploadBucket(files[i], path);
+      let destination = await uploadBucket(files[i], path);
       result[files[i]['filename']] = {uploaded: true, path: destination}
     } catch (err) {
       result[files[i]['filename']] = {uploaded: false, error: err}

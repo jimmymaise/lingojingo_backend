@@ -1,0 +1,11 @@
+
+query {topic(id: "5b1bf1615c44cc013e872606") {
+    _id,
+    deck,
+    cards,
+    cardDetails{
+      description,
+      _id
+    }
+
+}}
