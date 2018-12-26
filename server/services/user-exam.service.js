@@ -97,13 +97,13 @@ async function updateDataWhenCompletingUserExam(userExam) {
     topicId: userExam.topicId,
     userId: userExam.userId,
   })
+  userTopicData = userTopicData[0]
   if (!userTopicData) {
-    userTopicData = UserTopicService.addOneUserTopic(userExam.userId, {
+    userTopicData = await UserTopicService.addOneUserTopic(userExam.userId, {
       topicId: userExam.topicId,
       deckId: userExam.deckId,
     })
   }
-  userTopicData = userTopicData[0]
 
   let currentHighestResult = userTopicData.highestResult || {}
   let isCalculateTotalWord = false
