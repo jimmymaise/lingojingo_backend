@@ -31,7 +31,7 @@ internals.addOneUserTopic = async (userId, userTopicData) => {
     ...userTopicData
   });
 
-  return result
+  return result[0]
 }
 
 internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
