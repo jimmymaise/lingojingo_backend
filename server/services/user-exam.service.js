@@ -11,6 +11,7 @@ const LeaderBoardService = require('../services/leader-board.service')
 const RewardService = require('../services/reward.service')
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
+const UserTopicService = require('../services/user-topic');
 
 
 function calculateTotalCorrectAnswer(knownAnswer, totalQuestions) {
@@ -91,10 +92,17 @@ internals.updateOneUserExam = async (args) => {
 async function updateDataWhenCompletingUserExam(userExam) {
 
   //update userTopic
+
   let userTopicData = await UserTopic.find({
     topicId: userExam.topicId,
-    userId: userExam.userId
+    userId: userExam.userId,
   })
+  if (!userTopicData) {
+    userTopicData = UserTopicService.addOneUserTopic(userExam.userId, {
+      topicId: userExam.topicId,
+      deckId: userExam.deckId,
+    })
+  }
   userTopicData = userTopicData[0]
 
   let currentHighestResult = userTopicData.highestResult || {}

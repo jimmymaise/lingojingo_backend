@@ -1,8 +1,8 @@
 'use strict';
 
 
-const Deck = require('../models/deck');
-const UserTopicService = require('../models/user-topic');
+const Topic = require('../models/topic');
+const UserTopic = require('../models/user-topic');
 const _ = require('lodash');
 const internals = {};
 
@@ -10,11 +10,11 @@ const internals = {};
 //Topic
 
 internals.getOneUserTopic = async (id) => {
-  return await UserTopicService.findById(id);
+  return await UserTopic.findById(id);
 }
 
 internals.getUserTopicByDeckAndTopic = async (userId, deckId, topicId) => {
-  return await UserTopicService.findOne({
+  return await UserTopic.findOne({
     userId,
     deckId,
     topicId
@@ -22,11 +22,11 @@ internals.getUserTopicByDeckAndTopic = async (userId, deckId, topicId) => {
 }
 
 internals.addOneUserTopic = async (userId, userTopicData) => {
-  let topicData = await Deck.findById(userTopicData.topicId)
+  let topicData = await Topic.findById(userTopicData.topicId)
 
   userTopicData.topicType = topicData.type
 
-  let result = await UserTopicService.insertOne({
+  let result = await UserTopic.insertOne({
     userId,
     ...userTopicData
   });
@@ -37,7 +37,7 @@ internals.addOneUserTopic = async (userId, userTopicData) => {
 internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
   const {deckId, topicId, exams, currentStudyMode, filterKnownCard, highestResult, knownAnswer} = userTopicData;
 
-  let result = await UserTopicService.findOneAndUpdate({
+  let result = await UserTopic.findOneAndUpdate({
     userId,
     deckId,
     topicId
@@ -60,7 +60,7 @@ internals.createOrUpdateUserTopic = async (userId, userTopicData) => {
 }
 
 internals.deleteOneUserTopic = async (id) => {
-  let result = await UserTopicService.findByIdAndDelete(id);
+  let result = await UserTopic.findByIdAndDelete(id);
 
   if (!result) {
     result = {
@@ -76,7 +76,7 @@ internals.updateOneUserTopic = async (args) => {
   let id = args.id
   let updateObj = _.cloneDeep(args)
   delete updateObj['id']
-  let result = await UserTopicService.findByIdAndUpdate(
+  let result = await UserTopic.findByIdAndUpdate(
     id, {$set: updateObj});
   return result
 
