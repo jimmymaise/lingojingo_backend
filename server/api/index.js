@@ -26,7 +26,9 @@ internals.applyRoutes = function (server) {
       const Song = require('../models/song');
       const Article = require('../models/article');
       const UserItem = require('../models/user-item');
-
+      if (!(get(request, 'auth.credentials.claims.groups', [])).includes('ADMIN')) {
+        return Boom.unauthorized('Only Admin Can Sync ES !');
+      }
 
       try {
         if (request.params.p === 'deck' || request.params.p === 'all') {
