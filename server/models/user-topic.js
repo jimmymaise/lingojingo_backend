@@ -16,7 +16,7 @@ UserTopic.schema = Joi.object().keys({
   _id: Joi.object(),
   userId: Joi.string(),
   topicId: Joi.string(),
-  topicType: Joi.string(),
+  topicType: Joi.number(),
   deckId: Joi.string(),
   exams: [Joi.string().optional(), Joi.allow(null)], // ids of all exams
   totalExams: Joi.number(),
