@@ -35,7 +35,7 @@ internals.applyRoutes = function (server, next) {
       let files = data.file
 
       try {
-        return await UploadService.uploadFile(content, files, "/images");
+        return await UploadService.uploadFile(content, files, "/upload_images");
 
       } catch (err) {
         return Boom.internal(err);

@@ -28,6 +28,7 @@ deploy_staging:
   before_script:
     - docker info
   script:
+    - docker rmi $(docker images -a -q) || true
     - docker stop $(docker ps -a -q) || true
     - docker rm $(docker ps -a -q)  || true
     - docker build -t my-docker-image .
@@ -48,6 +49,7 @@ deploy_production:
   before_script:
     - docker info
   script:
+    - docker rmi $(docker images -a -q) || true
     - docker stop $(docker ps -a -q) || true
     - docker rm $(docker ps -a -q)  || true
     - docker build -t my-docker-image .

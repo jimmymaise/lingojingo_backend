@@ -32,6 +32,7 @@ const typeDefs = `
     usAudio: String,
     type: String,
     viMeaning: String,
+    suggestedImages: [String],
     enMeaning: String,
     sample: [CardSample]
   }
