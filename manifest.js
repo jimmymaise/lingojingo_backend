@@ -98,6 +98,9 @@ const manifest = {
         plugin: './server/services/upload-file.service'
       },
       {
+        plugin: './server/services/item.service'
+      },
+      {
         plugin: './server/api/index'
       },
       {
@@ -120,6 +123,9 @@ const manifest = {
       },
       {
         plugin: './server/api/upload'
+      },
+      {
+        plugin: './server/api/item'
       }
     ]
   }
