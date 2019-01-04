@@ -18,6 +18,7 @@ Card.schema = Joi.object().keys({
   usAudio: [Joi.string().optional(), Joi.allow(null)],
   type: [Joi.string().optional(), Joi.allow(null)],
   viMeaning: Joi.string(),
+  suggestedImages: [Joi.array().optional(), Joi.allow(null)],
   sample: [Joi.array().optional(), Joi.allow(null)],
   enMeaning: [Joi.string().optional(), Joi.allow(null)],//to do: Replace enmeaning to enMeaning
   tags: [Joi.array().optional(), Joi.allow(null)],
