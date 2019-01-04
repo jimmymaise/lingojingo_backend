@@ -49,6 +49,7 @@ deploy_production:
     - docker info
   script:
     - docker stop $(docker ps -a -q) || true
+    - docker rmi $(docker images -a -q) || true
     - docker rm $(docker ps -a -q)  || true
     - docker build -t my-docker-image .
     - docker run -t -d -p 8080:8080  -e NODE_ENV=$PROD_ENV -e ES_HOST=$PROD_ES_HOST -e MONGO_PROD_URL=$MONGO_PROD_URL -e PROD_FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
