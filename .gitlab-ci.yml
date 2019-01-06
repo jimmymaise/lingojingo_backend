@@ -24,7 +24,7 @@ deploy_staging:
     name: staging
     url: https://stag.vomemo.com
   only:
-  - staging
+    - master
   before_script:
     - docker info
   script:
@@ -45,7 +45,7 @@ deploy_production:
     MONGO_PROD_URL: $MONGO_PROD_URL
 
   only:
-  - master
+    - /^v\d+\.\d+\.\d+$/
   before_script:
     - docker info
   script:
