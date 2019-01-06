@@ -64,6 +64,8 @@ internals.applyRoutes = function (server, next) {
     },
     handler: async (request) => {
       try {
+        let setClaimToFireBase = require('../utils/general').setClaimToFireBase
+        await setClaimToFireBase(request.auth.credentials.user_id)
         const result = await UserInfoService.getOneForClient(request);
         return result;
       } catch (err) {
