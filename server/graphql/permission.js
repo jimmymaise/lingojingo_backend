@@ -3,7 +3,7 @@ const {rule, shield, and, or, not} = require('graphql-shield')
 const isAdmin = rule()(async (parent, args, ctx, info) => {
   let credentials = ctx.request.auth.credentials
   let claims = credentials.claims
-  if (!claims) {
+  if (!(claims && claims.groups.length)) {
     let setClaimToFireBase = require('../utils/general').setClaimToFireBase
     claims = await setClaimToFireBase(credentials.user_id)
   }
