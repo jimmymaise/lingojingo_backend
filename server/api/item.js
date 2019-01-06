@@ -31,6 +31,32 @@ internals.applyRoutes = function (server, next) {
     }
   });
 
+
+  server.route({
+    method: 'PUT',
+    path: '/images/batch-crop',
+    config: {
+      auth: 'firebase',
+      description: 'Batch crop image for item',
+      notes: 'Batch crop image',
+      tags: ['api'],
+    },
+    handler: async (request) => {
+
+      if (!(get(request, 'auth.credentials.claims.groups', [])).includes('ADMIN')) {
+        return Boom.unauthorized('Only Admin Can Crop Image!');
+      }
+
+      try {
+        return await ItemService.batchCropImage(request.payload);
+      }
+      catch (err) {
+        return Boom.internal(err);
+      }
+    }
+  });
+
+
   return;
 };
 
