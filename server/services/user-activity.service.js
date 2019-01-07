@@ -33,13 +33,14 @@ internals.getUserLogActivity = async (userId, dateTimeStart, dateTimeEnd, limit 
     ORDER BY dateTime DESC
     LIMIT ${limit}
     `
+  // console.log(query)
   const options = {
     query: query,
 // Location must match that of the dataset(s) referenced in the query.
 // location: 'US',
   };
   let data =  await bigqueryHandler.queryBigQueryData(options)
-  console.log(JSON.stringify(data))
+  // console.log(JSON.stringify(data))
   return data
 
 }

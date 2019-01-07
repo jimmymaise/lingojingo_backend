@@ -49,7 +49,8 @@ async function insertRowsAsStream(datasetId, tableId, rows) {
 
 // Runs the query
 async function queryBigQueryData(options) {
-  return await bigquery.query(options);
+  let data = await bigquery.query(options);
+  return data[0]
 
 }
 
