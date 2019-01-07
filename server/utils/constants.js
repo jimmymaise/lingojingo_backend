@@ -1,3 +1,4 @@
+CACHE_CONTROL = 'public, max-age=30672000'
 EXAM = {
   TYPE: {
     TOPIC: 'TopicExam',
@@ -50,3 +51,4 @@ module.exports.TOPIC = TOPIC;
 module.exports.LEVEL_SCORE = LEVEL_SCORE;
 module.exports.LEVEL_NAME = LEVEL_NAME;
 module.exports.REWARD_TYPE_NAME = REWARD_TYPE_NAME;
+module.exports.CACHE_CONTROL = CACHE_CONTROL;

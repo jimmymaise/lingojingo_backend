@@ -1,11 +1,8 @@
-var glob = require("glob");
-var fs = require("fs");
-const crc32 = require("fast-crc32c");
 const imageMagick = require("imagemagick-stream");
-let request = require("request")
+const request = require("request")
 const FIRE_BASE_CONFIG = require('../../data/firebase_config')
 const KEY_FILE = FIRE_BASE_CONFIG.service[process.env.NODE_ENV]
-
+const CACHE_CONTROL = require('../../utils/constants').CACHE_CONTROL
 const {Storage} = require('@google-cloud/storage');
 
 const PROJECT_ID = KEY_FILE.project_id;
@@ -36,7 +33,7 @@ function cropImage(path, dest) {
   let dstStream = gcsDstObject.createWriteStream({
     // Tweak the config options as desired.
     gzip: true,
-    cacheControl: 'public, max-age=14400',
+    cacheControl: CACHE_CONTROL,
     metadata: {
       contentType: contentType
     }
@@ -74,9 +71,7 @@ function saveToStorage(attachmentUrl, path) {
     const req = request(attachmentUrl);
     req.pause();
     req.on('response', res => {
-
       // Don't set up the pipe to the write stream unless the status is ok.
-      // See https://stackoverflow.com/a/26163128/2669960 for details.
       if (res.statusCode !== 200) {
         reject();
       }
@@ -117,7 +112,7 @@ async function uploadBucket(file, path) {
     metadata:
       {
         gzip: true,
-        cacheControl: 'public, max-age=14400',
+        cacheControl: CACHE_CONTROL,
         contentType: file.headers['content-type']
       }
   })
