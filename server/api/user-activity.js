@@ -22,7 +22,6 @@ internals.applyRoutes = function (server, next) {
       validate: {
         payload: {
           event: Joi.string().required(),
-          device: Joi.string().required(),
           itemName: Joi.string().optional().allow(null).allow(''),
           itemUrl: Joi.string().optional().allow(null).allow(''),
           itemId: Joi.string().optional().allow(null).allow(''),
@@ -32,9 +31,11 @@ internals.applyRoutes = function (server, next) {
     handler: async (request) => {
       let data = request.payload;
       data.userId = request.auth.credentials.user_id
+      data.device = request.headers['user-agent']
 
       try {
         const result = await UserActivityService.addUserLogActivity(data);
+
         return {
           success: true,
           message: 'successfully',
