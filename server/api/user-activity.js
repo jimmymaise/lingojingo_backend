@@ -23,7 +23,6 @@ internals.applyRoutes = function (server, next) {
         payload: {
           event: Joi.string().required(),
           device: Joi.string().required(),
-          dateTime: Joi.string().optional().allow(null).allow(''),
           itemName: Joi.string().optional().allow(null).allow(''),
           itemUrl: Joi.string().optional().allow(null).allow(''),
           itemId: Joi.string().optional().allow(null).allow(''),
