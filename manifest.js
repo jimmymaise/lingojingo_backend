@@ -77,6 +77,9 @@ const manifest = {
         plugin: './server/services/user-info.service'
       },
       {
+        plugin: './server/services/user-activity.service'
+      },
+      {
         plugin: './server/services/wallet.service'
       },
       {
@@ -126,6 +129,9 @@ const manifest = {
       },
       {
         plugin: './server/api/item'
+      },
+      {
+        plugin: './server/api/user-activity'
       }
     ]
   }
