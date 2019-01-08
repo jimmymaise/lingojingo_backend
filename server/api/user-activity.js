@@ -22,8 +22,8 @@ internals.applyRoutes = function (server, next) {
       validate: {
         payload: {
           event: Joi.string().required(),
+          data: Joi.string().optional().allow(null).allow(''),
           itemName: Joi.string().optional().allow(null).allow(''),
-          itemUrl: Joi.string().optional().allow(null).allow(''),
           itemId: Joi.string().optional().allow(null).allow(''),
         }
       }
