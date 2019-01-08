@@ -54,12 +54,6 @@ exports.register = function (server, options) {
 
   return;
 }
-// internals.addUserLogActivity({
-//   'userId': '1234',
-//   'event': 'VIEW DECK',
-//   'itemName': 'TOEIC',
-//   'itemId': '9797',
-//   'itemUrl': 'http://abc.com'
-// })
+
 
 exports.name = 'user-activity-service';
