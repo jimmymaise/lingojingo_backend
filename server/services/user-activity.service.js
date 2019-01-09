@@ -24,10 +24,10 @@ internals.getUserLogActivity = async (userId, dateTimeStart, dateTimeEnd, limit 
   }
 
   let timestampStart = (/^\d+$/.test(dateTimeEnd)) ?
-    new Date(parseInt(dateTimeEnd)).toISOString() : moment(dateTimeStart).toISOString()
+    new Date(parseInt(dateTimeStart)).toISOString() : moment(dateTimeStart).toISOString()
 
   let timestampEnd = (/^\d+$/.test(dateTimeStart)) ?
-    new Date(parseInt(dateTimeStart)).toISOString() : moment(dateTimeEnd).toISOString()
+    new Date(parseInt(dateTimeEnd)).toISOString() : moment(dateTimeEnd).toISOString()
 
   const query = `
     SELECT *
