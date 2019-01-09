@@ -9,6 +9,11 @@ const internals = {};
 internals.applyRoutes = function (server, next) {
   const UserActivityService = server.plugins['user-activity-service'];
 
+  let metaDataObj = Joi.object().keys({
+    key: Joi.string(),
+    value: Joi.string(),
+  })
+
 
   // POST: new wallet category
   server.route({
@@ -22,7 +27,7 @@ internals.applyRoutes = function (server, next) {
       validate: {
         payload: {
           event: Joi.string().required(),
-          data: Joi.string().optional().allow(null).allow(''),
+          data: Joi.array().items(metaDataObj),
           itemName: Joi.string().optional().allow(null).allow(''),
           itemId: Joi.string().optional().allow(null).allow(''),
         }
