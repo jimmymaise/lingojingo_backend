@@ -16,14 +16,19 @@ internals.addUserLogActivity = async (logData) => {
 
 internals.getUserLogActivity = async (userId, dateTimeStart, dateTimeEnd, limit = 100) => {
 
-  if (!dateTimeEnd){
+  if (!dateTimeEnd) {
     dateTimeEnd = new Date().toISOString()
   }
-  if (!dateTimeStart){
-    dateTimeStart = moment(dateTimeEnd).subtract(7 , 'day');
+  if (!dateTimeStart) {
+    dateTimeStart = moment(dateTimeEnd).subtract(7, 'day');
   }
-  let timestampStart = moment(dateTimeStart).format("YYYY-MM-DD HH:mm:ss");
-  let timestampEnd = moment(dateTimeEnd).format("YYYY-MM-DD HH:mm:ss");
+
+  let timestampStart = (/^\d+$/.test(dateTimeEnd)) ?
+    new Date(parseInt(dateTimeEnd)).toISOString() : moment(dateTimeStart).toISOString()
+
+  let timestampEnd = (/^\d+$/.test(dateTimeStart)) ?
+    new Date(parseInt(dateTimeStart)).toISOString() : moment(dateTimeEnd).toISOString()
+
   const query = `
     SELECT *
     FROM \`${datasetId}.${tableId}\`
@@ -39,7 +44,7 @@ internals.getUserLogActivity = async (userId, dateTimeStart, dateTimeEnd, limit 
 // Location must match that of the dataset(s) referenced in the query.
 // location: 'US',
   };
-  let data =  await bigqueryHandler.queryBigQueryData(options)
+  let data = await bigqueryHandler.queryBigQueryData(options)
   // console.log(JSON.stringify(data))
   return data
 
@@ -49,7 +54,6 @@ exports.register = function (server, options) {
 
   server.expose('addUserLogActivity', internals.addUserLogActivity);
   server.expose('getUserLogActivity', internals.getUserLogActivity);
-
 
 
   return;
