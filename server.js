@@ -1,6 +1,7 @@
 'use strict';
 
 const composer = require('./index');
+const XTAG_TIME = require('./server/utils/constants').XTAG_TIME
 const _ = require('lodash')
 const Config = require('./config');
 const {ApolloServer, makeExecutableSchema, gql} = require('apollo-server-hapi');
@@ -55,7 +56,7 @@ function checkSecurty(request) {
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
     diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < 120) {
+    if (diff < XTAG_TIME) {
       return request
     }
   }
