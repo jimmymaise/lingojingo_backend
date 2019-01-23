@@ -3,6 +3,11 @@ FROM node:latest
 USER node
 
 RUN mkdir -p /home/node/app
+RUN mkdir ~/.npm-global
+RUN npm config set prefix '~/.npm-global'
+RUN echo "export PATH=~/.npm-global/bin:$PATH" >> ~/.profile
+
+
 
 WORKDIR /home/node/app
 
