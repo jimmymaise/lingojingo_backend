@@ -14,6 +14,10 @@ COPY . .
 
 RUN npm install
 
+RUN npm install pm2 -g
+
 EXPOSE 8080
 
-CMD ["node", "server.js"]
+CMD [ "pm2-runtime", "node", "server.js" ]
+
+#CMD ["node", "server.js"]
