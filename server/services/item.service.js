@@ -50,7 +50,7 @@ internals.batchCropImage = async (updateArr) => {
       }
       let fileName = path.substring(path.lastIndexOf('/') + 1).replace(/((\?|#).*)?$/, '');
 
-      let dest = 'cr_images/' + fileName
+      let dest = 'cr_images/' + Math.floor(Date.now() / 1000) + '_' + fileName
       let imagePath = await gcloudHandler.cropImage(updateArr[i].path, dest)
       result['path'] = imagePath
       if (!updateArr[i].itemType || (updateArr[i].itemType.toLowerCase() === 'card')) {
