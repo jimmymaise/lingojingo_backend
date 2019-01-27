@@ -29,7 +29,7 @@ function cropImage(path, dest) {
   const gcsDstObject = bucket.file(dest);
 
   let contentType = dest.endsWith('.png') ? 'image/png' : 'image/jpeg'
-  let srcStream = gcsSrcObject.createReadStream();
+  let srcStream = gcsSrcObject.createReadStream({validation:false});
   let dstStream = gcsDstObject.createWriteStream({
     // Tweak the config options as desired.
     gzip: true,
