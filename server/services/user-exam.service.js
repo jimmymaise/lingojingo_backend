@@ -5,13 +5,14 @@ const Constant = require('../utils/constants')
 const UserInfo = require('../models/user-info');
 const UserExam = require('../models/user-exam');
 const UserTopic = require('../models/user-topic');
-const UserDeck = require('../models/user-item');
+const UserItem = require('../models/user-item');
 const Deck = require('../models/deck');
 const LeaderBoardService = require('../services/leader-board.service')
 const RewardService = require('../services/reward.service')
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
 const UserTopicService = require('../services/user-topic.service');
+const UserItemService = require('../services/user-item.service');
 
 
 function calculateTotalCorrectAnswer(knownAnswer, totalQuestions) {
@@ -138,18 +139,26 @@ async function updateDataWhenCompletingUserExam(userExam) {
 
   //update userDeck
   if (userExam.result === EXAM.RESULT.PASSED) {
-    let userDeckData = await UserDeck.find({
+    let userDeckData = await UserItem.find({
       itemId: userExam.deckId,
       userId: userExam.userId,
       itemType: 'deck'
     })
     userDeckData = userDeckData[0]
+    if (!userDeckData) {
+      userDeckData = await UserItemService.addOneUserItem({
+        topicId: userExam.topicId,
+        itemId: userExam.deckId,
+        userId: userExam.userId,
+        itemType: 'deck'
+      })
+    }
     userDeckData.completedTopics = userDeckData.completedTopics || {}
 
     if (userDeckData.completedTopics[userExam.topicId] !== userTopicData._id) {
       userDeckData.completedTopics[userExam.topicId] = userTopicData._id
 
-      await UserDeck.findByIdAndUpdate(userDeckData._id, {
+      await UserItem.findByIdAndUpdate(userDeckData._id, {
         $set: {
           completedTopics: userDeckData.completedTopics,
         }
