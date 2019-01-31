@@ -150,10 +150,13 @@ internals.getGeneralLeaderBoardES = async (args) => {
   let data = transformESResponseToGraphql(_.get(result, 'aggregations.by_user_id.buckets') || [])
   let limit = (data.length > (args.top || 10)) ? (args.top || 10) : data.length;
   let res = {}
+  if (!args.currentUserId){
+    args.currentUserId = args.userId
+  }
   res['currentUser'] = data.find(function (obj) {
-    return obj.userId.toString() === args.userId.toString();
+    return obj.userId.toString() === args.currentUserId.toString();
   }) || {
-    userId: args.userId.toString()
+    userId: args.currentUserId.toString()
   };
 
 
