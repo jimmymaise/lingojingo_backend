@@ -174,11 +174,13 @@ async function updateDataWhenCompletingUserExam(userExam) {
     let queryData = {}
     queryData.userId = userExam.userId
     queryData.topicType = Constant.TOPIC.TYPE.TOPIC
-    let result = LeaderBoardService.getGeneralLeaderBoard(queryData)
+    let result = (await LeaderBoardService.getGeneralLeaderBoard(queryData))['currentUser']
     let updatedLevel = utils.correctAnswerToLevel(result.totalCorrectAnswers)
 
 
-    await UserInfo.findByIdAndUpdate(userExam.userId, {
+    await UserInfo.findOneAndUpdate({
+      firebaseUserId: userExam.userId
+    }, {
       $set: {
         totalCorrectAnswers: result.totalCorrectAnswers,
         totalExams: result.totalExams,
@@ -194,7 +196,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
       rewardEvent.timeRewarded = new Date()
       rewardEvent.type = Constant.REWARD_TYPE_NAME.UPDATE_LEVEL;
       rewardEvent.topicId = userExam.topicId;
-      RewardService.addRewardEvent(userExam.userId)
+      await RewardService.addRewardEvent(userExam.userId,rewardEvent)
 
     }
   }

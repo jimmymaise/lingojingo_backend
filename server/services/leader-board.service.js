@@ -151,9 +151,9 @@ internals.getGeneralLeaderBoardES = async (args) => {
   let limit = (data.length > (args.top || 10)) ? (args.top || 10) : data.length;
   let res = {}
   res['currentUser'] = data.find(function (obj) {
-    return obj.userId.toString() === args.currentUserId.toString();
+    return obj.userId.toString() === args.userId.toString();
   }) || {
-    userId: args.currentUserId.toString()
+    userId: args.userId.toString()
   };
 
 
