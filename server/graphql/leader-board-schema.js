@@ -1,4 +1,5 @@
 const leaderBoardService = require('../services/leader-board.service');
+const examService = require('../services/user-exam.service');
 const userInfoService = require('../services/user-info.service');
 
 const GraphQLJSON = require('graphql-type-json');
@@ -18,13 +19,10 @@ const typeDefs = `
   }
   
   type LeaderBoard {
-    _id: String,
     userInfo: UserInfo,
-    score: Float,
-    totalExams: Int,
+    totalScore: Float,
+    testNum: Int,
     timeSpentAvg: Float,
-    totalCorrectAnswers: Int,
-    timeSpent: Int,
     rank: Int
 
 }
@@ -39,8 +37,10 @@ const resolvers = {
     //   return await leaderBoardService.getTopicLeaderBoard(args);
     // },
     getGeneralLeaderBoard: async (parent, args, context) => {
-      args['currentUserId'] = context.request.auth.credentials.user_id
-      return await leaderBoardService.getGeneralLeaderBoard(args);
+      let userId = context.request.auth.credentials.user_id;
+      let type = 'allTime'
+      let limit = 10
+      return await examService.getLeaderBoard(type, limit, userId);
     },
 
   },
