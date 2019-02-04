@@ -82,7 +82,7 @@ internals.getLeaderBoard = async (type='allTime', limit=30, userId) => {
   data['currentUser'] = data['leaderBoard'].find(function (obj) {
     return obj.userId.toString() === userId.toString();
   }) || {
-    userId: serId.toString()
+    userId: userId.toString()
   };
   return data
 
