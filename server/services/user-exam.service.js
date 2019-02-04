@@ -1,6 +1,5 @@
 'use strict';
 const _ = require('lodash');
-const internals = {};
 const Constant = require('../utils/constants')
 const UserInfo = require('../models/user-info');
 const UserExam = require('../models/user-exam');
@@ -13,7 +12,11 @@ const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
 const UserTopicService = require('../services/user-topic.service');
 const UserItemService = require('../services/user-item.service');
+const bigqueryHandler = require('../intergration/bigquery/handler')
+let datasetId = 'user'
+let tableId = 'exam'
 
+const internals = {};
 
 function calculateTotalCorrectAnswer(knownAnswer, totalQuestions) {
   let numCorrect = 0;
@@ -47,6 +50,45 @@ internals.getRecentlyUserExams = async (userId, topicId, limit) => {
   });
 }
 
+internals.getLeaderBoard = async (type='allTime', limit=30, userId) => {
+  let leaderTable
+
+  switch (type) {
+    case 'weekly':
+      leaderTable = 'weekly_leader_board'
+      break;
+    case 'monthly':
+      leaderTable = 'monthly_leader_board'
+      break;
+    case 'allTime':
+      leaderTable = 'all_time_leader_board'
+      break;
+  }
+
+  const query = `
+    SELECT *
+    FROM \`${datasetId}.${leaderTable}\`
+    WHERE rank <= ${limit}
+    OR userId = '${userId}'
+    ORDER BY rank
+    `
+  const options = {
+    query: query,
+// Location must match that of the dataset(s) referenced in the query.
+// location: 'US',
+  };
+  let data = {}
+  data['leaderBoard'] = await bigqueryHandler.queryBigQueryData(options)
+  data['currentUser'] = data['leaderBoard'].find(function (obj) {
+    return obj.userId.toString() === userId.toString();
+  }) || {
+    userId: serId.toString()
+  };
+  return data
+
+}
+
+
 internals.addOneUserExam = async (userExam) => {
   userExam.timeCreated = new Date();
   let deckData = await Deck.findById(userExam.deckId)
@@ -57,10 +99,10 @@ internals.addOneUserExam = async (userExam) => {
   userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
 
-// Sau do Update lastExamResult, knownAnswer ben UserTopic
-
   let result = await UserExam.insertOne(userExam);
   await updateDataWhenCompletingUserExam(userExam)
+  delete userExam['knownAnswer']
+  await bigqueryHandler.insertRowsAsStream(datasetId, tableId, [userExam])
   return result[0]
 
 }
@@ -196,7 +238,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
       rewardEvent.timeRewarded = new Date()
       rewardEvent.type = Constant.REWARD_TYPE_NAME.UPDATE_LEVEL;
       rewardEvent.topicId = userExam.topicId;
-      await RewardService.addRewardEvent(userExam.userId,rewardEvent)
+      await RewardService.addRewardEvent(userExam.userId, rewardEvent)
 
     }
   }
@@ -213,6 +255,7 @@ exports.register = function (server, options) {
   server.expose('deleteOneUserExam', internals.deleteOneUserExam);
   server.expose('getUserExams', internals.getUserExams);
   server.expose('getRecentlyUserExams', internals.getRecentlyUserExams);
+  server.expose('getLeaderBoard', internals.getLeaderBoard)
 
 
 };
@@ -222,5 +265,7 @@ exports.updateOneUserExam = internals.updateOneUserExam;
 exports.deleteOneUserExam = internals.deleteOneUserExam;
 exports.getUserExams = internals.getUserExams;
 exports.getRecentlyUserExams = internals.getRecentlyUserExams;
+exports.getLeaderBoard = internals.getLeaderBoard;
+
 
 exports.name = 'user-exam-service';
