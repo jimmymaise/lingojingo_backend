@@ -90,7 +90,7 @@ internals.getLeaderBoard = async (type='allTime', limit=30, userId) => {
 
 
 internals.addOneUserExam = async (userExam) => {
-  userExam.timeCreated = new Date();
+  userExam.timeCreated = new Date().toISOString();
   let deckData = await Deck.findById(userExam.deckId)
   userExam.totalQuestions = Object.keys(userExam.knownAnswer).length
   userExam.totalCorrectAnswers = calculateTotalCorrectAnswer(userExam.knownAnswer, userExam.totalQuestions)
@@ -98,10 +98,10 @@ internals.addOneUserExam = async (userExam) => {
   userExam.timeSpentAvg = userExam.totalQuestions > 0 ? Math.round(userExam.timeSpent / userExam.totalQuestions) : null
   userExam.result = userExam.score >= deckData.passScore ? EXAM.RESULT.PASSED : EXAM.RESULT.FAILED
 
-
   let result = await UserExam.insertOne(userExam);
   await updateDataWhenCompletingUserExam(userExam)
   delete userExam['knownAnswer']
+  userExam['_id'] = userExam['_id'].toString()
   await bigqueryHandler.insertRowsAsStream(datasetId, tableId, [userExam])
   return result[0]
 
