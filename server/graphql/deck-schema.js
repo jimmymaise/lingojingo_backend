@@ -34,7 +34,6 @@ const typeDefs = `
     img: String,
     topicDetails: [Topic],
     cardDetails: [Card],
-    wordStatistics:WordStatistics,
     category: DeckCategory,
     passScore: String
   }
@@ -61,7 +60,6 @@ const typeDefs = `
   img: String,
   topicDetails: [JSON],
   cardDetails: [JSON],
-  wordStatistics:JSON,
   category: JSON,
   passScore: String
 }
@@ -103,15 +101,6 @@ const resolvers = {
   Deck: {
     topicDetails: async (parent, args, context) => {
       return await deckService.getListTopicDetail(context.request.auth.credentials.uid, parent.topics);
-    },
-    wordStatistics: async (parent, args, context) => {
-      let queryData = {}
-      queryData.deckId = parent._id
-      queryData.userId = context.request.auth.credentials.uid
-
-      data = await userStatisticsService.getWordStatics(queryData);
-      return data[0]
-      // return await deckService.getListTopicDetail(context.request.auth.credentials.uid, parent.topics);
     },
 
     category: async (parent, args, context) => {

@@ -45,6 +45,22 @@ internals.updateOneUserItem = async (args) => {
 
 }
 
+internals.updateItemFavorite = async (userId, userItemId, status) => {
+  let result = await UserItem.findOneAndUpdate(
+    {_id: ObjectID(userItemId), userId: userId}, {$set: {favorite: status}});
+  return result
+
+}
+
+internals.addTopicStudy = async (userId, userItemId, topicId, data = {}) => {
+  let result = await UserItem.findOne({_id: ObjectID(userItemId), userId: userId});
+  result['studyTopics'] = result['studyTopics'] || {}
+  result['studyTopics'][topicId] = result['studyTopics'][topicId] || data
+  result = await UserItem.findOneAndUpdate(
+    {_id: ObjectID(userItemId), userId: userId}, {$set: {studyTopics: result['studyTopics']}});
+  return result
+}
+
 
 internals.searchUserItem = async (args) => {
 
@@ -93,6 +109,8 @@ exports.register = function (server, options) {
   server.expose('deleteOneUserItem', internals.deleteOneUserItem);
   server.expose('createOrUpdateUserTopic', internals.createOrUpdateUserTopic);
   server.expose('searchUserItem', internals.searchUserItem);
+  server.expose('addTopicStudy', internals.addTopicStudy);
+  server.expose('updateItemFavorite', internals.updateItemFavorite);
 
 
 };
@@ -105,6 +123,8 @@ exports.updateOneUserItem = internals.updateOneUserItem;
 exports.deleteOneUserItem = internals.deleteOneUserItem;
 exports.createOrUpdateUserTopic = internals.createOrUpdateUserTopic;
 exports.searchUserItem = internals.searchUserItem;
+exports.addTopicStudy = internals.addTopicStudy;
+exports.updateItemFavorite = internals.updateItemFavorite;
 
 
 exports.name = 'user-item-service';

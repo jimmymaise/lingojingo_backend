@@ -23,12 +23,7 @@ class UserItem extends ESMongoModels {
     }
     indexData['name'] = indexData['itemInfo']['name']
     keyRemoveArray.forEach(e => delete indexData['itemInfo'][e]);
-    if (indexData.itemType === 'deck') {
-      indexData['wordStatistics'] = (await userStatisticsService.getWordStatics({
-        deckId: indexData.itemId,
-        userId: indexData.userId
-      }))[0];
-    }
+
     await super.upsertES(_id, indexData)
   }
 };
@@ -42,7 +37,7 @@ UserItem.schema = Joi.object().keys({
   itemId: Joi.string(),
   favorite: Joi.number(),
   itemType: Joi.string(),
-  completedTopics: Joi.object().optional().allow(null),// List completed topics with property is the id of topic and value is the id of userTopic
+  studyTopics: Joi.object().optional().allow(null),// List completed topics with property is the id of topic and value is the id of userTopic
   createdAt: Joi.date().optional(),//Thời gian tạo item
   expiredAt: Joi.date().optional(),//Thời gian hết hạn
 })

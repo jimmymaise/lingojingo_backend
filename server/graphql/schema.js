@@ -75,11 +75,7 @@ const externalType = `
     timeSpentAvg: Int,
   }
   
-  type WordStatistics{
-    notLearned: Int,
-    learned: Int,
-    learning: Int,
-  }
+
 
   type UserInfo{
     fullName: String,

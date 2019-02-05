@@ -50,7 +50,7 @@ internals.getRecentlyUserExams = async (userId, topicId, limit) => {
   });
 }
 
-internals.getLeaderBoard = async (type='allTime', limit=30, userId) => {
+internals.getLeaderBoard = async (type = 'allTime', limit = 30, userId) => {
   let leaderTable
 
   switch (type) {
@@ -134,114 +134,77 @@ internals.updateOneUserExam = async (args) => {
 
 async function updateDataWhenCompletingUserExam(userExam) {
 
-  //update userTopic
 
-  let userTopicData = await UserTopic.find({
-    topicId: userExam.topicId,
+  let userDeckData = await UserItem.find({
+    itemId: userExam.deckId,
     userId: userExam.userId,
+    itemType: 'deck'
   })
-  userTopicData = userTopicData[0]
-  if (!userTopicData) {
-    userTopicData = await UserTopicService.addOneUserTopic(userExam.userId, {
+  userDeckData = userDeckData[0]
+  if (!userDeckData) {
+    userDeckData = await UserItemService.addOneUserItem({
       topicId: userExam.topicId,
-      deckId: userExam.deckId,
+      itemId: userExam.deckId,
+      userId: userExam.userId,
+      itemType: 'deck'
     })
   }
-
+  userDeckData.studyTopics = userDeckData.studyTopics || {}
+  userDeckData.studyTopics[userExam.topicId] = userDeckData.studyTopics[userExam.topicId] || {}
+  let userTopicData = userDeckData.studyTopics[userExam.topicId]
+  userTopicData.result = userTopicData.result ? userTopicData.result : userExam.result
   let currentHighestResult = userTopicData.highestResult || {}
-  let isCalculateTotalWord = false
   if (currentHighestResult.score || 0 < userExam.score) {
     currentHighestResult = {
       examId: userExam._id.toString(),
       score: userExam.score,
       result: userExam.result,
-      timeSpentAvg: userExam.timeSpentAvg,
-      timeSpent: userExam.timeSpent,
-      totalQuestions: userExam.totalQuestions,
-      knownAnswer: userExam.knownAnswer,
-      totalCorrectAnswers: userExam.totalCorrectAnswers
-    }
-    if (userTopicData.topicType === Constant.TOPIC.TYPE.TOPIC) {
-      isCalculateTotalWord = true
-
     }
   }
-
+  userTopicData.highestResult = currentHighestResult
   userTopicData.exams = userTopicData.exams || []
   userTopicData.exams.push(userExam._id.toString())
   userTopicData.exams = userTopicData.exams.filter(utils.onlyUnique)
-  await UserTopic.findByIdAndUpdate(userTopicData._id, {
+
+
+  await UserItem.findByIdAndUpdate(userDeckData._id, {
     $set: {
-      highestResult: currentHighestResult,
-      knownAnswer: userExam.knownAnswer,
-      exams: userTopicData.exams,
-      totalExams: userTopicData.exams.length,
+      studyTopics: userDeckData.studyTopics,
     }
-  });
-
-  //update userDeck
-  if (userExam.result === EXAM.RESULT.PASSED) {
-    let userDeckData = await UserItem.find({
-      itemId: userExam.deckId,
-      userId: userExam.userId,
-      itemType: 'deck'
-    })
-    userDeckData = userDeckData[0]
-    if (!userDeckData) {
-      userDeckData = await UserItemService.addOneUserItem({
-        topicId: userExam.topicId,
-        itemId: userExam.deckId,
-        userId: userExam.userId,
-        itemType: 'deck'
-      })
-    }
-    userDeckData.completedTopics = userDeckData.completedTopics || {}
-
-    if (userDeckData.completedTopics[userExam.topicId] !== userTopicData._id) {
-      userDeckData.completedTopics[userExam.topicId] = userTopicData._id
-
-      await UserItem.findByIdAndUpdate(userDeckData._id, {
-        $set: {
-          completedTopics: userDeckData.completedTopics,
-        }
-
-      })
+  })
 
 
-    }
-  }
-
-//  Update user info
-  if (isCalculateTotalWord === true) {
-    let queryData = {}
-    queryData.userId = userExam.userId
-    queryData.topicType = Constant.TOPIC.TYPE.TOPIC
-    let result = (await LeaderBoardService.getGeneralLeaderBoard(queryData))['currentUser']
-    let updatedLevel = utils.correctAnswerToLevel(result.totalCorrectAnswers)
-
-
-    await UserInfo.findOneAndUpdate({
-      firebaseUserId: userExam.userId
-    }, {
-      $set: {
-        totalCorrectAnswers: result.totalCorrectAnswers,
-        totalExams: result.totalExams,
-        timeSpent: result.timeSpent,
-        score: result.score,
-        level: updatedLevel
-      }
-
-    })
-    if (updatedLevel !== result.level) {
-      let rewardEvent = {}
-      rewardEvent.userId = userExam.userId;
-      rewardEvent.timeRewarded = new Date()
-      rewardEvent.type = Constant.REWARD_TYPE_NAME.UPDATE_LEVEL;
-      rewardEvent.topicId = userExam.topicId;
-      await RewardService.addRewardEvent(userExam.userId, rewardEvent)
-
-    }
-  }
+// //  Update user info
+//   if (isCalculateTotalWord === true) {
+//     let queryData = {}
+//     queryData.userId = userExam.userId
+//     queryData.topicType = Constant.TOPIC.TYPE.TOPIC
+//     let result = (await LeaderBoardService.getGeneralLeaderBoard(queryData))['currentUser']
+//     let updatedLevel = utils.correctAnswerToLevel(result.totalCorrectAnswers)
+//
+//
+//     await UserInfo.findOneAndUpdate({
+//       firebaseUserId: userExam.userId
+//     }, {
+//       $set: {
+//         totalCorrectAnswers: result.totalCorrectAnswers,
+//         totalExams: result.totalExams,
+//         timeSpent: result.timeSpent,
+//         score: result.score,
+//         level: updatedLevel
+//       }
+//
+//     })
+//     if (updatedLevel !== result.level) {
+//       let rewardEvent = {}
+//       rewardEvent.userId = userExam.userId;
+//       rewardEvent.timeRewarded = new Date()
+//       rewardEvent.type = Constant.REWARD_TYPE_NAME.UPDATE_LEVEL;
+//       rewardEvent.topicId = userExam.topicId;
+//       await RewardService.addRewardEvent(userExam.userId, rewardEvent)
+//
+//     }
+//   }
 
 
 }

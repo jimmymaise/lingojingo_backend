@@ -104,6 +104,9 @@ const manifest = {
         plugin: './server/services/item.service'
       },
       {
+        plugin: './server/services/user-item.service'
+      },
+      {
         plugin: './server/api/index'
       },
       {
