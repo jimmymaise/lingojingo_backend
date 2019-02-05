@@ -6,6 +6,8 @@ let get = require("lodash.get");
 
 internals.applyRoutes = function (server, next) {
   const ItemService = server.plugins['item-service'];
+  const UserItemService = server.plugins['user-item-service'];
+
 
   server.route({
     method: 'PUT',
@@ -49,8 +51,44 @@ internals.applyRoutes = function (server, next) {
 
       try {
         return await ItemService.batchCropImage(request.payload);
+      } catch (err) {
+        return Boom.internal(err);
       }
-      catch (err) {
+    }
+  });
+  server.route({
+    method: 'PUT',
+    path: '/user-item/{id}/favorite/{status}',
+    config: {
+      auth: 'firebase',
+      description: 'Add favorite for item',
+      notes: 'Add favorite for item',
+      tags: ['api'],
+    },
+    handler: async (request) => {
+
+      try {
+        return await UserItemService.updateItemFavorite(request.auth.credentials.uid, request.params.id, request.params.status);
+      } catch (err) {
+        return Boom.internal(err);
+      }
+    }
+  });
+
+  server.route({
+    method: 'PUT',
+    path: '/user-item/{id}/topic/{topicId}/study',
+    config: {
+      auth: 'firebase',
+      description: 'Add topic Study',
+      notes: 'Batch crop image',
+      tags: ['api'],
+    },
+    handler: async (request) => {
+
+      try {
+        return await UserItemService.addTopicStudy(request.auth.credentials.uid, request.params.id, request.params.topicId, request.payload);
+      } catch (err) {
         return Boom.internal(err);
       }
     }
@@ -61,7 +99,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency(['item-service'], internals.applyRoutes);
+  server.dependency(['item-service','user-item-service'], internals.applyRoutes);
 
   return;
 };

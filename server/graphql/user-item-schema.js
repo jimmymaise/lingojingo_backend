@@ -32,7 +32,7 @@ const typeDefs = `
 
   extend type Mutation { createMyUserItem(itemId: String!, itemType: String!, latestStudy: JSON): UserItem }
 
-  extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, completedTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
+  extend type Mutation { updateMyUserItem(id: ID!, favorite: Int, studyTopics: JSON, exams: JSON, latestStudy: JSON): UserItem }
   
   extend type Mutation { deleteMyUserItem(_id: ID!): UserItem}
 
@@ -42,8 +42,7 @@ const typeDefs = `
     itemId: String,
     favorite: Int,
     itemInfo: JSON,
-    completedTopics: JSON,
-    wordStatistics: WordStatistics,
+    studyTopics: JSON,
     createdAt:String,
     expiredAt:String
   }
@@ -54,7 +53,6 @@ const typeDefs = `
     itemId: String,
     itemType: String,
     favorite: Int,
-    wordStatistics: WordStatistics,
     createdAt: String,
     expiredAt: String,
     itemInfo: JSON
@@ -79,19 +77,6 @@ const resolvers = {
       return await userItemService.searchUserItem(args);
     }
   },
-  UserItem:
-    {
-      wordStatistics: async (parent, args) => {
-        //Thống kê từ đang học, chưa học, đã học cho 1 item cụ thể của user
-
-        let queryData = {}
-        queryData.itemId = parent.itemId
-        queryData.userId = parent.userId
-
-        let data = await userStatisticsService.getWordStatics(queryData);
-        return data[0]
-      }
-    },
   Mutation: {
     createMyUserItem: async (parent, args, context) => {
       args.userId = context.request.auth.credentials.uid;
