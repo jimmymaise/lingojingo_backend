@@ -1,5 +1,6 @@
 const winston = require('winston');
 const Sentry = require('winston-raven-sentry');
+let get = require("lodash.get");
 
 const options = {
   dsn: 'https://d8c9d908c23144068f61a4152a7593ef@sentry.io/1281759',
@@ -18,12 +19,12 @@ logger['requestToSentryLog'] = function (request, other_errors) {
       headers: request.headers,
       cookies: request.state,
       url: request.path,
-      body: request.payload.query,
+      body: get(request,'payload.query',null),
     },
     extra: {
-      timestamp: request.info.received,
+      timestamp: get(request,'info.received',null),
       id: request.info.id,
-      remoteAddress: request.info.remoteAddress,
+      remoteAddress: get(request,'info.remoteAddress',null),
       userInfo: request.auth,
       otherErrors: JSON.stringify(other_errors)
 
