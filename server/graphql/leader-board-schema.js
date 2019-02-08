@@ -1,6 +1,7 @@
 const leaderBoardService = require('../services/leader-board.service');
 const examService = require('../services/user-exam.service');
 const userInfoService = require('../services/user-info.service');
+let get = require("lodash.get");
 
 const GraphQLJSON = require('graphql-type-json');
 //db.getCollection("user_exams").find({deckId:'5b1bfc365c44cc013e87280b',topicId:'5b1bf1615c44cc013e872289'}).sort({score:-1}).limit(5).toArray()
@@ -37,9 +38,9 @@ const resolvers = {
     //   return await leaderBoardService.getTopicLeaderBoard(args);
     // },
     getGeneralLeaderBoard: async (parent, args, context) => {
-      let userId = context.request.auth.credentials.user_id;
-      let type = 'allTime'
-      let limit = 10
+      let userId = get(context, 'request.auth.credentials.user_id');
+      let type = args.type || 'allTime'
+      let limit = args.top || 10
       return await examService.getLeaderBoard(type, limit, userId);
     },
 
