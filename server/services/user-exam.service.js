@@ -152,6 +152,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
   userDeckData.studyTopics = userDeckData.studyTopics || {}
   userDeckData.studyTopics[userExam.topicId] = userDeckData.studyTopics[userExam.topicId] || {}
   let userTopicData = userDeckData.studyTopics[userExam.topicId]
+
   userTopicData.result = userTopicData.result ? userTopicData.result : userExam.result
   let currentHighestResult = userTopicData.highestResult || {}
   if (currentHighestResult.score || 0 < userExam.score) {
@@ -161,6 +162,22 @@ async function updateDataWhenCompletingUserExam(userExam) {
       result: userExam.result,
     }
   }
+
+  let completedTopics = 0
+  let inProgressTopics = 0
+  for (let key in userTopicData) {
+    if (userTopicData.hasOwnProperty(key)) {
+      if (userTopicData[key]['result']) {
+        completedTopics++
+      } else {
+        inProgressTopics++
+      }
+    }
+  }
+  userDeckData['deckStat'] = userDeckData['deckStat'] || {}
+  userDeckData['deckStat']['completedTopics'] = completedTopics
+  userDeckData['deckStat']['inProgressTopics'] = inProgressTopics
+
   userTopicData.highestResult = currentHighestResult
   userTopicData.exams = userTopicData.exams || []
   userTopicData.exams.push(userExam._id.toString())
@@ -228,6 +245,7 @@ exports.updateOneUserExam = internals.updateOneUserExam;
 exports.deleteOneUserExam = internals.deleteOneUserExam;
 exports.getUserExams = internals.getUserExams;
 exports.getRecentlyUserExams = internals.getRecentlyUserExams;
+
 exports.getLeaderBoard = internals.getLeaderBoard;
 
 

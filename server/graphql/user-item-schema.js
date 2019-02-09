@@ -42,6 +42,7 @@ const typeDefs = `
     itemId: String,
     favorite: Int,
     itemInfo: JSON,
+    deckStat: JSON,
     studyTopics: JSON,
     createdAt:String,
     expiredAt:String
