@@ -165,9 +165,9 @@ async function updateDataWhenCompletingUserExam(userExam) {
 
   let completedTopics = 0
   let inProgressTopics = 0
-  for (let key in userTopicData) {
-    if (userTopicData.hasOwnProperty(key)) {
-      if (userTopicData[key]['result']) {
+  for (let key in userDeckData.studyTopics) {
+    if (userDeckData.studyTopics.hasOwnProperty(key)) {
+      if (userDeckData.studyTopics [key]['result']) {
         completedTopics++
       } else {
         inProgressTopics++
