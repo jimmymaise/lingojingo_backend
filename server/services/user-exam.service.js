@@ -85,7 +85,7 @@ internals.getLeaderBoard = async (type = 'allTime', limit = 30, userId) => {
     userId: userId.toString()
   };
   if ((data['leaderBoard'] || []).length > limit) {
-    data['leaderBoard'].slice(-1);
+    data['leaderBoard'].pop();
   }
   return data
 
