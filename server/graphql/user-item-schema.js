@@ -53,6 +53,8 @@ const typeDefs = `
     userId: String,
     itemId: String,
     itemType: String,
+    name: String,
+    deckStat: JSON,
     favorite: Int,
     createdAt: String,
     expiredAt: String,
