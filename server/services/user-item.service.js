@@ -45,19 +45,19 @@ internals.updateOneUserItem = async (args) => {
 
 }
 
-internals.updateItemFavorite = async (userId, userItemId, status) => {
+internals.updateItemFavorite = async (userId, itemId, itemType, status) => {
   let result = await UserItem.findOneAndUpdate(
-    {_id: ObjectID(userItemId), userId: userId}, {$set: {favorite: status}});
+    {itemId: itemId, userId: userId, itemType: itemType}, {$set: {favorite: status}});
   return result
 
 }
 
-internals.addTopicStudy = async (userId, userItemId, topicId, data = {}) => {
-  let result = await UserItem.findOne({_id: ObjectID(userItemId), userId: userId});
+internals.addTopicStudy = async (userId, itemId, itemType, topicId, data = {}) => {
+  let result = await UserItem.findOne({itemId, itemType, userId});
   result['studyTopics'] = result['studyTopics'] || {}
   result['studyTopics'][topicId] = result['studyTopics'][topicId] || data
   result = await UserItem.findOneAndUpdate(
-    {_id: ObjectID(userItemId), userId: userId}, {$set: {studyTopics: result['studyTopics']}});
+    {itemId: itemId, userId: userId, itemType: itemType}, {$set: {studyTopics: result['studyTopics']}});
   return result
 }
 

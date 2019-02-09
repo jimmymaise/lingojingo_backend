@@ -37,6 +37,7 @@ UserItem.schema = Joi.object().keys({
   itemId: Joi.string(),
   favorite: Joi.number(),
   itemType: Joi.string(),
+  deckStat: Joi.object().optional().allow(null),
   studyTopics: Joi.object().optional().allow(null),// List completed topics with property is the id of topic and value is the id of userTopic
   createdAt: Joi.date().optional(),//Thời gian tạo item
   expiredAt: Joi.date().optional(),//Thời gian hết hạn

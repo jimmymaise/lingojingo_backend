@@ -58,7 +58,7 @@ internals.applyRoutes = function (server, next) {
   });
   server.route({
     method: 'PUT',
-    path: '/user-item/{id}/favorite/{status}',
+    path: '/{itemType}/{itemId}/favorite/{status}',
     config: {
       auth: 'firebase',
       description: 'Add favorite for item',
@@ -68,7 +68,8 @@ internals.applyRoutes = function (server, next) {
     handler: async (request) => {
 
       try {
-        return await UserItemService.updateItemFavorite(request.auth.credentials.uid, request.params.id, request.params.status);
+        return await UserItemService.updateItemFavorite(request.auth.credentials.uid, request.params.itemId,
+          request.params.itemType, request.params.status);
       } catch (err) {
         return Boom.internal(err);
       }
@@ -77,7 +78,7 @@ internals.applyRoutes = function (server, next) {
 
   server.route({
     method: 'PUT',
-    path: '/user-item/{id}/topic/{topicId}/study',
+    path: '/{itemType}/{itemId}/topic/{topicId}/study',
     config: {
       auth: 'firebase',
       description: 'Add topic Study',
@@ -87,7 +88,8 @@ internals.applyRoutes = function (server, next) {
     handler: async (request) => {
 
       try {
-        return await UserItemService.addTopicStudy(request.auth.credentials.uid, request.params.id, request.params.topicId, request.payload);
+        return await UserItemService.addTopicStudy(request.auth.credentials.uid, request.params.itemId,
+          request.params.itemType, request.params.topicId, request.payload);
       } catch (err) {
         return Boom.internal(err);
       }
@@ -99,7 +101,7 @@ internals.applyRoutes = function (server, next) {
 };
 
 exports.register = function (server, options) {
-  server.dependency(['item-service','user-item-service'], internals.applyRoutes);
+  server.dependency(['item-service', 'user-item-service'], internals.applyRoutes);
 
   return;
 };
