@@ -169,7 +169,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
   let inProgressTopics = 0
   for (let key in userDeckData.studyTopics) {
     if (userDeckData.studyTopics.hasOwnProperty(key)) {
-      if (userDeckData.studyTopics [key]['result']) {
+      if (userDeckData.studyTopics [key] && userDeckData.studyTopics [key]['result']) {
         completedTopics++
       } else {
         inProgressTopics++
@@ -189,6 +189,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
   await UserItem.findByIdAndUpdate(userDeckData._id, {
     $set: {
       studyTopics: userDeckData.studyTopics,
+      deckStat: userDeckData['deckStat']
     }
   })
 
