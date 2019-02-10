@@ -2,6 +2,7 @@
 
 
 const UserItem = require('../models/user-item');
+
 const _ = require('lodash');
 const internals = {};
 const ObjectID = require('mongodb').ObjectID;
@@ -23,6 +24,13 @@ internals.getOneUserItem = async (id) => {
 internals.addOneUserItem = async (args) => {
   let result = await UserItem.findOne({itemId: args.itemId, userId: args.userId, itemType: args.itemType});
   if (result) return result
+  const Item = require(`../models/${args.itemType}`);
+  //Add more fields from other table
+
+  let itemData = await Item.findById(args.itemId);
+  if (itemData) {
+    throw Error(`Cannot find ${indexData.itemType} ${args.itemId} `)
+  }
   result = await UserItem.insertOne(args);
   return result[0]
 
@@ -46,6 +54,14 @@ internals.updateOneUserItem = async (args) => {
 }
 
 internals.updateItemFavorite = async (userId, itemId, itemType, status) => {
+  let item = await UserItem.findOne({itemId, itemType, userId});
+  if (!item) {
+    await internals.addOneUserItem({
+      itemId: itemId,
+      userId: userId,
+      itemType: itemType
+    })
+  }
   let result = await UserItem.findOneAndUpdate(
     {itemId: itemId, userId: userId, itemType: itemType}, {$set: {favorite: status}});
   return result
@@ -54,6 +70,13 @@ internals.updateItemFavorite = async (userId, itemId, itemType, status) => {
 
 internals.addTopicStudy = async (userId, itemId, itemType, topicId, data = {}) => {
   let result = await UserItem.findOne({itemId, itemType, userId});
+  if (!result) {
+    result = await internals.addOneUserItem({
+      itemId: itemId,
+      userId: userId,
+      itemType: itemType
+    })
+  }
   result['studyTopics'] = result['studyTopics'] || {}
   result['studyTopics'][topicId] = result['studyTopics'][topicId] || data
   result = await UserItem.findOneAndUpdate(
