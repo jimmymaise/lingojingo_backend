@@ -28,8 +28,8 @@ internals.addOneUserItem = async (args) => {
   //Add more fields from other table
 
   let itemData = await Item.findById(args.itemId);
-  if (itemData) {
-    throw Error(`Cannot find ${indexData.itemType} ${args.itemId} `)
+  if (!itemData) {
+    throw Error(`Cannot find ${args.itemType} ${args.itemId} `)
   }
   result = await UserItem.insertOne(args);
   return result[0]
