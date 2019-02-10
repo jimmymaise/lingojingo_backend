@@ -16,6 +16,7 @@ const typeDefs = `
   input MyUserItemSearchInput {
     name: String,
     itemType: String,
+    favorite: Int
   }
 
   type UserItemPagination {

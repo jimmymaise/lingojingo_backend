@@ -19,7 +19,7 @@ class UserItem extends ESMongoModels {
 
     indexData['itemInfo'] = await Item.findById(indexData.itemId);
     if (!indexData['itemInfo']) {
-      logger.error(indexData.itemId)
+      throw Error(`Cannot find ${indexData.itemType} ${indexData.itemId} `)
     }
     indexData['name'] = indexData['itemInfo']['name']
     keyRemoveArray.forEach(e => delete indexData['itemInfo'][e]);

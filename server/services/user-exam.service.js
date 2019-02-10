@@ -146,7 +146,6 @@ async function updateDataWhenCompletingUserExam(userExam) {
   userDeckData = userDeckData[0]
   if (!userDeckData) {
     userDeckData = await UserItemService.addOneUserItem({
-      topicId: userExam.topicId,
       itemId: userExam.deckId,
       userId: userExam.userId,
       itemType: 'deck'
