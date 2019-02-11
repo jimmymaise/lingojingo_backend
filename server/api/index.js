@@ -5,6 +5,8 @@ const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 const Wreck = require('wreck');
 let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.vomemo.com/proxyES`
 let get = require("lodash.get");
+const Boom = require('boom');
+
 
 internals.applyRoutes = function (server) {
   server.route({
