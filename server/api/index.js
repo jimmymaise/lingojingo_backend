@@ -7,7 +7,6 @@ let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `htt
 let get = require("lodash.get");
 const Boom = require('boom');
 
-
 internals.applyRoutes = function (server) {
   server.route({
     method: 'GET',
@@ -29,7 +28,9 @@ internals.applyRoutes = function (server) {
       const Song = require('../models/song');
       const Article = require('../models/article');
       const UserItem = require('../models/user-item');
-      if (!(get(request, 'auth.credentials.claims.groups', [])).includes('ADMIN')) {
+      const getClaims =require('../graphql/permission').getClaims
+      let claims = getClaims(request.auth.credentials)
+      if (!(claims['group'] ||[]).includes('ADMIN')) {
         return Boom.unauthorized('Only Admin Can Sync ES !');
       }
 
