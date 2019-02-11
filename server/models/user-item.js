@@ -5,7 +5,7 @@ const Joi = require('joi');
 const ESMongoModels = require('./es-mongo-model');
 const esSchema = require('../elasticsearch/mapping/user-item').userItem
 const userStatisticsService = require('../services/user-statistics.service');
-let keyRemoveDeckArray = ['tags']
+let keyRemoveDeckArray = ['topics', 'tags']
 let keyRemoveSongArray = ['listLyric', 'cards']
 let keyRemoveArticleArray = ['content', 'checkForUnderstandingQuestions', 'discussionQuestions', 'textDependentQuestions', 'reference']
 let keyRemoveArray = keyRemoveDeckArray.concat(keyRemoveSongArray, keyRemoveArticleArray);
@@ -22,6 +22,9 @@ class UserItem extends ESMongoModels {
       throw Error(`Cannot find ${indexData.itemType} ${indexData.itemId} `)
     }
     indexData['name'] = indexData['itemInfo']['name']
+    if(indexData['itemInfo']['topics']){
+      indexData['itemInfo']['totalTopic'] = indexData['itemInfo']['topics'].length()
+    }
     keyRemoveArray.forEach(e => delete indexData['itemInfo'][e]);
 
     await super.upsertES(_id, indexData)
