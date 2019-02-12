@@ -23,7 +23,7 @@ class UserItem extends ESMongoModels {
     }
     indexData['name'] = indexData['itemInfo']['name']
     if(indexData['itemInfo']['topics']){
-      indexData['itemInfo']['totalTopic'] = indexData['itemInfo']['topics'].length()
+      indexData['itemInfo']['totalTopic'] = indexData['itemInfo']['topics'].length
     }
     keyRemoveArray.forEach(e => delete indexData['itemInfo'][e]);
 

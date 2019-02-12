@@ -3,6 +3,7 @@
 const Boom = require('boom');
 const internals = {};
 let get = require("lodash.get");
+const getClaims =require('../graphql/permission').getClaims
 
 internals.applyRoutes = function (server, next) {
   const ItemService = server.plugins['item-service'];
@@ -20,8 +21,9 @@ internals.applyRoutes = function (server, next) {
     },
     handler: async (request) => {
 
-      if (!(get(request, 'auth.credentials.claims.groups', [])).includes('ADMIN')) {
-        return Boom.unauthorized('Only Admin Can Upload Image!');
+      let claims = getClaims(request.auth.credentials)
+      if (!(claims['group'] ||[]).includes('ADMIN')) {
+        return Boom.unauthorized('nly Admin Can Upload Image! !');
       }
 
       try {
@@ -45,10 +47,10 @@ internals.applyRoutes = function (server, next) {
     },
     handler: async (request) => {
 
-      if (!(get(request, 'auth.credentials.claims.groups', [])).includes('ADMIN')) {
-        return Boom.unauthorized('Only Admin Can Crop Image!');
+      let claims = getClaims(request.auth.credentials)
+      if (!(claims['group'] ||[]).includes('ADMIN')) {
+        return Boom.unauthorized('nly Admin Can Crop Image! !');
       }
-
       try {
         return await ItemService.batchCropImage(request.payload);
       } catch (err) {
