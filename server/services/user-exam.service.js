@@ -63,6 +63,8 @@ internals.getLeaderBoard = async (type = 'allTime', limit = 30, userId) => {
     case 'allTime':
       leaderTable = 'all_time_leader_board'
       break;
+    default:
+      throw Error('Invalid leader board type')
   }
 
   const query = `
@@ -143,6 +145,7 @@ async function updateDataWhenCompletingUserExam(userExam) {
     userId: userExam.userId,
     itemType: 'deck'
   })
+
   userDeckData = userDeckData[0]
   if (!userDeckData) {
     userDeckData = await UserItemService.addOneUserItem({
