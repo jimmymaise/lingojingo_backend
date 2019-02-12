@@ -2,16 +2,19 @@ const {rule, shield, and, or, not} = require('graphql-shield')
 
 const isAdmin = rule()(async (parent, args, ctx, info) => {
   let credentials = ctx.request.auth.credentials
-  let claims = getClaims(credentials)
+  let claims = await getClaims(credentials)
   return (claims.groups || []).includes('ADMIN')
 })
-const getClaims = async function (credentials) {
+
+async function getClaims(credentials) {
   let claims = credentials.claims
   if (!(claims && claims.groups.length)) {
     let setClaimToFireBase = require('../utils/general').setClaimToFireBase
     return await setClaimToFireBase(credentials.user_id)
   }
+  return claims
 }
+
 const permissions = shield({
   Mutation: {
     createOneCard: isAdmin,

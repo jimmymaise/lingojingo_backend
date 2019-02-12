@@ -20,7 +20,7 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/syncES/{p*}',
     config: {
-      auth: envAuth
+      auth: 'firebase'
     },
     handler: async function (request) {
       const Deck = require('../models/deck');
@@ -29,8 +29,8 @@ internals.applyRoutes = function (server) {
       const Article = require('../models/article');
       const UserItem = require('../models/user-item');
       const getClaims =require('../graphql/permission').getClaims
-      let claims = getClaims(request.auth.credentials)
-      if (!(claims['group'] ||[]).includes('ADMIN')) {
+      let claims = await getClaims(request.auth.credentials)
+      if (!(claims['groups'] ||[]).includes('ADMIN')) {
         return Boom.unauthorized('Only Admin Can Sync ES !');
       }
 

@@ -21,8 +21,8 @@ internals.applyRoutes = function (server, next) {
     },
     handler: async (request) => {
 
-      let claims = getClaims(request.auth.credentials)
-      if (!(claims['group'] ||[]).includes('ADMIN')) {
+      let claims = await getClaims(request.auth.credentials)
+      if (!(claims['groups'] ||[]).includes('ADMIN')) {
         return Boom.unauthorized('nly Admin Can Upload Image! !');
       }
 
@@ -47,8 +47,8 @@ internals.applyRoutes = function (server, next) {
     },
     handler: async (request) => {
 
-      let claims = getClaims(request.auth.credentials)
-      if (!(claims['group'] ||[]).includes('ADMIN')) {
+      let claims = await getClaims(request.auth.credentials)
+      if (!(claims['groups'] ||[]).includes('ADMIN')) {
         return Boom.unauthorized('nly Admin Can Crop Image! !');
       }
       try {
