@@ -1,5 +1,6 @@
 'use strict';
 
+
 const composer = require('./index');
 const XTAG_TIME = require('./server/utils/constants').XTAG_TIME
 const _ = require('lodash')
@@ -16,6 +17,11 @@ const logger = require('./server/utils/logger.js').logger
 const typeDefs = require('./server/graphql/schema.js').typeDefs
 const resolvers = require('./server/graphql/schema.js').resolvers
 const permissions = require('./server/graphql/permission.js').permissions
+
+const socketIOApp = require('http').createServer(handler)
+const io = require('socket.io')(socketIOApp);
+const fs = require('fs');
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -121,3 +127,8 @@ const StartServer = async () => {
 };
 
 StartServer().catch(error => console.log(error));
+
+
+module.exports = {
+  firebaseAdmin
+}

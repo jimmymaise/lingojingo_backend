@@ -13,6 +13,7 @@ const EXAM = require('../utils/constants').EXAM;
 const UserTopicService = require('../services/user-topic.service');
 const UserItemService = require('../services/user-item.service');
 const bigqueryHandler = require('../intergration/bigquery/handler')
+const sendMessageToTopic = require('../cloud_messages/handlers').sendMessageToTopic
 let datasetId = 'user'
 let tableId = 'exam'
 
@@ -105,6 +106,7 @@ internals.addOneUserExam = async (userExam) => {
 
   let result = await UserExam.insertOne(userExam);
   await updateDataWhenCompletingUserExam(userExam)
+  sendMessageWhenCompetingExam(userExam)
   delete userExam['knownAnswer']
   userExam['_id'] = userExam['_id'].toString()
   await bigqueryHandler.insertRowsAsStream(datasetId, tableId, [userExam])
@@ -136,6 +138,9 @@ internals.updateOneUserExam = async (args) => {
 
 }
 
+function sendMessageWhenCompetingExam(data) {
+  sendMessageToTopic(data, 'a_user_complete_exam')
+}
 
 async function updateDataWhenCompletingUserExam(userExam) {
 
@@ -145,7 +150,6 @@ async function updateDataWhenCompletingUserExam(userExam) {
     userId: userExam.userId,
     itemType: 'deck'
   })
-
   userDeckData = userDeckData[0]
   if (!userDeckData) {
     userDeckData = await UserItemService.addOneUserItem({
@@ -195,6 +199,9 @@ async function updateDataWhenCompletingUserExam(userExam) {
       deckStat: userDeckData['deckStat']
     }
   })
+
+
+
 
 
 // //  Update user info
