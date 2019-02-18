@@ -18,10 +18,6 @@ const typeDefs = require('./server/graphql/schema.js').typeDefs
 const resolvers = require('./server/graphql/schema.js').resolvers
 const permissions = require('./server/graphql/permission.js').permissions
 
-const socketIOApp = require('http').createServer(handler)
-const io = require('socket.io')(socketIOApp);
-const fs = require('fs');
-
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
