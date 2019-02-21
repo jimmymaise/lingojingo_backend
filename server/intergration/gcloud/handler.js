@@ -168,6 +168,11 @@ cropImageFromFolder = async (path_folder, dest_folder) => {
   for (let i = 0; i < files.length; i++) {
 
     let dest = dest_folder + '/' + files[i]['name']
+    let file = bucket.file(dest);
+    let isFileExist = (await file.exists())[0]
+    if(isFileExist){
+      continue
+    }
     try {
       let imagePath = await cropImage(files[i]['name'], dest)
       console.log(imagePath)
@@ -181,7 +186,7 @@ cropImageFromFolder = async (path_folder, dest_folder) => {
 
 }
 
-
+cropImageFromFolder('images','xxx_images')
 module.exports.uploadFile = uploadFile;
 module.exports.saveToStorage = saveToStorage;
 module.exports.cropImage = cropImage;
