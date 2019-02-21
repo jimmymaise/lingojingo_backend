@@ -4,6 +4,7 @@ const FIRE_BASE_CONFIG = require('../../data/firebase_config')
 const KEY_FILE = FIRE_BASE_CONFIG.service[process.env.NODE_ENV]
 const CACHE_CONTROL = require('../../utils/constants').CACHE_CONTROL
 const {Storage} = require('@google-cloud/storage');
+const logger = require('../../utils/logger.js').logger
 
 const PROJECT_ID = KEY_FILE.project_id;
 
@@ -27,9 +28,15 @@ var _inArray = function (needle, haystack) {
 function cropImage(path, dest) {
   const gcsSrcObject = bucket.file(path);
   const gcsDstObject = bucket.file(dest);
+  if (path.split('.').pop() === 'gif') {
+    console.log("Image crop should not be gif")
+    logger.error("Image crop should not be gif")
+    return
+
+  }
 
   let contentType = dest.endsWith('.png') ? 'image/png' : 'image/jpeg'
-  let srcStream = gcsSrcObject.createReadStream({validation:false});
+  let srcStream = gcsSrcObject.createReadStream({validation: false});
   let dstStream = gcsDstObject.createWriteStream({
     // Tweak the config options as desired.
     gzip: true,
@@ -38,8 +45,16 @@ function cropImage(path, dest) {
       contentType: contentType
     }
   });
+  let crop
 
-  let crop = imageMagick().crop("0x0+0+72");
+  crop = imageMagick().crop("0x0+0+72");
+  crop.on('error', function (e) {
+    console.log(path + "//" + e)
+    logger.error("Cannot crop image "+path + "//" + e)
+    return
+
+  })
+
 
   console.log("Pipe");
   srcStream.pipe(crop).pipe(dstStream);
@@ -143,7 +158,33 @@ async function uploadFile(files, path) {
 
 }
 
+cropImageFromFolder = async (path_folder, dest_folder) => {
+
+
+  const options = {
+    prefix: path_folder,
+  };
+  const [files] = await bucket.getFiles(options);
+  for (let i = 0; i < files.length; i++) {
+
+    let dest = dest_folder + '/' + files[i]['name']
+    try {
+      let imagePath = await cropImage(files[i]['name'], dest)
+      console.log(imagePath)
+
+    } catch (e) {
+      console.log(files[i]['name'] + ":" + e.toString())
+    }
+
+
+  }
+
+}
+
+
 module.exports.uploadFile = uploadFile;
 module.exports.saveToStorage = saveToStorage;
 module.exports.cropImage = cropImage;
+module.exports.cropImageFromFolder = cropImageFromFolder;
+
 

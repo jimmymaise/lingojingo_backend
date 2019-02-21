@@ -79,6 +79,26 @@ internals.applyRoutes = function (server, next) {
   });
 
   server.route({
+    method: 'POST',
+    path: '/images/multi-crop',
+    config: {
+      auth: 'firebase',
+      description: 'crop folder images to xxx_images',
+      notes: 'crop folder images to xxx_images',
+      tags: ['api'],
+    },
+    handler: async (request) => {
+
+      try {
+        return await ItemService.cropAllFolder();
+      } catch (err) {
+        return Boom.internal(err);
+      }
+    }
+  });
+
+
+  server.route({
     method: 'PUT',
     path: '/{itemType}/{itemId}/topic/{topicId}/study',
     config: {
