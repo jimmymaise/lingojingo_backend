@@ -6,6 +6,11 @@ const CardService = require('../services/card.service');
 
 const internals = {};
 
+
+internals.cropAllFolder = async () => {
+  await gcloudHandler.cropImageFromFolder('images', 'xxx_images')
+}
+
 internals.batchUpdateImage = async (updateArr) => {
   let data = []
   for (let i = 0; i < updateArr.length; i++) {
@@ -49,7 +54,7 @@ internals.batchCropImage = async (updateArr) => {
         path = cardData['img'][0]
       }
       let fileName = path.substring(path.lastIndexOf('/') + 1).replace(/((\?|#).*)?$/, '');
-      fileName = fileName.replace(/^\d+_/,'')
+      fileName = fileName.replace(/^\d+_/, '')
 
       let dest = 'cr_images/' + Math.floor(Date.now() / 1000) + '_' + fileName
       let imagePath = await gcloudHandler.cropImage(updateArr[i].path, dest)
@@ -76,6 +81,7 @@ exports.register = function (server, options) {
   server.expose('uploadFile', internals.uploadFile);
   server.expose('batchUpdateImage', internals.batchUpdateImage);
   server.expose('batchCropImage', internals.batchCropImage);
+  server.expose('cropAllFolder', internals.cropAllFolder);
 
 
   return;
@@ -83,6 +89,7 @@ exports.register = function (server, options) {
 
 exports.uploadFile = internals.uploadFile;
 exports.batchUpdateImage = internals.batchUpdateImage;
+exports.cropAllFolder = internals.cropAllFolder;
 
 
 exports.name = 'item-service';
