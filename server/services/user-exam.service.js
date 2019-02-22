@@ -1,19 +1,12 @@
 'use strict';
 const _ = require('lodash');
-const Constant = require('../utils/constants')
-const UserInfo = require('../models/user-info');
 const UserExam = require('../models/user-exam');
-const UserTopic = require('../models/user-topic');
 const UserItem = require('../models/user-item');
 const Deck = require('../models/deck');
-const LeaderBoardService = require('../services/leader-board.service')
-const RewardService = require('../services/reward.service')
 const utils = require('../utils/general');
 const EXAM = require('../utils/constants').EXAM;
-const UserTopicService = require('../services/user-topic.service');
 const UserItemService = require('../services/user-item.service');
 const bigqueryHandler = require('../intergration/bigquery/handler')
-const sendMessageToTopic = require('../cloud_messages/handlers').sendMessageToTopic
 let datasetId = 'user'
 let tableId = 'exam'
 
@@ -106,7 +99,6 @@ internals.addOneUserExam = async (userExam) => {
 
   let result = await UserExam.insertOne(userExam);
   await updateDataWhenCompletingUserExam(userExam)
-  sendMessageWhenCompetingExam(userExam)
   delete userExam['knownAnswer']
   userExam['_id'] = userExam['_id'].toString()
   await bigqueryHandler.insertRowsAsStream(datasetId, tableId, [userExam])
@@ -138,9 +130,6 @@ internals.updateOneUserExam = async (args) => {
 
 }
 
-function sendMessageWhenCompetingExam(data) {
-  sendMessageToTopic(data, 'a_user_complete_exam')
-}
 
 async function updateDataWhenCompletingUserExam(userExam) {
 

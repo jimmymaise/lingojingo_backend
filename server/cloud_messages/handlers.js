@@ -1,4 +1,5 @@
-let admin = require('../../server').firebaseAdmin
+let admin = require('../utils/fb');
+
 
 function sendMessageToTopic(data, topic) {
 
@@ -13,9 +14,11 @@ function sendMessageToTopic(data, topic) {
     .then((response) => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
+      return response
     })
     .catch((error) => {
       console.log('Error sending message:', error);
+      return error
     });
 
 }

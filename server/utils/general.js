@@ -1,8 +1,35 @@
 const Constant = require('../utils/constants');
+const logger = require('../utils/logger.js').logger
 
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
+
+function checkSecurty(request) {
+  if (request.headers['debug'] === 'vomemo@Admin#') {
+    return request
+  }
+  let xTag = request.headers['x-tag'] ? parseInt(request.headers['x-tag'], 10) : 0
+  let beTimeStamp = Math.floor(Date.now() / 1000)
+  let feTimeStamp = 0
+
+  let diff
+  if (xTag) {
+    feTimeStamp = ((xTag + 12345) / 2018) + 98765
+    diff = Math.abs(beTimeStamp - feTimeStamp)
+    if (diff < Constant.XTAG_TIME) {
+      return request
+    }
+  }
+  logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
+    'diff': diff,
+    'x-tag': xTag
+  }))
+  throw Error(`Error code 911: Some issue happens`)
+
+
+}
+
 
 async function setClaimToFireBase(user_id) {
   let admin = require('firebase-admin');
@@ -65,3 +92,4 @@ function correctAnswerToLevel(correctAnswer) {
 module.exports.onlyUnique = onlyUnique;
 module.exports.setClaimToFireBase = setClaimToFireBase
 module.exports.correctAnswerToLevel = correctAnswerToLevel;
+module.exports.checkSecurty = checkSecurty;

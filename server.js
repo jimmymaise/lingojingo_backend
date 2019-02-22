@@ -2,13 +2,12 @@
 
 
 const composer = require('./index');
-const XTAG_TIME = require('./server/utils/constants').XTAG_TIME
+let checkSecurty = require('./server/utils/general').checkSecurty
 const _ = require('lodash')
 const Config = require('./config');
 const {ApolloServer, makeExecutableSchema, gql} = require('apollo-server-hapi');
-const FIRE_BASE_CONFIG = require('./server/data/firebase_config')
-const firebaseAdmin = require('firebase-admin');
-const serviceAccount = FIRE_BASE_CONFIG.service[process.env.NODE_ENV];
+const firebaseAdmin = require('./server/utils/fb');
+
 const applyMiddleware = require("graphql-middleware").applyMiddleware;
 const GraphQLExtension = require('graphql-extensions').GraphQLExtension
 
@@ -41,35 +40,8 @@ class MyErrorTrackingExtension extends GraphQLExtension {
 
 }
 
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: FIRE_BASE_CONFIG.databaseURL[process.env.NODE_ENV]
-});
-
-function checkSecurty(request) {
-  if (request.headers['debug'] === 'vomemo@Admin#') {
-    return request
-  }
-  let xTag = request.headers['x-tag'] ? parseInt(request.headers['x-tag'], 10) : 0
-  let beTimeStamp = Math.floor(Date.now() / 1000)
-  let feTimeStamp = 0
-
-  let diff
-  if (xTag) {
-    feTimeStamp = ((xTag + 12345) / 2018) + 98765
-    diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < XTAG_TIME) {
-      return request
-    }
-  }
-  logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
-    'diff': diff,
-    'x-tag': xTag
-  }))
-  throw Error(`Error code 911: Some issue happens`)
 
 
-}
 
 const StartServer = async () => {
   try {
