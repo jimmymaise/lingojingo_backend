@@ -17,7 +17,7 @@ function checkSecurty(request) {
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
     diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < (process.env.XTAG_TIME || Constant.XTAG_TIME_DEFAULT)) {
+    if (diff < parseInt(process.env.XTAG_TIME || Constant.XTAG_TIME_DEFAULT)) {
       return request
     }
   }
