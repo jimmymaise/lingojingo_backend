@@ -1,5 +1,6 @@
 CACHE_CONTROL = 'public, max-age=30672000'
-XTAG_TIME=10
+XTAG_TIME_DEFAULT = 10
+BY_PASS_KEY = 'vomemo@Admin#'
 EXAM = {
   TYPE: {
     TOPIC: 'TopicExam',
@@ -47,10 +48,15 @@ REWARD_TYPE_NAME = {
 
 
 }
-module.exports.EXAM = EXAM;
-module.exports.TOPIC = TOPIC;
-module.exports.LEVEL_SCORE = LEVEL_SCORE;
-module.exports.LEVEL_NAME = LEVEL_NAME;
-module.exports.REWARD_TYPE_NAME = REWARD_TYPE_NAME;
-module.exports.CACHE_CONTROL = CACHE_CONTROL;
-module.exports.XTAG_TIME = XTAG_TIME;
+
+
+module.exports = {
+  EXAM,
+  TOPIC,
+  LEVEL_SCORE,
+  LEVEL_NAME,
+  REWARD_TYPE_NAME,
+  CACHE_CONTROL,
+  XTAG_TIME_DEFAULT,
+  BY_PASS_KEY
+}

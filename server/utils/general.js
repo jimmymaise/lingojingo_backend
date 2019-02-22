@@ -6,7 +6,7 @@ function onlyUnique(value, index, self) {
 }
 
 function checkSecurty(request) {
-  if (request.headers['debug'] === 'vomemo@Admin#') {
+  if (request.headers['debug'] === Constant.BY_PASS_KEY) {
     return request
   }
   let xTag = request.headers['x-tag'] ? parseInt(request.headers['x-tag'], 10) : 0
@@ -17,7 +17,7 @@ function checkSecurty(request) {
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
     diff = Math.abs(beTimeStamp - feTimeStamp)
-    if (diff < Constant.XTAG_TIME) {
+    if (diff < parseInt(process.env.XTAG_TIME || Constant.XTAG_TIME_DEFAULT)) {
       return request
     }
   }
