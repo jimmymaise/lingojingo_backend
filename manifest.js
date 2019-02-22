@@ -135,6 +135,9 @@ const manifest = {
       },
       {
         plugin: './server/api/user-activity'
+      },
+      {
+        plugin: './server/api/cloud-message'
       }
     ]
   }
