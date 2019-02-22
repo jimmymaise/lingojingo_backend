@@ -186,7 +186,6 @@ cropImageFromFolder = async (path_folder, dest_folder) => {
 
 }
 
-cropImageFromFolder('images','xxx_images')
 module.exports.uploadFile = uploadFile;
 module.exports.saveToStorage = saveToStorage;
 module.exports.cropImage = cropImage;
