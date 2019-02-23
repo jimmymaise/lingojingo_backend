@@ -20,7 +20,7 @@
     "elasticsearch": "^15.1.1",
     "firebase-admin": "^5.1.0",
     "glue": "^5.0.0",
-    "graphql": "^0.13.2",
+    "graphql": "^14.1.1",
     "graphql-middleware": "^3.0.0",
     "graphql-shield": "^5.1.0",
     "graphql-tools": "^3.1.1",
