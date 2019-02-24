@@ -30,7 +30,7 @@ Deck.esSchema = esSchema;
 Deck.schema = Joi.object().keys({
   _id: Joi.object(),
   name: Joi.string().required(),
-  description: Joi.string(),
+  description: [Joi.string().optional(), Joi.allow(null)],
   mainLevel: Joi.number(),
   subLevel: Joi.number(),
   total: Joi.number(),
