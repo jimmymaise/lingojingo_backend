@@ -12,7 +12,7 @@ Topic.esSchema = esSchema;
 
 Topic.schema = Joi.object().keys({
   _id: Joi.object(),
-  description: Joi.string(),
+  description: [Joi.string().optional(), Joi.allow(null)],
   topic: Joi.string().required(),
   img: [Joi.string().optional(), Joi.allow(null)],
   deck: Joi.string(),
