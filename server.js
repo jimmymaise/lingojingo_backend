@@ -2,46 +2,13 @@
 
 
 const composer = require('./index');
-let checkSecurty = require('./server/utils/general').checkSecurty
+const checkSecurty = require('./server/utils/general').checkSecurty
 const _ = require('lodash')
 const Config = require('./config');
-const {ApolloServer, makeExecutableSchema, gql} = require('apollo-server-hapi');
+const {ApolloServer} = require('apollo-server-hapi');
 const firebaseAdmin = require('./server/utils/fb');
-
-const applyMiddleware = require("graphql-middleware").applyMiddleware;
-const GraphQLExtension = require('graphql-extensions').GraphQLExtension
-
 const logger = require('./server/utils/logger.js').logger
-
-const typeDefs = require('./server/graphql/schema.js').typeDefs
-const resolvers = require('./server/graphql/schema.js').resolvers
-const permissions = require('./server/graphql/permission.js').permissions
-
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
-});
-
-
-const schemaWithMiddleware = applyMiddleware(
-  schema,
-  permissions
-)
-
-
-class MyErrorTrackingExtension extends GraphQLExtension {
-  willSendResponse(o) {
-    const {context, graphqlResponse} = o
-
-    context.trackErrors(graphqlResponse.errors)
-
-    return o
-  }
-
-}
-
-
-
+const {schemaWithMiddleware,MyErrorTrackingExtension} = require('./server/graphql/core')
 
 const StartServer = async () => {
   try {
@@ -96,7 +63,3 @@ const StartServer = async () => {
 
 StartServer().catch(error => console.log(error));
 
-
-module.exports = {
-  firebaseAdmin
-}
