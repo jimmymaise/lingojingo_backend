@@ -67,6 +67,12 @@ internals.applyRoutes = function (server, next) {
         let setClaimToFireBase = require('../utils/general').setClaimToFireBase
         await setClaimToFireBase(request.auth.credentials.user_id)
         const result = await UserInfoService.getOneForClient(request);
+
+        if (result.avatarUrl && result.avatarUrl.indexOf('facebook') >= 0
+          && result.avatarUrl.indexOf('type=large') < 0) {
+            result.avatarUrl += '?type=large';
+        }
+
         return result;
       } catch (err) {
         return Boom.internal('Get user info error', err);
