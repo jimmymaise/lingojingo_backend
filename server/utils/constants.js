@@ -1,6 +1,6 @@
 CACHE_CONTROL = 'public, max-age=30672000'
 XTAG_TIME_DEFAULT = 10
-BY_PASS_KEY = 'vomemo@Admin#'
+BY_PASS_KEY = 'jingo@Admin#'
 EXAM = {
   TYPE: {
     TOPIC: 'TopicExam',

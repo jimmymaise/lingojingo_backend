@@ -3,7 +3,7 @@
 const internals = {};
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 const Wreck = require('wreck');
-let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.vomemo.com/proxyES`
+let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.lingojingo.com/proxyES`
 let get = require("lodash.get");
 const Boom = require('boom');
 
@@ -12,7 +12,7 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/',
     handler: function (request) {
-      return {message: 'Welcome to Vomemo.'};
+      return {message: 'Welcome to LingoJingo.'};
     }
   });
 
