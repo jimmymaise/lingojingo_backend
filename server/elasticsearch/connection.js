@@ -9,7 +9,7 @@ let host = process.env.ES_HOST
 let es = new elasticsearch.Client({host: {host, port}})
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
-  host = 'https://stag-api.vomemo.com/proxyES'
+  host = 'https://stag-api.lingojingo.com/proxyES'
   es = new elasticsearch.Client({host: 'http://localhost:3200/proxyES'})
 
 }
