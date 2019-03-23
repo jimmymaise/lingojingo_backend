@@ -7,6 +7,7 @@ let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `htt
 let get = require("lodash.get");
 const Boom = require('boom');
 
+
 internals.applyRoutes = function (server) {
   server.route({
     method: 'GET',
@@ -54,6 +55,8 @@ internals.applyRoutes = function (server) {
         if (request.params.p === 'grammar-unit' || request.params.p === 'all') {
           return await GrammarUnit.syncDataES({}, true)
         }
+        return Boom.badData('Invalid type !');
+
       } catch (e) {
         return {e}
 
