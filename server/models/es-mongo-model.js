@@ -42,7 +42,13 @@ class ESMongoModels extends MongoModels {
   static async upsertES(_id, indexData) {
     await es.initIndex(this.collectionName, this.esSchema)
     if (!indexData) {
-      indexData = await this.findById(_id)
+      if (typeof (_id) !== 'number'){
+        indexData = await this.findById({id:_id})
+      }
+      else {
+        indexData = await this.findOne({id:_id})
+
+      }
     }
     delete indexData['_id'];
     let data
