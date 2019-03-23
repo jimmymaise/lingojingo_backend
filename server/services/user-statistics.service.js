@@ -2,7 +2,6 @@
 const _ = require('lodash');
 const internals = {};
 
-const UserTopic = require('../models/user-topic');
 const Deck = require('../models/deck');
 
 

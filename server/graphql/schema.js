@@ -8,9 +8,13 @@ const deckSchema = require('./deck-schema');
 const songSchema = require('./song-schema');
 const articleSchema = require('./article-schema');
 
+const grammarExerciseSchema = require('./grammar-exercise-schema');
+const grammarGroupSchema = require('./grammar-group-schema');
+const grammarSectionSchema = require('./grammar-section-schema');
+const grammarUnitSchema = require('./grammar-unit-schema');
+
 
 const topicSchema = require('./topic-schema');
-const userTopicSchema = require('./user-topic-schema');
 const examSchema = require('./user-exam-schema');
 const userItem = require('./user-item-schema');
 
@@ -101,9 +105,17 @@ const externalType = `
 `
 
 const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDefs, topicSchema.typeDefs,
-  userTopicSchema.typeDefs, examSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs, songSchema.typeDefs, articleSchema.typeDefs, userItem.typeDefs];
+  grammarExerciseSchema.typeDefs,
+  grammarGroupSchema.typeDefs,
+  grammarSectionSchema.typeDefs,
+  grammarUnitSchema.typeDefs
+  , examSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs, songSchema.typeDefs, articleSchema.typeDefs, userItem.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
-  userTopicSchema.resolvers, examSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers, songSchema.resolvers, articleSchema.resolvers, userItem.resolvers);
+  grammarExerciseSchema.resolvers,
+  grammarGroupSchema.resolvers,
+  grammarSectionSchema.resolvers,
+  grammarUnitSchema.resolvers
+  , examSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers, songSchema.resolvers, articleSchema.resolvers, userItem.resolvers);
 
 module.exports = {
   typeDefs,

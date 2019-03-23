@@ -12,7 +12,6 @@ const UserInfo = require('../models/user-info');
 
 const Article = require('../models/article');
 // const ArticleCategory = require('../models/article-category');
-const UserTopic = require('../models/user-topic');
 // Article.syncDataES()
 // UserTopic.syncDataES()
 

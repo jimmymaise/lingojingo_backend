@@ -8,7 +8,7 @@ const criteria = {
 
 const config = {
   $meta: 'This file configures the plot device.',
-  projectName: 'Vomemo - Vocabulary Memory',
+  projectName: 'LingoJingo - Vocabulary Memory',
   port: {
     web: {
       $filter: 'env',
