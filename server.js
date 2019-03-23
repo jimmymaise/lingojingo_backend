@@ -53,6 +53,9 @@ const StartServer = async () => {
 
     console.log(`${Config.get('/projectName')}`);
     console.log(`Server running at: ${server.graphqlPath}`);
+    // const GrammarUnit = require('./server/models/grammar-unit');
+    //
+    // GrammarUnit.syncDataES({}, true)
 
 
   } catch (err) {

@@ -9,7 +9,7 @@ const esSchema = require('../elasticsearch/mapping/grammar-unit').grammarUnit
 class GrammarUnit extends ESMongoModels {
 
   static async upsertES(_id) {
-    let indexData = await this.findById(_id)
+    let indexData = await this.findOne({_id:_id})
     //Add more fields from other table
     //Remove some fields not need to put ES
     let grammarGroupInfo = await GrammarGroup.findOne({_id: indexData.groupId});
