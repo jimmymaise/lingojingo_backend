@@ -24,8 +24,15 @@ grammarUnit = {
           "null_value": "NULL"
         },
         "groupInfo": {
-          "type": "keyword",
-          "null_value": "NULL"
+          "properties": {
+            "name": {
+              "type": "keyword",
+            },
+            "_id": {
+              "type": "keyword",
+            }
+
+          }
         },
         "section": {
           "type": "keyword",
