@@ -9,6 +9,7 @@ const typeDefs = `
     name: String,
     img: String,
     sections: [String],
+    groupId: Int,
     type: String,
     order: Int,
     sectionDetails: [GrammarSection],

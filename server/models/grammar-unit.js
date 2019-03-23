@@ -12,7 +12,7 @@ class GrammarUnit extends ESMongoModels {
     let indexData = await this.findById(_id)
     //Add more fields from other table
     //Remove some fields not need to put ES
-    let grammarGroupInfo = await GrammarGroup.findOne({_id: indexData.group});
+    let grammarGroupInfo = await GrammarGroup.findOne({_id: indexData.groupId});
     indexData['groupInfo'] = {
       name: grammarGroupInfo['name'],
       _id: grammarGroupInfo['_id'],
@@ -31,7 +31,7 @@ GrammarUnit.schema = Joi.object().keys({
   _id: Joi.number(),
   name: [Joi.string().optional(), Joi.allow(null)],
   img: [Joi.string().optional(), Joi.allow(null)],
-  group: Joi.string(),
+  groupId: Joi.string(),
   order: Joi.number(),
   sections: Joi.array(),
   type: Joi.number(),

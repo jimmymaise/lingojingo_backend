@@ -19,7 +19,11 @@ grammarUnit = {
           "type": "keyword",
           "null_value": "NULL"
         },
-        "group": {
+        "groupId": {
+          "type": "keyword",
+          "null_value": "NULL"
+        },
+        "groupInfo": {
           "type": "keyword",
           "null_value": "NULL"
         },

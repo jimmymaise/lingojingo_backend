@@ -9,10 +9,11 @@ class GrammarSection extends MongoModels {
 GrammarSection.collectionName = 'grammar-sections';
 
 GrammarSection.schema = Joi.object().keys({
-  _id: Joi.object(),
+  _id: Joi.number(),
   description: [Joi.string().optional(), Joi.allow(null)],
   heading: [Joi.string().optional(), Joi.allow(null)],
   exercises: [Joi.array().optional(), Joi.allow(null)],
+  references: [Joi.array().optional(), Joi.allow(null)],
 
 
 }).options({stripUnknown: true});
