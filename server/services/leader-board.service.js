@@ -1,7 +1,6 @@
 'use strict';
 const _ = require('lodash');
 const internals = {};
-const UserTopic = require('../models/user-topic');
 
 //UserPoint
 

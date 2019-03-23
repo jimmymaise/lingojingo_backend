@@ -24,10 +24,11 @@ internals.applyRoutes = function (server) {
     },
     handler: async function (request) {
       const Deck = require('../models/deck');
-      const UserTopic = require('../models/user-topic');
       const Song = require('../models/song');
       const Article = require('../models/article');
       const UserItem = require('../models/user-item');
+      const GrammarUnit = require('../models/grammar-unit');
+
       const getClaims =require('../graphql/permission').getClaims
       let claims = await getClaims(request.auth.credentials)
       if (!(claims['groups'] ||[]).includes('ADMIN')) {
@@ -49,6 +50,9 @@ internals.applyRoutes = function (server) {
         }
         if (request.params.p === 'user-topic' || request.params.p === 'all') {
           return await UserTopic.syncDataES({}, true)
+        }
+        if (request.params.p === 'grammar-unit' || request.params.p === 'all') {
+          return await GrammarUnit.syncDataES({}, true)
         }
       } catch (e) {
         return {e}

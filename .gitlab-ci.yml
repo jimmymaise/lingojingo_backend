@@ -22,7 +22,7 @@ deploy_staging:
     - runner2
   environment:
     name: staging
-    url: https://stag.vomemo.com
+    url: https://stag.lingojingo.com
   only:
     - master
   before_script:
@@ -39,7 +39,7 @@ deploy_production:
     - runner1
   environment:
     name: production
-    url: https://app.vomemo.com
+    url: https://app.lingojingo.com
   variables:
     NODE_ENV: $PROD_ENV
     MONGO_PROD_URL: $MONGO_PROD_URL

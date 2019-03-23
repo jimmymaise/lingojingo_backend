@@ -11,7 +11,6 @@ const UserInfo = require('../models/user-info');
 
 const Song = require('../models/song');
 // const SongCategory = require('../models/song-category');
-const UserTopic = require('../models/user-topic');
 // Song.syncDataES()
 // UserTopic.syncDataES()
 
