@@ -10,11 +10,13 @@ const internals = {};
 //Query
 internals.getOneGrammarGroup = async (id) => {
 
-  return await GrammarGroup.findById(id);
+  return await GrammarGroup.findOne({_id: id});
 }
 internals.getListUnitDetail = async (firebaseUId, unitIds) => {
-  const ids = unitIds.map((id) => ObjectID(id));
-  return await GrammarUnit.find({_id: {$in: ids}});
+  // const ids = unitIds.map((id) => ObjectID(id));
+  // return await GrammarUnit.find({_id: {$in: ids}});
+  return  await GrammarUnit.find({_id: {$in: unitIds}});
+
 }
 
 

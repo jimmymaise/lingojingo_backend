@@ -24,17 +24,17 @@ class GrammarUnit extends ESMongoModels {
 }
 
 
-GrammarUnit.collectionName = 'grammar-units';
+GrammarUnit.collectionName = 'grammar_units';
 GrammarUnit.esSchema = esSchema;
 
 GrammarUnit.schema = Joi.object().keys({
   _id: Joi.number(),
   name: [Joi.string().optional(), Joi.allow(null)],
   img: [Joi.string().optional(), Joi.allow(null)],
-  groupId: Joi.string(),
+  groupId: Joi.number(),
   order: Joi.number(),
   sections: Joi.array(),
-  type: Joi.number(),
+  type: [Joi.string().optional(), Joi.allow(null)],
 }).options({stripUnknown: true});
 
 GrammarUnit.indexes = [];

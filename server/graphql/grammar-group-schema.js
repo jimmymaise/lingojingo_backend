@@ -3,9 +3,9 @@ const GrammarGroupService = require('../services/grammar-group.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  extend type Query { grammarGroup(id: ID!): GrammarGroup }
+  extend type Query { grammarGroup(id: Int!): GrammarGroup }
   type GrammarGroup {
-    _id: String,
+    _id: Int,
     name: String,
     img: String,
     order: Int,

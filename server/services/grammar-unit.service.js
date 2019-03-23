@@ -50,8 +50,7 @@ internals.searchGrammarUnit = async (args) => {
 
 // TODO: please protect user don't have permission in this grammarUnit
 internals.getListSectionDetail = async (firebaseUId, sectionIds) => {
-  const ids = sectionIds.map((id) => ObjectID(id));
-  return await GrammarSection.find({_id: {$in: ids}});
+  return await GrammarSection.find({_id: {$in: sectionIds}});
 }
 
 

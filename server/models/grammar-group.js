@@ -6,7 +6,7 @@ const MongoModels = require('mongo-models');
 class GrammarGroup extends MongoModels {
 };
 
-GrammarGroup.collectionName = 'grammar-groups';
+GrammarGroup.collectionName = 'grammar_groups';
 
 GrammarGroup.schema = Joi.object().keys({
   _id: Joi.number(),

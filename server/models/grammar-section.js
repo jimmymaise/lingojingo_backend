@@ -6,7 +6,7 @@ const MongoModels = require('mongo-models');
 class GrammarSection extends MongoModels {
 };
 
-GrammarSection.collectionName = 'grammar-sections';
+GrammarSection.collectionName = 'grammar_sections';
 
 GrammarSection.schema = Joi.object().keys({
   _id: Joi.number(),

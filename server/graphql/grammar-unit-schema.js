@@ -3,7 +3,7 @@ const grammarUnitService = require('../services/grammar-unit.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  extend type Query { grammarUnit(id: ID!): GrammarUnit }
+  extend type Query { grammarUnit(id: Int!): GrammarUnit }
   type GrammarUnit {
     _id: String,
     name: String,

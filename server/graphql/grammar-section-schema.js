@@ -3,7 +3,7 @@ const grammarSectionService = require('../services/grammar-section.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  extend type Query { grammarSection(id: ID!): GrammarSection }
+  extend type Query { grammarSection(id: Int!): GrammarSection }
   type GrammarSection {
     _id: Int,
     name: String,

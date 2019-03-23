@@ -6,7 +6,7 @@ const MongoModels = require('mongo-models');
 class GrammarExercise extends MongoModels {
 };
 
-GrammarExercise.collectionName = 'grammar-exercises';
+GrammarExercise.collectionName = 'grammar_exercises';
 
 GrammarExercise.schema = Joi.object().keys({
   _id: Joi.number(),
