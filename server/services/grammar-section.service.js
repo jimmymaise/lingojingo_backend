@@ -9,8 +9,8 @@ const internals = {};
 
 //Query
 internals.getOneGrammarSection = async (id) => {
+  return await GrammarSection.findOne({_id: id});
 
-  return await GrammarSection.findById(id);
 }
 internals.getListExerciseDetail = async (firebaseUId, exerciseIds) => {
   return await GrammarExercise.find({_id: {$in: exerciseIds}});

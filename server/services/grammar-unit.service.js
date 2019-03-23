@@ -10,7 +10,7 @@ const GrammarSection = require('../models/grammar-section');
 const internals = {};
 
 internals.getGrammarUnit = async (grammarUnitId) => {
-  return await GrammarUnit.findById(grammarUnitId);
+  return await GrammarUnit.findOne({_id: grammarUnitId});
 }
 
 internals.searchGrammarUnit = async (args) => {
@@ -32,9 +32,6 @@ internals.searchGrammarUnit = async (args) => {
     body.orQuery('match_phrase', 'name', {query: search.name, analyzer: 'nameIndexAnalyzer', 'boost': '5'})
     body.orQuery('match', 'name', {query: search.name, operator: 'and'})
     body.queryMinimumShouldMatch(1)
-  }
-  if (search.mainLevel) {
-    body.query('terms', 'mainLevel', search.mainLevel)
   }
   // if (search.categoryId) {
   //   body.query('match', 'category.id', search.categoryId)

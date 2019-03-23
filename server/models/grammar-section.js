@@ -10,6 +10,7 @@ GrammarSection.collectionName = 'grammar_sections';
 
 GrammarSection.schema = Joi.object().keys({
   _id: Joi.number(),
+  name: [Joi.string().optional(), Joi.allow(null)],
   description: [Joi.string().optional(), Joi.allow(null)],
   heading: [Joi.string().optional(), Joi.allow(null)],
   exercises: [Joi.array().optional(), Joi.allow(null)],

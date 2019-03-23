@@ -9,7 +9,8 @@ const internals = {};
 //Query
 internals.getOneGrammarExcercise = async (id) => {
 
-  return await GrammarExercise.findById(id);
+  return await GrammarExercise.findOne({_id: id});
+
 }
 
 
