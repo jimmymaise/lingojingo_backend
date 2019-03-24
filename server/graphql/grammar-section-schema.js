@@ -9,7 +9,7 @@ const typeDefs = `
     name: String,
     description: String,
     heading: String,
-    references: String,
+    references: [String],
     type: String,
     exercises: [String]
     exerciseDetails: [GrammarExercise]
