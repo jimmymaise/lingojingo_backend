@@ -30,6 +30,7 @@ const typeDefs = `
     order: Int,
     relatedUnits: [String],
     sectionDetails: [GrammarSection],
+    groupInfo: [JSON]
  
   }
     type GrammarUnitSummary {

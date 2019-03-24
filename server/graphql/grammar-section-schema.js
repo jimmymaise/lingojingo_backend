@@ -10,10 +10,10 @@ const typeDefs = `
     description: String,
     heading: String,
     references: [String],
-    type: String,
     exercises: [String]
     exerciseDetails: [GrammarExercise]
     explanation: String,
+    unitId: Int,
   }
   
 
