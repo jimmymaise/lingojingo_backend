@@ -9,7 +9,7 @@ const esSchema = require('../elasticsearch/mapping/grammar-unit').grammarUnit
 class GrammarUnit extends ESMongoModels {
 
   static async upsertES(_id) {
-    let indexData = await this.findOne({_id:_id})
+    let indexData = await this.findOne({_id: _id})
     //Add more fields from other table
     //Remove some fields not need to put ES
     let grammarGroupInfo = await GrammarGroup.findOne({_id: indexData.groupId});
@@ -31,10 +31,10 @@ GrammarUnit.schema = Joi.object().keys({
   _id: Joi.number(),
   name: [Joi.string().optional(), Joi.allow(null)],
   img: [Joi.string().optional(), Joi.allow(null)],
-  groupId: Joi.number(),
-  order: Joi.number(),
-  sections: Joi.array(),
-  relatedUnits: Joi.array(),
+  groupId: [Joi.number().optional(), Joi.allow(null)],
+  order: [Joi.number().optional(), Joi.allow(null)],
+  sections: [Joi.array().optional(), Joi.allow(null)],
+  relatedUnits: [Joi.array().optional(), Joi.allow(null)],
   type: [Joi.string().optional(), Joi.allow(null)],
 }).options({stripUnknown: true});
 

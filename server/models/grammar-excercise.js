@@ -11,17 +11,17 @@ GrammarExercise.collectionName = 'grammar_exercises';
 GrammarExercise.schema = Joi.object().keys({
   _id: Joi.number(),
   coreAnswers: [Joi.array().optional(), Joi.allow(null)],
-  rubric: Joi.string().optional(),
+  rubric: [Joi.string().optional(), Joi.allow(null)],
   referenceExercise: [Joi.string().optional(), Joi.allow(null)],
-  engine: Joi.string().optional(),
+  engine: [Joi.string().optional(), Joi.allow(null)],
   name: [Joi.string().optional(), Joi.allow(null)],
-  carouselOneOptions: Joi.array().optional(),
-  carouselTwoOptions: Joi.array().optional(),
-  carouselThreeOptions: Joi.array().optional(),
-  questions: Joi.array().optional(),
-  gridReference: Joi.string().optional(),
-  leftLabel: Joi.string().optional(),
-  rightLabel: Joi.string().optional(),
+  carouselOneOptions:  [Joi.array().optional(), Joi.allow(null)],
+  carouselTwoOptions:  [Joi.array().optional(), Joi.allow(null)],
+  carouselThreeOptions: [Joi.array().optional(), Joi.allow(null)],
+  questions: [Joi.array().optional(), Joi.allow(null)],
+  gridReference:  [Joi.string().optional(), Joi.allow(null)],
+  leftLabel: [Joi.string().optional(), Joi.allow(null)],
+  rightLabel: [Joi.string().optional(), Joi.allow(null)],
 
 
 }).options({stripUnknown: true});
