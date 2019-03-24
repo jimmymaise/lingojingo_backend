@@ -7,13 +7,13 @@ const typeDefs = `
   type GrammarSection {
     _id: Int,
     name: String,
-    img: String,
-    section: String,
+    description: String,
+    heading: String,
+    references: String,
     type: String,
     exercises: [String]
     exerciseDetails: [GrammarExercise]
     explanation: String,
- 
   }
   
 
