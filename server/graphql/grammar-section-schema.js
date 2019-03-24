@@ -10,8 +10,9 @@ const typeDefs = `
     img: String,
     section: String,
     type: String,
-    exercise: [String]
-    exerciseDetail: [GrammarExercise]
+    exercises: [String]
+    exerciseDetails: [GrammarExercise]
+    explanation: String,
  
   }
   
@@ -28,7 +29,7 @@ const resolvers = {
   // Mutation for administrator
 
   GrammarSection: {
-    exerciseDetail: async (parent, args, context) => {
+    exerciseDetails: async (parent, args, context) => {
       return await grammarSectionService.getListExerciseDetail(context.request.auth.credentials.uid, parent.exercises);
     }
   }
