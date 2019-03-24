@@ -34,6 +34,7 @@ GrammarUnit.schema = Joi.object().keys({
   groupId: Joi.number(),
   order: Joi.number(),
   sections: Joi.array(),
+  relatedUnits: Joi.array(),
   type: [Joi.string().optional(), Joi.allow(null)],
 }).options({stripUnknown: true});
 

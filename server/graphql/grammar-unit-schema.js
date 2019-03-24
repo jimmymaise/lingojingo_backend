@@ -28,6 +28,7 @@ const typeDefs = `
     groupId: Int,
     type: String,
     order: Int,
+    relatedUnits: [String],
     sectionDetails: [GrammarSection],
  
   }

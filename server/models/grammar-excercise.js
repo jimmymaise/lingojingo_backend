@@ -18,6 +18,11 @@ GrammarExercise.schema = Joi.object().keys({
   carouselOneOptions: Joi.array().optional(),
   carouselTwoOptions: Joi.array().optional(),
   carouselThreeOptions: Joi.array().optional(),
+  questions: Joi.array().optional(),
+  gridReference: Joi.string().optional(),
+  leftLabel: Joi.string().optional(),
+  rightLabel: Joi.string().optional(),
+
 
 }).options({stripUnknown: true});
 
