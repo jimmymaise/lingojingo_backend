@@ -14,7 +14,10 @@ const typeDefs = `
     carouselTwoOptions: [JSON],
     carouselThreeOptions: [JSON],
     questions: [JSON],
-    gridReference: String
+    gridReference: String,
+    leftLabel: String,
+    rightLabel: String
+
   }
   
 
