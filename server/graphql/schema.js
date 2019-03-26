@@ -9,6 +9,8 @@ const songSchema = require('./song-schema');
 const articleSchema = require('./article-schema');
 
 const grammarExerciseSchema = require('./grammar-exercise-schema');
+const grammarReferenceSchema = require('./grammar-reference-schema');
+
 const grammarGroupSchema = require('./grammar-group-schema');
 const grammarSectionSchema = require('./grammar-section-schema');
 const grammarUnitSchema = require('./grammar-unit-schema');
@@ -108,12 +110,14 @@ const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDe
   grammarExerciseSchema.typeDefs,
   grammarGroupSchema.typeDefs,
   grammarSectionSchema.typeDefs,
+  grammarReferenceSchema.typeDefs,
   grammarUnitSchema.typeDefs
   , examSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs, songSchema.typeDefs, articleSchema.typeDefs, userItem.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
   grammarExerciseSchema.resolvers,
   grammarGroupSchema.resolvers,
   grammarSectionSchema.resolvers,
+  grammarReferenceSchema.resolvers,
   grammarUnitSchema.resolvers
   , examSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers, songSchema.resolvers, articleSchema.resolvers, userItem.resolvers);
 
