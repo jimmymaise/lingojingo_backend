@@ -12,6 +12,7 @@ GrammarReference.schema = Joi.object().keys({
   _id: Joi.number(),
   name: [Joi.string().optional(), Joi.allow(null)],
   bodyText: [Joi.string().optional(), Joi.allow(null)],
+  hideHeading:[Joi.number().optional(), Joi.allow(null)],
 
 
 }).options({stripUnknown: true});

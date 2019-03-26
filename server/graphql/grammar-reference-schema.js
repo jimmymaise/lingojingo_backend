@@ -6,7 +6,8 @@ const typeDefs = `
   type GrammarReference {
     _id: Int,
     name: String,
-    bodyText: String
+    bodyText: String,
+    hideHeading: Int
   }
   
 
