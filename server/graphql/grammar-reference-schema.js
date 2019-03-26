@@ -1,23 +1,12 @@
-const GrammarExerciseService = require('../services/grammar-exercise.service');
+const GrammarReferenceService = require('../services/grammar-reference.service');
 
 // The GraphQL schema in string form
 const typeDefs = `
-  extend type Query { grammarExercise(id: Int!): GrammarExercise }
-  type GrammarExercise {
+  extend type Query { grammarReference(id: Int!): GrammarReference }
+  type GrammarReference {
     _id: Int,
-    coreAnswers: [JSON],
-    rubric: String,
-    referenceExercise: String,
-    engine: String,
     name: String,
-    carouselOneOptions: [JSON],
-    carouselTwoOptions: [JSON],
-    carouselThreeOptions: [JSON],
-    questions: [JSON],
-    gridReference: String,
-    leftLabel: String,
-    rightLabel: String
-
+    bodyText: String
   }
   
 
@@ -25,8 +14,8 @@ const typeDefs = `
 // The resolvers
 const resolvers = {
   Query: {
-    grammarExercise: async (parent, args) => {
-      return await GrammarExerciseService.getOneGrammarExcercise(args.id);
+    grammarReference: async (parent, args) => {
+      return await GrammarReferenceService.getOneGrammarReference(args.id);
     }
   },
   // Mutation for administrator

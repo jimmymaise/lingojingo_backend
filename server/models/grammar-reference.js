@@ -3,30 +3,20 @@
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
 
-class GrammarExercise extends MongoModels {
+class GrammarReference extends MongoModels {
 };
 
-GrammarExercise.collectionName = 'grammar_exercises';
+GrammarReference.collectionName = 'grammar_references';
 
-GrammarExercise.schema = Joi.object().keys({
+GrammarReference.schema = Joi.object().keys({
   _id: Joi.number(),
-  coreAnswers: [Joi.array().optional(), Joi.allow(null)],
-  rubric: [Joi.string().optional(), Joi.allow(null)],
-  referenceExercise: [Joi.string().optional(), Joi.allow(null)],
-  engine: [Joi.string().optional(), Joi.allow(null)],
   name: [Joi.string().optional(), Joi.allow(null)],
-  carouselOneOptions:  [Joi.array().optional(), Joi.allow(null)],
-  carouselTwoOptions:  [Joi.array().optional(), Joi.allow(null)],
-  carouselThreeOptions: [Joi.array().optional(), Joi.allow(null)],
-  questions: [Joi.array().optional(), Joi.allow(null)],
-  gridReference:  [Joi.string().optional(), Joi.allow(null)],
-  leftLabel: [Joi.string().optional(), Joi.allow(null)],
-  rightLabel: [Joi.string().optional(), Joi.allow(null)],
+  bodyText: [Joi.string().optional(), Joi.allow(null)],
 
 
 }).options({stripUnknown: true});
 
-GrammarExercise.indexes = [];
+GrammarReference.indexes = [];
 
-module.exports = GrammarExercise;
+module.exports = GrammarReference;
 

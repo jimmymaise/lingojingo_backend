@@ -1,26 +1,26 @@
 'use strict';
 
 const ObjectID = require('mongodb').ObjectID;
-const GrammarExercise= require('../models/grammar-excercise');
+const GrammarReference= require('../models/grammar-reference');
 
 const _ = require('lodash');
 const internals = {};
 
 //Query
-internals.getOneGrammarExcercise = async (id) => {
+internals.getOneGrammarReference = async (id) => {
 
-  return await GrammarExercise.findOne({_id: id});
+  return await GrammarReference.findOne({_id: id});
 
 }
 
 
 exports.register = function (server, options) {
-  server.expose('getOneGrammarExcercise', internals.getOneGrammarExcercise);
+  server.expose('getOneGrammarReference', internals.getOneGrammarReference);
 };
 
 
-exports.getOneGrammarExcercise = internals.getOneGrammarExcercise;
+exports.getOneGrammarReference = internals.getOneGrammarReference;
 
 
 
-exports.name = 'grammar-exercise-service';
+exports.name = 'grammar-reference-service';
