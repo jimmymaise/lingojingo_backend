@@ -17,7 +17,7 @@ GrammarSection.schema = Joi.object().keys({
   exercises: [Joi.array().optional(), Joi.allow(null)],
   references: [Joi.array().optional(), Joi.allow(null)],
   unitId: [Joi.number().optional(), Joi.allow(null)],
-  
+
 
 }).options({stripUnknown: true});
 
