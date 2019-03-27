@@ -65,7 +65,7 @@ add_version_stag:
   only:
     - /^r\d+\.\d+\.\d+$/
   script:
-    - UPDATE_VERSION_URL="${STAG_BE_URL?}/version/frontend/${CI_COMMIT_TAG?}"
+    - UPDATE_VERSION_URL="${STAG_BE_URL?}/version/backend/${CI_COMMIT_TAG?}"
     - curl -X POST  ${UPDATE_VERSION_URL?}
     - echo  ${UPDATE_VERSION_URL?}
 
@@ -74,6 +74,6 @@ add_version_prod:
   only:
     - /^v\d+\.\d+\.\d+$/
   script:
-    - UPDATE_VERSION_URL="${PROD_BE_URL?}/version/frontend/${CI_COMMIT_TAG?}"
+    - UPDATE_VERSION_URL="${PROD_BE_URL?}/version/backend/${CI_COMMIT_TAG?}"
     - curl -X POST  ${UPDATE_VERSION_URL?}
     - echo  ${UPDATE_VERSION_URL?}
