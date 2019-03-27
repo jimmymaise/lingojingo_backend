@@ -20,27 +20,29 @@ internals.applyRoutes = function (server) {
 
   server.route({
     method: 'GET',
-    path: '/version/frontend',
+    path: '/version/{type}',
     config: {
       auth: 'firebase'
     },
     handler: async function (request) {
       const Version = require('../models/version');
-
-      return global.feVersion || await Version.findOne({type: 'frontend'})
+      return global[request.params.type] || await Version.findOne({type: request.params.type})
 
     }
   });
 
   server.route({
     method: 'POST',
-    path: '/version/frontend/{id}',
+    path: '/version/{type}/{id}',
     handler: async function (request) {
       const Version = require('../models/version');
-      global.feVersion = await Version.findOneAndUpdate({
-          type: 'frontend',
+      const gitlab = require('../intergration/gitlab/handler');
+      let res = await gitlab.getTagDetail(request.params.type, request.params.id)
+
+      global[request.params.type]= await Version.findOneAndUpdate({
+          type: request.params.type,
         }, {
-          $set: {'version': request.params.id}
+          $set: res
         },
         {
           upsert: true

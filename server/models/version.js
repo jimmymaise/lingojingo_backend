@@ -12,7 +12,9 @@ Version.schema = Joi.object().keys({
   _id: Joi.object(),
   type: Joi.string().required(),
   version: Joi.string().required(),
-  description: [Joi.string().optional(), Joi.allow(null)],
+  message: [Joi.string().optional(), Joi.allow(null)],
+  release: Joi.object()
+
 
 
 }).options({stripUnknown: true});
