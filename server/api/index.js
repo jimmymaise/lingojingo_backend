@@ -17,6 +17,40 @@ internals.applyRoutes = function (server) {
     }
   });
 
+
+  server.route({
+    method: 'GET',
+    path: '/version/frontend',
+    config: {
+      auth: 'firebase'
+    },
+    handler: async function (request) {
+      const Version = require('../models/version');
+
+      return global.feVersion || await Version.findOne({type: 'frontend'})
+
+    }
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/version/frontend/{id}',
+    handler: async function (request) {
+      const Version = require('../models/version');
+      global.feVersion = await Version.findOneAndUpdate({
+          type: 'frontend',
+        }, {
+          $set: {'version': request.params.id}
+        },
+        {
+          upsert: true
+
+        });
+      return {message: 'updated version successfully.'};
+    }
+  });
+
+
   server.route({
     method: 'GET',
     path: '/syncES/{p*}',
@@ -30,9 +64,9 @@ internals.applyRoutes = function (server) {
       const UserItem = require('../models/user-item');
       const GrammarUnit = require('../models/grammar-unit');
 
-      const getClaims =require('../graphql/permission').getClaims
+      const getClaims = require('../graphql/permission').getClaims
       let claims = await getClaims(request.auth.credentials)
-      if (!(claims['groups'] ||[]).includes('ADMIN')) {
+      if (!(claims['groups'] || []).includes('ADMIN')) {
         return Boom.unauthorized('Only Admin Can Sync ES !');
       }
 
