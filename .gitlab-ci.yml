@@ -28,6 +28,8 @@ deploy_staging:
     url: https://stag.lingojingo.com
   only:
     - master
+    - /^r\d+\.\d+\.\d+$/
+
   before_script:
     - docker info
   script:
