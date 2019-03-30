@@ -2,6 +2,8 @@ const graphqlTools = require('graphql-tools');
 const merge = require('lodash/merge');
 
 const cardSchema = require('./card-schema');
+const quoteSchema = require('./quote-schema');
+
 const sentry = require('../utils/logger').logger;
 
 const deckSchema = require('./deck-schema');
@@ -111,14 +113,16 @@ const typeDefs = [externalType, rootType, cardSchema.typeDefs, deckSchema.typeDe
   grammarGroupSchema.typeDefs,
   grammarSectionSchema.typeDefs,
   grammarReferenceSchema.typeDefs,
-  grammarUnitSchema.typeDefs
+  grammarUnitSchema.typeDefs,
+  quoteSchema.typeDefs,
   , examSchema.typeDefs, rewardSchema.typeDefs, leaderBoardSchema.typeDefs, songSchema.typeDefs, articleSchema.typeDefs, userItem.typeDefs];
 const resolvers = merge(rootResolver, cardSchema.resolvers, deckSchema.resolvers, topicSchema.resolvers,
   grammarExerciseSchema.resolvers,
   grammarGroupSchema.resolvers,
   grammarSectionSchema.resolvers,
   grammarReferenceSchema.resolvers,
-  grammarUnitSchema.resolvers
+  grammarUnitSchema.resolvers,
+  quoteSchema.resolvers
   , examSchema.resolvers, rewardSchema.resolvers, leaderBoardSchema.resolvers, songSchema.resolvers, articleSchema.resolvers, userItem.resolvers);
 
 module.exports = {
