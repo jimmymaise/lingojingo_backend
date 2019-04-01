@@ -59,11 +59,10 @@ internals.applyRoutes = function (server) {
       auth: 'firebase'
     },
     handler: async function (request) {
-      const translateEnToVi = require('../intergration/gtranslate/handler').translateEnToVi;
+      const translateText = require('../intergration/gtranslate/handler').translateText;
       const data = request.payload;
       try {
-        let translatedText = await translateEnToVi(data.text)
-        return {text: translatedText};
+        return await translateText(data.text, data.from, data.to)
       } catch (e) {
         return Boom.serverUnavailable('Service Unavailable from google side');
       }

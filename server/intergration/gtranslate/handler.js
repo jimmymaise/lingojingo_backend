@@ -1,8 +1,8 @@
 const translate = require('@vitalets/google-translate-api');
 
-async function translateEnToVi(text) {
+async function translateText(text, from, to) {
   try {
-    let translatedText = await translate(text, {from: 'en', to: 'vi'})
+    let translatedText = await translate(text, {from: from || 'en', to: to || 'vi'})
     console.log(translatedText);
     return translatedText
   } catch (e) {
@@ -15,4 +15,4 @@ async function translateEnToVi(text) {
 
 }
 
-module.exports.translateEnToVi = translateEnToVi;
+module.exports.translateText = translateText;
