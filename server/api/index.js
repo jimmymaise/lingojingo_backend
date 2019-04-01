@@ -39,7 +39,7 @@ internals.applyRoutes = function (server) {
       const gitlab = require('../intergration/gitlab/handler');
       let res = await gitlab.getTagDetail(request.params.type, request.params.id)
 
-      global[request.params.type]= await Version.findOneAndUpdate({
+      global[request.params.type] = await Version.findOneAndUpdate({
           type: request.params.type,
         }, {
           $set: res
@@ -49,6 +49,25 @@ internals.applyRoutes = function (server) {
 
         });
       return {message: 'updated version successfully.'};
+    }
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/translate',
+    config: {
+      auth: 'firebase'
+    },
+    handler: async function (request) {
+      const translateEnToVi = require('../intergration/gtranslate/handler').translateEnToVi;
+      const data = request.payload;
+      try {
+        let translatedText = await translateEnToVi(data.text)
+        return {text: translatedText};
+      } catch (e) {
+        return Boom.serverUnavailable('Service Unavailable from google side');
+      }
+
     }
   });
 
