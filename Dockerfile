@@ -21,7 +21,8 @@ RUN npm install
 
 RUN npm install pm2 -g
 
-EXPOSE 8080
+EXPOSE 8080 8081
+
 
 CMD [ "/home/node/.npm-global/lib/node_modules/pm2/bin/pm2-runtime", "server.js" ]
 
