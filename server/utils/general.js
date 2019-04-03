@@ -1,11 +1,13 @@
 const Constant = require('../utils/constants');
 const logger = require('../utils/logger.js').logger
+const {ApolloError} = require('apollo-server-hapi')
 
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
+let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
-function checkSecurty(request) {
+function checkSecurity(request) {
   if (request.headers['debug'] === Constant.BY_PASS_KEY) {
     return request
   }
@@ -24,11 +26,11 @@ function checkSecurty(request) {
   logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
     'diff': diff,
     'x-tag': xTag,
-    'feTimeStamp': feTimeStamp,
+    'feTimeStampFromXTag': feTimeStamp,
     'beTimeStamp': beTimeStamp
 
   }))
-  throw Error(`Error code 911: Some issue happens`)
+  throw SecQueryError
 
 
 }
@@ -95,4 +97,4 @@ function correctAnswerToLevel(correctAnswer) {
 module.exports.onlyUnique = onlyUnique;
 module.exports.setClaimToFireBase = setClaimToFireBase
 module.exports.correctAnswerToLevel = correctAnswerToLevel;
-module.exports.checkSecurty = checkSecurty;
+module.exports.checkSecurity = checkSecurity;

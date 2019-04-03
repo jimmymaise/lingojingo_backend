@@ -1,7 +1,7 @@
 'use strict';
 
 const Boom = require('boom');
-const checkSecurty = require('../utils/general').checkSecurty
+const checkSecurity = require('../utils/general').checkSecurity
 
 
 const internals = {};
@@ -19,7 +19,7 @@ internals.applyRoutes = function (server, next) {
       tags: ['api']
     },
     handler: async (request) => {
-      checkSecurty(request)
+      checkSecurity(request)
       try {
         const result = await cloudMessage.sendMessageToTopic(request.payload, request.params.topic)
         return {

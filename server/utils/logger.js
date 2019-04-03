@@ -17,7 +17,8 @@ logger['requestToSentryLog'] = function (request, other_errors) {
     user: {
       id: get(request, 'auth.credentials.uid', null),
       email: get(request, 'auth.credentials.email', null),
-      username: get(request, 'request.auth.credentials.name', null),
+      username: get(request, 'auth.credentials.name', null),
+      ipAddress: get(request,'headers.x-forwarded-for',null)
     },
     request: {
       method: request.method,

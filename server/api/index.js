@@ -13,7 +13,9 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/',
     handler: function (request) {
-      return {message: 'Welcome to LingoJingo.'};
+      return {message: 'Welcome to LingoJingo.',
+      serverTime:Date.now()
+      };
     }
   });
 
