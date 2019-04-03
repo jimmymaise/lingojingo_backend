@@ -14,17 +14,22 @@ const logger = new winston.Logger({
 });
 logger['requestToSentryLog'] = function (request, other_errors) {
   return {
+    user: {
+      id: get(request, 'auth.credentials.uid', null),
+      email: get(request, 'auth.credentials.email', null),
+      username: get(request, 'request.auth.credentials.name', null),
+    },
     request: {
       method: request.method,
       headers: request.headers,
       cookies: request.state,
       url: request.path,
-      body: get(request,'payload.query',null),
+      body: get(request, 'payload.query', null),
     },
     extra: {
-      timestamp: get(request,'info.received',null),
+      timestamp: get(request, 'info.received', null),
       id: request.info.id,
-      remoteAddress: get(request,'info.remoteAddress',null),
+      remoteAddress: get(request, 'info.remoteAddress', null),
       userInfo: request.auth,
       otherErrors: JSON.stringify(other_errors)
 
