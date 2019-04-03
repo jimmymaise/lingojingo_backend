@@ -23,7 +23,10 @@ function checkSecurty(request) {
   }
   logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
     'diff': diff,
-    'x-tag': xTag
+    'x-tag': xTag,
+    'feTimeStamp': feTimeStamp,
+    'beTimeStamp': beTimeStamp
+
   }))
   throw Error(`Error code 911: Some issue happens`)
 
