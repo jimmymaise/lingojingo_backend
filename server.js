@@ -2,7 +2,7 @@
 
 
 const composer = require('./index');
-const checkSecurty = require('./server/utils/general').checkSecurty
+const checkSecurity = require('./server/utils/general').checkSecurity
 const _ = require('lodash')
 const Config = require('./config');
 const {ApolloServer} = require('apollo-server-hapi');
@@ -18,7 +18,7 @@ const StartServer = async () => {
       extensions: [() => new MyErrorTrackingExtension()],
       context: ({request}) => {
         return {
-          request: checkSecurty(request),
+          request: checkSecurity(request),
           trackErrors(errors) {
             if (errors) {
               let other_errors = _.cloneDeep(errors)
