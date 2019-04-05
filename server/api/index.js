@@ -1,6 +1,7 @@
 'use strict';
 
 const internals = {};
+const getLocation = require('../utils/general').getLocation
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 const Wreck = require('wreck');
 let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.lingojingo.com/proxyES`
@@ -13,8 +14,9 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/',
     handler: function (request) {
-      return {message: 'Welcome to LingoJingo.',
-      serverTime:Date.now()
+      return {
+        message: 'Welcome to LingoJingo.',
+        serverTime: Date.now()
       };
     }
   });
@@ -120,28 +122,25 @@ internals.applyRoutes = function (server) {
 
     }
   });
-  server.route({
-    method: '*',
-    path: '/proxyES/{p*}',
-    config: {
-      auth: envAuth
-    },
+  let remotes = [
+    {url: "https://translate.google.com", path: 'server-1'},
+  ]
 
+  server.route({
+    method: "GET",
+    path: "/proxy/{p*}",
     handler: {
       proxy: {
-        mapUri: function (request) {
-          return {
-            uri: `${esAddr}/${request.params.p}`
-          };
-        },
-        onResponse: function (err, res, request, h, settings, ttl) {
+        mapUri: function (req) {
 
-          return Wreck.read(res, {json: true}, function (err, payload) {
 
-            let response = h.response(payload);
-            response.headers = res.headers;
-            return response;
-          });
+          let headers = {}
+          headers['host'] = getLocation(req.params.p).hostname
+          headers['accept-language'] = req.headers['accept-language']
+          headers['user-agent'] = req.headers['user-agent']
+
+          return {'uri': req.url.path.split('/proxy/')[1], 'headers': headers}
+
         }
       }
     }
