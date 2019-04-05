@@ -159,12 +159,8 @@ internals.applyRoutes = function (server) {
 
 
           let headers = {}
-          headers['accept-language'] = req.headers['accept-language']
-          headers['user-agent'] = req.headers['user-agent']
           headers['x-requested-with'] = 'https://app.lingojingo.com'
           headers['origin'] = 'https://app.lingojingo.com'
-          headers['content-type'] = 'application/json'
-          headers['accept'] = 'application/json'
           notUsedProxies = _.filter(proxyList, function (o) {
             return !usedProxies.includes(o);
           });
