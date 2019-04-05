@@ -124,15 +124,13 @@ internals.applyRoutes = function (server) {
 
     }
   });
-  let remotes = [
-    {url: "https://translate.google.com", path: 'server-1'},
-  ]
 
   server.route({
     method: "GET",
     path: "/proxy/{p*}",
     handler: {
       proxy: {
+        rejectUnauthorized:false,
         mapUri: function (req) {
 
 
@@ -152,7 +150,7 @@ internals.applyRoutes = function (server) {
     path: "/rotate-proxy/{p*}",
     handler: {
       proxy: {
-
+        rejectUnauthorized:false,
         mapUri: function (req) {
 
 
