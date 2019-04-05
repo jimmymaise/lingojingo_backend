@@ -5,7 +5,11 @@ const _ = require('lodash')
 const getLocation = require('../utils/general').getLocation
 const Boom = require('boom');
 const Wreck = require('@hapi/wreck');
-let proxyList = ['https://stag-api.lingojingo.com/proxy', 'https://api.lingojingo.com/proxy', 'https://cors-anywhere.herokuapp.com']
+let proxyList = ['https://stag-api.lingojingo.com/proxy/',
+  'https://api.lingojingo.com/proxy/',
+    'https://cors-anywhere.herokuapp.com/',
+  'https://cors.io/?',
+  'https://yacdn.org/serve/',]
 let usedProxies = []
 let usingProxy
 let notUsedProxies
@@ -130,7 +134,7 @@ internals.applyRoutes = function (server) {
     path: "/proxy/{p*}",
     handler: {
       proxy: {
-        rejectUnauthorized:false,
+        rejectUnauthorized: false,
         mapUri: function (req) {
 
 
@@ -150,12 +154,11 @@ internals.applyRoutes = function (server) {
     path: "/rotate-proxy/{p*}",
     handler: {
       proxy: {
-        rejectUnauthorized:false,
+        rejectUnauthorized: false,
         mapUri: function (req) {
 
 
           let headers = {}
-          headers['host'] = getLocation(req.params.p).hostname
           headers['accept-language'] = req.headers['accept-language']
           headers['user-agent'] = req.headers['user-agent']
           headers['x-requested-with'] = 'https://app.lingojingo.com'
@@ -166,7 +169,7 @@ internals.applyRoutes = function (server) {
             return !usedProxies.includes(o);
           });
           usingProxy = _.sample(notUsedProxies)
-          return {'uri': usingProxy + '/' + req.url.path.split('/rotate-proxy/')[1], 'headers': headers}
+          return {'uri': usingProxy + req.url.path.split('/rotate-proxy/')[1], 'headers': headers}
         },
         onResponse: function (err, res, request, h, settings, ttl) {
 
@@ -185,6 +188,7 @@ internals.applyRoutes = function (server) {
             }
 
           }
+          console.log("proxy " + usingProxy + "OK")
           res['headers']['content-type'] = 'application/json'
           return Wreck.read(res, {json: true}, function (err, payload) {
 
