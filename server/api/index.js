@@ -5,11 +5,11 @@ const _ = require('lodash')
 const getLocation = require('../utils/general').getLocation
 const Boom = require('boom');
 const Wreck = require('@hapi/wreck');
-let proxyList = ['https://stag-api.lingojingo.com/proxy/',
+let proxyList = [
+  'https://stag-api.lingojingo.com/proxy/',
   'https://api.lingojingo.com/proxy/',
-    'https://cors-anywhere.herokuapp.com/',
-  'https://cors.io/?',
-  'https://yacdn.org/serve/',]
+  'https://cors-anywhere.herokuapp.com/',
+  'https://cors.io/?',]
 let usedProxies = []
 let usingProxy
 let notUsedProxies
@@ -160,7 +160,11 @@ internals.applyRoutes = function (server) {
 
           let headers = {}
           headers['x-requested-with'] = 'https://app.lingojingo.com'
-          headers['origin'] = 'https://app.lingojingo.com'
+          headers['origin'] = req.headers['origin'] || 'https://app.lingojingo.com'
+          headers['accept-language'] = req.headers['accept-language']
+          headers['user-agent'] = req.headers['user-agent']
+
+
           notUsedProxies = _.filter(proxyList, function (o) {
             return !usedProxies.includes(o);
           });
