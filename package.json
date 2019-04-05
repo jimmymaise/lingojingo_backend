@@ -48,7 +48,7 @@
     "winston": "^2.4.4",
     "winston-raven-sentry": "^2.0.0",
     "winston-sentry": "^0.2.1",
-    "wreck": "^14.1.0"
+    "wreck": "^14.2.0"
   },
   "devDependencies": {
     "cross-env": "^5.1.5",

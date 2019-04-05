@@ -1,13 +1,15 @@
 'use strict';
 
 const internals = {};
+const _ = require('lodash')
 const getLocation = require('../utils/general').getLocation
-const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
-const Wreck = require('wreck');
-let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.lingojingo.com/proxyES`
-let get = require("lodash.get");
 const Boom = require('boom');
-
+const Wreck = require('@hapi/wreck');
+let proxyList = ['https://stag-api.lingojingo.com/proxy', 'https://api.lingojingo.com/proxy', 'https://cors-anywhere.herokuapp.com']
+let usedProxies = []
+let usingProxy
+let notUsedProxies
+const logger = require('../utils/logger.js').logger
 
 internals.applyRoutes = function (server) {
   server.route({
@@ -140,6 +142,59 @@ internals.applyRoutes = function (server) {
           headers['user-agent'] = req.headers['user-agent']
 
           return {'uri': req.url.path.split('/proxy/')[1], 'headers': headers}
+
+        }
+      }
+    }
+  });
+  server.route({
+    method: "GET",
+    path: "/rotate-proxy/{p*}",
+    handler: {
+      proxy: {
+
+        mapUri: function (req) {
+
+
+          let headers = {}
+          headers['host'] = getLocation(req.params.p).hostname
+          headers['accept-language'] = req.headers['accept-language']
+          headers['user-agent'] = req.headers['user-agent']
+          headers['x-requested-with'] = 'https://app.lingojingo.com'
+          headers['origin'] = 'https://app.lingojingo.com'
+          headers['content-type'] = 'application/json'
+          headers['accept'] = 'application/json'
+          notUsedProxies = _.filter(proxyList, function (o) {
+            return !usedProxies.includes(o);
+          });
+          usingProxy = _.sample(notUsedProxies)
+          return {'uri': usingProxy + '/' + req.url.path.split('/rotate-proxy/')[1], 'headers': headers}
+        },
+        onResponse: function (err, res, request, h, settings, ttl) {
+
+          console.log('receiving the response from the upstream.');
+          if (!res || res.statusCode !== 200) {
+            if (usedProxies.length < proxyList.length - 1) {
+              logger.error("Error when using proxy " + usingProxy + "with status code " + _.get(res, 'statusCode') + err)
+              console.error("Error when using proxy " + usingProxy + "with status code " + _.get(res, 'statusCode') + err)
+
+              usedProxies.push(usingProxy)
+              return h.redirect(request.url.path);
+            } else {
+              usedProxies = []
+              usingProxy = undefined
+              throw Error('Cannot get response from google side' + "with status code " + _.get(res, 'statusCode') + err)
+            }
+
+          }
+          res['headers']['content-type'] = 'application/json'
+          return Wreck.read(res, {json: true}, function (err, payload) {
+
+            console.log('some payload manipulation if you want to.')
+            const response = h.response(payload);
+            response.headers = res.headers;
+            return response;
+          });
 
         }
       }
