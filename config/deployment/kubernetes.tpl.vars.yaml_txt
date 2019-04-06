@@ -1,9 +1,0 @@
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
-  namespace: default
-data:
-  DB_URI: _DB_URI_
-  ES_HOST: _ES_HOST_
