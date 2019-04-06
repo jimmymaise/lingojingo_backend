@@ -27,3 +27,15 @@ spec:
             timeoutSeconds: 5
           ports:
             - containerPort: 80
+          env:
+            - name: DB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+                  key: DB_URI
+            - name: ES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+                  key: ES_HOST
+
