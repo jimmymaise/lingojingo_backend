@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+spec:
+  replicas: _REPLICAS_
+  selector:
+    matchLabels:
+      app: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+  # Pod template
+  template:
+    metadata:
+      labels:
+        app: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+          image: gcr.io/_GCP_PROJECT_ID_/_PROJECT_NAME_:_VERSION_
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /admin
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 80

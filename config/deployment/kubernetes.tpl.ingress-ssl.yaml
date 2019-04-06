@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+  annotations:
+    kubernetes.io/ingress.class: nginx
+
+spec:
+  tls:
+    - hosts:
+        - _CI_ENVIRONMENT_SLUG_-_PROJECT_NAME_._MY_DOMAIN_
+      secretName: tls-_CI_ENVIRONMENT_SLUG_-_PROJECT_NAME_
+  rules:
+    - host: _CI_ENVIRONMENT_SLUG_-_PROJECT_NAME_._MY_DOMAIN_
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+              servicePort: 80
+          - path: /admin
+            backend:
+              serviceName: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
+              servicePort: 80
