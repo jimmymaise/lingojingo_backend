@@ -1,3 +1,7 @@
+image: docker:latest
+variables:
+  PIP_PROCESS_DEPENDENCY_LINKS: 1
+  PROJECT_NAME: sts
 
 stages:
 #  - test
@@ -99,3 +103,53 @@ add_version_prod:
     - UPDATE_VERSION_URL="${PROD_BE_URL?}/version/backend/${CI_COMMIT_TAG?}"
     - curl -X POST  ${UPDATE_VERSION_URL?}
     - echo  ${UPDATE_VERSION_URL?}
+
+
+# Custom Functions -------------------------------------------------------
+.custom_functions: &custom_functions |
+  export VERSION=$(echo $CI_COMMIT_SHA | cut -c8-25)
+  export SECRET_NAME=tls-$CI_ENVIRONMENT_SLUG-$PROJECT_NAME
+  export REPLICAS=$GCP_REPLICAS
+  export TRACK=stable
+
+  function config_kubernetes() {
+    echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
+    gcloud auth activate-service-account --key-file gcloud-service-key.json
+    gcloud beta container clusters get-credentials $GCP_KUBE_NAME --region $GCP_REGION --project $GCP_PROJECT_ID
+  }
+
+  function create_ssl_secret() {
+    ## Check if secret name already exists
+    if [[ $SECRET_NAME == $(kubectl get secret $SECRET_NAME -o jsonpath="{.metadata.name}") ]]; then
+      kubectl delete secret $SECRET_NAME
+    fi
+
+    kubectl create secret tls $SECRET_NAME --key config/ssl_certs/tls.key --cert config/ssl_certs/tls.crt
+  }
+
+  function create_deployment_files() {
+    ## Deployment file substitutions
+    sed 's/_PROJECT_NAME_/'"$PROJECT_NAME"'/g; s/_VERSION_/'"$VERSION"'/g; s/_CI_ENVIRONMENT_SLUG_/'"$CI_ENVIRONMENT_SLUG"'/g; s/_GCP_PROJECT_ID_/'"$GCP_PROJECT_ID"'/g; s/_REPLICAS_/'"$REPLICAS"'/g; s/_TRACK_/'"$TRACK"'/g;' config/deployment/kubernetes.tpl.deployment.yaml > deployment.yaml;
+
+    ## Ingress file substitutions
+
+    sed 's/_PROJECT_NAME_/'"$PROJECT_NAME"'/g; s/_CI_ENVIRONMENT_SLUG_/'"$CI_ENVIRONMENT_SLUG"'/g; s/_MY_DOMAIN_/'"$MY_DOMAIN"'/g;' config/deployment/kubernetes.tpl.ingress-ssl.yaml > ingress.yaml;
+
+    ## Service file substitutions
+    sed 's/_PROJECT_NAME_/'"$PROJECT_NAME"'/g; s/_CI_ENVIRONMENT_SLUG_/'"$CI_ENVIRONMENT_SLUG"'/g;' config/deployment/kubernetes.tpl.service.yaml > service.yaml;
+
+  }
+
+  function apply_and_rollout() {
+    cat deployment.yaml
+    cat service.yaml
+    cat ingress.yaml
+    kubectl apply -f deployment.yaml
+    kubectl apply -f service.yaml
+    kubectl apply -f ingress.yaml
+    kubectl rollout status -f deployment.yaml
+    kubectl get all,ing -l app=$PROJECT_NAME-$CI_ENVIRONMENT_SLUG
+  }
+
+before_script:
+  - *custom_functions
