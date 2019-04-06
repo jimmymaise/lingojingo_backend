@@ -47,6 +47,7 @@ deploy_staging:
     ES_HOST: $STAG_ES_HOST
     XTAG_TIME: $XTAG_TIME
     MONGO_STAG_URL: $MONGO_STAG_URL
+    NODE_ENV: $STAG_ENV
 
   script:
     - echo "Deploy to staging server"
@@ -144,6 +145,7 @@ add_version_prod:
     cat deployment.yaml
     cat service.yaml
     cat ingress.yaml
+
     kubectl apply -f deployment.yaml
     kubectl apply -f service.yaml
     kubectl apply -f ingress.yaml
