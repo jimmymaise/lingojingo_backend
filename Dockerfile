@@ -19,11 +19,11 @@ COPY . .
 
 RUN npm install
 
-RUN npm install pm2 -g
+#RUN npm install pm2 -g
 
-EXPOSE 8080 8081
+EXPOSE 8080
 
 
-CMD [ "/home/node/.npm-global/lib/node_modules/pm2/bin/pm2-runtime", "server.js" ]
+#CMD [ "/home/node/.npm-global/lib/node_modules/pm2/bin/pm2-runtime", "server.js" ]
 
-#CMD ["node", "server.js"]
+CMD ["node", "server.js"]
