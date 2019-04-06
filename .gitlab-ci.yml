@@ -4,7 +4,7 @@ variables:
   PROJECT_NAME: sts
 
 stages:
-#  - test
+  #  - test
   - build
   - deploy
   - add_version
@@ -31,10 +31,7 @@ build:
   services:
     - docker:dind
   script:
-    - echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
-    - gcloud auth activate-service-account --key-file gcloud-service-key.json
-    - gcloud config set project $GCP_PROJECT_ID
-    - gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE_NAME=$PROJECT_NAME,_VERSION=$(echo $CI_COMMIT_SHA | cut -c8-25)
+    - cloudbuild
   only:
     - master
     - /^kube\d+\.\d+\.\d+$/
@@ -51,10 +48,7 @@ deploy_staging:
 
   script:
     - echo "Deploy to staging server"
-    - config_kubernetes
-    - create_ssl_secret
-    - create_deployment_files
-    - apply_and_rollout
+    - deploy
   when: always
   environment:
     name: staging
@@ -75,17 +69,11 @@ deploy_production:
     NODE_ENV: $PROD_ENV
     MONGO_PROD_URL: $MONGO_PROD_URL
     MONGO_STAG_URL: $MONGO_STAG_URL
-
+  script:
+    - echo "Deploy to staging server"
+    - deploy
   only:
     - /^v\d+\.\d+\.\d+$/
-  before_script:
-    - docker info
-  script:
-    - docker stop $(docker ps -a -q) || true
-    - docker rm $(docker ps -a -q)  || true
-    - docker rmi $(docker images -a -q) || true
-    - docker build -t my-docker-image .
-    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$PROD_ENV -e ES_HOST=$PROD_ES_HOST -e XTAG_TIME=$XTAG_TIME  -e MONGO_PROD_URL=$MONGO_PROD_URL -e PROD_FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
 
 add_version_stag:
   stage: add_version
@@ -109,49 +97,25 @@ add_version_prod:
 # Custom Functions -------------------------------------------------------
 .custom_functions: &custom_functions |
   export VERSION=$(echo $CI_COMMIT_SHA | cut -c8-25)
-  export SECRET_NAME=tls-$CI_ENVIRONMENT_SLUG-$PROJECT_NAME
-  export REPLICAS=$GCP_REPLICAS
-  export TRACK=stable
+  export DEPLOYMENT_NAME=$PROJECT_NAME-$CI_ENVIRONMENT_SLUG
 
-  function config_kubernetes() {
+  function cloudbuild(){
+    echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
+    gcloud auth activate-service-account --key-file gcloud-service-key.json
+    gcloud config set project $GCP_PROJECT_ID
+    gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE_NAME=$PROJECT_NAME,_VERSION=$VERSION
+  }
+  function deploy() {
     echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
     gcloud auth activate-service-account --key-file gcloud-service-key.json
     gcloud beta container clusters get-credentials $GCP_KUBE_NAME --region $GCP_REGION --project $GCP_PROJECT_ID
+
+    kubectl set image deployment.extensions/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=gcr.io/$GCP_PROJECT_ID/$PROJECT_NAME:$VERSION
+    kubectl rollout status deployment.extensions/$DEPLOYMENT_NAME
+    kubectl get all,ing -l app=$DEPLOYMENT_NAME
   }
 
-  function create_ssl_secret() {
-    ## Check if secret name already exists
-    if [[ $SECRET_NAME == $(kubectl get secret $SECRET_NAME -o jsonpath="{.metadata.name}") ]]; then
-      kubectl delete secret $SECRET_NAME
-    fi
-
-    kubectl create secret tls $SECRET_NAME --key config/ssl_certs/tls.key --cert config/ssl_certs/tls.crt
-  }
-
-  function create_deployment_files() {
-    ## Deployment file substitutions
-    sed 's/_PROJECT_NAME_/'"$PROJECT_NAME"'/g; s/_VERSION_/'"$VERSION"'/g; s/_CI_ENVIRONMENT_SLUG_/'"$CI_ENVIRONMENT_SLUG"'/g; s/_GCP_PROJECT_ID_/'"$GCP_PROJECT_ID"'/g; s/_REPLICAS_/'"$REPLICAS"'/g; s/_TRACK_/'"$TRACK"'/g;' config/deployment/kubernetes.tpl.deployment.yaml > deployment.yaml;
-
-    ## Ingress file substitutions
-
-    sed 's/_PROJECT_NAME_/'"$PROJECT_NAME"'/g; s/_CI_ENVIRONMENT_SLUG_/'"$CI_ENVIRONMENT_SLUG"'/g; s/_MY_DOMAIN_/'"$MY_DOMAIN"'/g;' config/deployment/kubernetes.tpl.ingress-ssl.yaml > ingress.yaml;
-
-    ## Service file substitutions
-    sed 's/_PROJECT_NAME_/'"$PROJECT_NAME"'/g; s/_CI_ENVIRONMENT_SLUG_/'"$CI_ENVIRONMENT_SLUG"'/g;' config/deployment/kubernetes.tpl.service.yaml > service.yaml;
-
-  }
-
-  function apply_and_rollout() {
-    cat deployment.yaml
-    cat service.yaml
-    cat ingress.yaml
-
-    kubectl apply -f deployment.yaml
-    kubectl apply -f service.yaml
-    kubectl apply -f ingress.yaml
-    kubectl rollout status -f deployment.yaml
-    kubectl get all,ing -l app=$PROJECT_NAME-$CI_ENVIRONMENT_SLUG
-  }
-
+before_script:
+  - *custom_functions
 before_script:
   - *custom_functions
