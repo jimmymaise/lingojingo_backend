@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
-              path: /admin
+              path: /
               port: 80
               scheme: HTTP
             initialDelaySeconds: 30

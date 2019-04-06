@@ -18,7 +18,7 @@ spec:
             backend:
               serviceName: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
               servicePort: 80
-          - path: /admin
+          - path: /
             backend:
               serviceName: _PROJECT_NAME_-_CI_ENVIRONMENT_SLUG_
               servicePort: 80
