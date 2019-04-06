@@ -1,6 +1,7 @@
 
 stages:
 #  - test
+  - build
   - deploy
   - add_version
 
@@ -19,25 +20,43 @@ stages:
 #      - node_modules/
 
 #Deploy for releasing to production
-deploy_staging:
-  stage: deploy
-  tags:
-    - runner2
-  environment:
-    name: staging
-    url: https://stag.lingojingo.com
+
+build:
+  stage: build
+  image: google/cloud-sdk
+  services:
+    - docker:dind
+  script:
+    - echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE_NAME=$PROJECT_NAME,_VERSION=$(echo $CI_COMMIT_SHA | cut -c8-25)
   only:
     - master
-    - /^r\d+\.\d+\.\d+$/
 
-  before_script:
-    - docker info
+deploy_staging:
+  stage: deploy
+  image: google/cloud-sdk
+  variables:
+    ES_HOST: $STAG_ES_HOST
+    XTAG_TIME: $XTAG_TIME
+    MONGO_STAG_URL: $MONGO_STAG_URL
+
   script:
-    - docker stop $(docker ps -a -q) || true
-    - docker rm $(docker ps -a -q)  || true
-    - docker rmi $(docker images -a -q) || true
-    - docker build -t my-docker-image .
-    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$STAG_ENV -e ES_HOST=$STAG_ES_HOST -e XTAG_TIME=$XTAG_TIME -e MONGO_STAG_URL=$MONGO_STAG_URL my-docker-image
+    - echo "Deploy to staging server"
+    - config_kubernetes
+    - create_ssl_secret
+    - create_deployment_files
+    - apply_and_rollout
+  when: always
+  environment:
+    name: staging
+    url: https://$CI_ENVIRONMENT_SLUG-$PROJECT_NAME.$MY_DOMAIN
+  only:
+    - master
+    - /^kube\d+\.\d+\.\d+$/
+
+
 deploy_production:
   stage: deploy
   tags:
@@ -48,6 +67,7 @@ deploy_production:
   variables:
     NODE_ENV: $PROD_ENV
     MONGO_PROD_URL: $MONGO_PROD_URL
+    MONGO_STAG_URL: $MONGO_STAG_URL
 
   only:
     - /^v\d+\.\d+\.\d+$/
