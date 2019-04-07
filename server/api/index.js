@@ -27,6 +27,24 @@ internals.applyRoutes = function (server) {
     }
   });
 
+  server.route({
+    method: 'GET',
+    path: '/healthz',
+    handler: function (request) {
+      return {
+        message: 'Welcome to LingoJingo.',
+        serverTime: Date.now(),
+        healthCheck: {
+          api: "OK",
+          db: "Not Implemented",
+          es: "Not Implemented",
+          redis: "Not Implemented",
+
+        }
+      };
+    }
+  });
+
 
   server.route({
     method: 'GET',

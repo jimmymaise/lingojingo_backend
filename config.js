@@ -12,8 +12,6 @@ const config = {
   port: {
     web: {
       $filter: 'env',
-      production: 8080,
-      staging: 8080,
       test: 9000,
       dev: 3200,
       $default: 8080
@@ -21,20 +19,6 @@ const config = {
   },
   hapiMongoModels: {
     $filter: 'env',
-    production: {
-      mongodb: {
-        uri: process.env.MONGO_PROD_URL,
-        db: 'vomemo'
-      },
-      autoIndex: false
-    },
-    staging: {
-      mongodb: {
-        uri: process.env.MONGO_STAG_URL,
-        db: 'vomemo'
-      },
-      autoIndex: false
-    },
     test: {
       mongodb: {
         uri: 'mongodb://localhost:27017/',
@@ -44,15 +28,15 @@ const config = {
     },
     dev: {
       mongodb: {
-        uri: 'mongodb://vomemo_user:Aa123456!@ds117960.mlab.com:17960/vomemo',
-        db: 'vomemo'
+        uri: 'mongodb://mongo_test:mongo_test%40123test@35.247.138.131:27017/mongo_test?readPreference=primary',
+        db: 'mongo_test'
       },
       autoIndex: false
     },
     $default: {
       mongodb: {
-        uri: 'mongodb://vomemo_user:Aa123456!@ds117960.mlab.com:17960/vomemo',
-        db: 'vomemo'
+        uri: process.env.MONGO_URL,
+        db: process.env.MONGO_DB_NAME
       },
       autoIndex: false
     }

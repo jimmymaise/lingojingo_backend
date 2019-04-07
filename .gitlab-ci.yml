@@ -117,5 +117,3 @@ add_version_prod:
 
 before_script:
   - *custom_functions
-before_script:
-  - *custom_functions
