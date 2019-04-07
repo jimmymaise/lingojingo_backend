@@ -4,7 +4,7 @@ let bodybuilder = require('bodybuilder')
 
 // Core ES variables for this project
 
-let port = 9200
+let port = process.env.ES_PORT||9200
 let host = process.env.ES_HOST
 let es = new elasticsearch.Client({host: {host, port}})
 
