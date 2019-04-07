@@ -40,11 +40,6 @@ build:
 deploy_staging:
   stage: deploy
   image: google/cloud-sdk
-  variables:
-    ES_HOST: $STAG_ES_HOST
-    XTAG_TIME: $XTAG_TIME
-    MONGO_STAG_URL: $MONGO_STAG_URL
-    NODE_ENV: $STAG_ENV
 
   script:
     - echo "Deploy to staging server"
