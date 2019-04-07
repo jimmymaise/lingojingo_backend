@@ -119,23 +119,36 @@ internals.applyRoutes = function (server) {
       }
 
       try {
+
+        let process = false
         if (request.params.p === 'deck' || request.params.p === 'all') {
-          return await Deck.syncDataES({}, true)
+          process = true
+          Deck.syncDataES({}, true)
         }
         if (request.params.p === 'user-item' || request.params.p === 'all') {
-          return await UserItem.syncDataES({}, true)
+          process = true
+          UserItem.syncDataES({}, true)
         }
         if (request.params.p === 'article' || request.params.p === 'all') {
-          return await Article.syncDataES({}, true)
+          process = true
+          Article.syncDataES({}, true)
         }
         if (request.params.p === 'song' || request.params.p === 'all') {
-          return await Song.syncDataES({}, true)
+          process = true
+          Song.syncDataES({}, true)
         }
         if (request.params.p === 'user-topic' || request.params.p === 'all') {
-          return await UserTopic.syncDataES({}, true)
+          process = true
+          UserTopic.syncDataES({}, true)
         }
         if (request.params.p === 'grammar-unit' || request.params.p === 'all') {
-          return await GrammarUnit.syncDataES({}, true)
+          process = true
+          GrammarUnit.syncDataES({}, true)
+        }
+        if (process) {
+          return {
+            "message": "Sync ES process starting"
+          }
         }
         return Boom.badData('Invalid type !');
 
