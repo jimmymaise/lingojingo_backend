@@ -4,12 +4,10 @@ let bodybuilder = require('bodybuilder')
 
 // Core ES variables for this project
 
-let port = process.env.ES_PORT||9200
-let host = process.env.ES_HOST
-let es = new elasticsearch.Client({host: {host, port}})
+// let es = new elasticsearch.Client({host: {host, port}})
+let es = new elasticsearch.Client({host: process.env.ES_URL})
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
-  host = 'https://stag-api.lingojingo.com/proxyES'
   es = new elasticsearch.Client({host: 'http://localhost:3200/proxyES'})
 
 }
