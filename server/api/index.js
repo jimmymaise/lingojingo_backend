@@ -6,7 +6,7 @@ const getLocation = require('../utils/general').getLocation
 const Boom = require('boom');
 const Wreck = require('@hapi/wreck');
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
-let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.vomemo.com/proxyES`
+let esAddr = (process.env.ES_HOST) ? process.env.ES_URL : `https://stag-api.vomemo.com/proxyES`
 
 let proxyList = [
   'https://stag-api.lingojingo.com/proxy/',
