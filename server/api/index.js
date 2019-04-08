@@ -47,6 +47,34 @@ internals.applyRoutes = function (server) {
 
 
   server.route({
+    method: '*',
+    path: '/proxyES/{p*}',
+    config: {
+      auth: envAuth
+    },
+
+    handler: {
+      proxy: {
+        mapUri: function (request) {
+          return {
+            uri: `${esAddr}/${request.params.p}`
+          };
+        },
+        onResponse: function (err, res, request, h, settings, ttl) {
+
+          return Wreck.read(res, {json: true}, function (err, payload) {
+
+            let response = h.response(payload);
+            response.headers = res.headers;
+            return response;
+          });
+        }
+      }
+    }
+  });
+  
+
+  server.route({
     method: 'GET',
     path: '/version/{type}',
     config: {
@@ -235,7 +263,8 @@ internals.applyRoutes = function (server) {
   });
 
   return;
-};
+}
+;
 
 exports.register = function (server, options) {
   server.dependency(['hapi-mongo-models'], internals.applyRoutes);
