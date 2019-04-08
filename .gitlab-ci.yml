@@ -34,7 +34,7 @@ build:
     - cloudbuild
   only:
     - master
-    - /^kube\d+\.\d+\.\d+$/
+    - /^release\d+\.\d+\.\d+$/
 
 
 deploy_staging:
@@ -50,7 +50,7 @@ deploy_staging:
     url: https://$CI_ENVIRONMENT_SLUG-$PROJECT_NAME.$MY_DOMAIN
   only:
     - master
-    - /^kube\d+\.\d+\.\d+$/
+    - /^release\d+\.\d+\.\d+$/
 
 
 deploy_production:
@@ -62,18 +62,23 @@ deploy_production:
     url: https://app.lingojingo.com
   variables:
     NODE_ENV: $PROD_ENV
-    MONGO_PROD_URL: $MONGO_PROD_URL
-    MONGO_STAG_URL: $MONGO_STAG_URL
-  script:
-    - echo "Deploy to staging server"
-    - deploy
+    MONGO_URL: $MONGO_PROD_URL
   only:
     - /^v\d+\.\d+\.\d+$/
+  before_script:
+    - docker info
+  script:
+    - docker stop $(docker ps -a -q) || true
+    - docker rm $(docker ps -a -q)  || true
+    - docker rmi $(docker images -a -q) || true
+    - docker build -t my-docker-image .
+    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$PROD_ENV -e ES_HOST=$PROD_ES_HOST -e XTAG_TIME=$XTAG_TIME  -e MONGO_URL=$MONGO_PROD_URL -e FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
+
 
 add_version_stag:
   stage: add_version
   only:
-    - /^r\d+\.\d+\.\d+$/
+    - /^release\d+\.\d+\.\d+$/
   script:
     - UPDATE_VERSION_URL="${STAG_BE_URL?}/version/backend/${CI_COMMIT_TAG?}"
     - curl -X POST  ${UPDATE_VERSION_URL?}
