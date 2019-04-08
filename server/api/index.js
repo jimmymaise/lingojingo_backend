@@ -5,6 +5,9 @@ const _ = require('lodash')
 const getLocation = require('../utils/general').getLocation
 const Boom = require('boom');
 const Wreck = require('@hapi/wreck');
+const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
+let esAddr = (process.env.ES_HOST) ? `http://${process.env.ES_HOST}:9200` : `https://stag-api.vomemo.com/proxyES`
+
 let proxyList = [
   'https://stag-api.lingojingo.com/proxy/',
   'https://api.lingojingo.com/proxy/',
@@ -72,7 +75,7 @@ internals.applyRoutes = function (server) {
       }
     }
   });
-  
+
 
   server.route({
     method: 'GET',
