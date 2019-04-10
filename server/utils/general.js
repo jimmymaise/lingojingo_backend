@@ -18,7 +18,7 @@ function checkSecurity(request) {
   let xTag = request.headers['x-tag']
   if (isNaN(xTag)) {
     let hashids = new Hashids('Lingo Jingo@Learning Vocabulary Online');
-    xTag = hashids.decode(xTag);
+    xTag = hashids.decode(xTag)[0];
 
   } else {
     xTag = parseInt(request.headers['x-tag'], 10)
