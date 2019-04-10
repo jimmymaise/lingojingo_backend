@@ -1,17 +1,29 @@
 const Constant = require('../utils/constants');
 const logger = require('../utils/logger.js').logger
 const {ApolloError} = require('apollo-server-hapi')
+let Hashids = require('hashids');
+
 
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
+
 let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
 function checkSecurity(request) {
   if (request.headers['debug'] === Constant.BY_PASS_KEY) {
     return request
   }
-  let xTag = request.headers['x-tag'] ? parseInt(request.headers['x-tag'], 10) : 0
+
+  let xTag = request.headers['x-tag']
+  if (isNaN(xTag)) {
+    let hashids = new Hashids('Lingo Jingo@Learning Vocabulary Online');
+    xTag = hashids.decode(xTag);
+
+  } else {
+    xTag = parseInt(request.headers['x-tag'], 10)
+  }
+
   let beTimeStamp = Math.floor(Date.now() / 1000)
   let feTimeStamp = 0
 
@@ -93,6 +105,7 @@ function correctAnswerToLevel(correctAnswer) {
 
 
 }
+
 function getLocation(href) {
   var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
   return match && {
@@ -106,6 +119,7 @@ function getLocation(href) {
     hash: match[7]
   }
 }
+
 module.exports.onlyUnique = onlyUnique;
 module.exports.setClaimToFireBase = setClaimToFireBase
 module.exports.correctAnswerToLevel = correctAnswerToLevel;
