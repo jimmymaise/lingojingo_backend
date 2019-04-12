@@ -36,9 +36,10 @@ function checkSecurity(request) {
   }
   logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
     'diff': diff,
-    'x-tag': xTag,
+    'x-tag-decoded': xTag,
     'feTimeStampFromXTag': feTimeStamp,
-    'beTimeStamp': beTimeStamp
+    'beTimeStamp': beTimeStamp,
+    'x-tag': request.headers['x-tag']
 
   }))
   throw SecQueryError

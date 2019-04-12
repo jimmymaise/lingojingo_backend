@@ -24,8 +24,11 @@ logger['requestToSentryLog'] = function (request, other_errors) {
       method: request.method,
       headers: request.headers,
       cookies: request.state,
+      params: request.params,
       url: request.path,
       body: get(request, 'payload.query', null),
+      variables:get(request, 'payload.variables', null),
+      operationName:get(request, 'payload.operationName', null)
     },
     extra: {
       timestamp: get(request, 'info.received', null),
