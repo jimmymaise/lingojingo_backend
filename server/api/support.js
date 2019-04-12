@@ -2,6 +2,7 @@
 
 const Boom = require('boom');
 const internals = {};
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 internals.applyRoutes = function (server, next) {
   const SupportService = server.plugins['support-service'];
@@ -11,6 +12,7 @@ internals.applyRoutes = function (server, next) {
     path: '/support/ticket',
     config: {
       auth: 'firebase',
+      cors: DEFAULT_CORS,
       description: 'Support Ticket Jira',
       notes: 'Create ticket for supporting user',
       tags: ['api'],

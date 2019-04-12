@@ -3,6 +3,7 @@
 
 const composer = require('./index');
 const checkSecurity = require('./server/utils/general').checkSecurity
+const DEFAULT_CORS = require('./server/utils/constants').DEFAULT_CORS
 const _ = require('lodash')
 const Config = require('./config');
 const {ApolloServer} = require('apollo-server-hapi');
@@ -42,11 +43,7 @@ const StartServer = async () => {
       app,
       route: {
         auth: 'firebase',
-        cors: {
-          origin: ['http://localhost:3200', 'http://localhost:3100', 'https://app.lingojingo.com',
-            'https://voca-memo.firebaseapp.com', 'https://lingojingoapp.firebaseapp.com','https://stag.lingojingo.com'],
-          additionalHeaders: ['debug', 'x-tag']
-        }
+        cors: DEFAULT_CORS
       }
     });
     await server.installSubscriptionHandlers(app.listener);

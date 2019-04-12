@@ -2,6 +2,7 @@
 
 const Boom = require('boom');
 const checkSecurity = require('../utils/general').checkSecurity
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 
 const internals = {};
@@ -14,6 +15,7 @@ internals.applyRoutes = function (server, next) {
     path: '/cloud-message/{topic}',
     config: {
       auth: 'firebase',
+      cors: DEFAULT_CORS,
       description: 'send cloud-message for User',
       notes: 'send cloud-message for user ',
       tags: ['api']

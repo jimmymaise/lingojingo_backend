@@ -3,6 +3,7 @@
 const Boom = require('boom');
 const Joi = require('joi');
 const Async = require('async');
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 const internals = {};
 
@@ -15,6 +16,7 @@ internals.applyRoutes = function (server, next) {
     path: '/me',
     config: {
       auth: 'firebase',
+      cors: DEFAULT_CORS,
       description: 'Update current user info data',
       notes: 'Update and return newest data',
       tags: ['api'],
@@ -58,9 +60,7 @@ internals.applyRoutes = function (server, next) {
       notes: 'Returns current user info',
       tags: ['api'],
       auth: 'firebase',
-      cors: {
-        additionalExposedHeaders: ['Date']
-      }
+      cors: DEFAULT_CORS,
     },
     handler: async (request) => {
       try {

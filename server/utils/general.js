@@ -10,6 +10,8 @@ function onlyUnique(value, index, self) {
 
 let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
+
+
 function checkSecurity(request) {
   if (process.env.XTAG_DISABLE === true || request.headers['debug'] === process.env.XTAG_BY_PASS_KEY) {
     return request

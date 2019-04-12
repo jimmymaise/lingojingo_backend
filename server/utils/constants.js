@@ -48,14 +48,19 @@ REWARD_TYPE_NAME = {
 
 }
 
+DEFAULT_CORS = {
+  origin: ['http://localhost:3200', 'http://localhost:3100', 'https://app.lingojingo.com',
+    'https://voca-memo.firebaseapp.com', 'https://lingojingoapp.firebaseapp.com', 'https://stag.lingojingo.com'],
+  additionalHeaders: ['debug', 'x-tag', 'Date']
+}
 
 module.exports = {
   EXAM,
+  DEFAULT_CORS,
   TOPIC,
   LEVEL_SCORE,
   LEVEL_NAME,
   REWARD_TYPE_NAME,
   CACHE_CONTROL,
   XTAG_TIME_DEFAULT,
-  BY_PASS_KEY
 }

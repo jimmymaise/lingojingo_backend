@@ -1,6 +1,7 @@
 'use strict';
 
 const Boom = require('boom');
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 
 const internals = {};
@@ -13,6 +14,7 @@ internals.applyRoutes = function (server, next) {
     path: '/article/buy/{id}',
     config: {
       auth: 'firebase',
+      cors: DEFAULT_CORS,
       description: 'Buy article for User',
       notes: 'Buy article for User when payment complete',
       tags: ['api']

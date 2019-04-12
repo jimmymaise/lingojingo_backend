@@ -3,6 +3,7 @@
 const Boom = require('boom');
 const Joi = require('joi');
 const Async = require('async');
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 const internals = {};
 
@@ -16,7 +17,8 @@ internals.applyRoutes = function (server, next) {
       auth: 'firebase',
       description: 'Buy deck for User',
       notes: 'Buy deck for User when payment complete',
-      tags: ['api']
+      tags: ['api'],
+      cors: DEFAULT_CORS,
     },
     handler: async (request) => {
 

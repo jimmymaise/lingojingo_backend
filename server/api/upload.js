@@ -3,6 +3,8 @@
 const Boom = require('boom');
 const internals = {};
 let get = require("lodash.get");
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
+
 
 internals.applyRoutes = function (server, next) {
   const UploadService = server.plugins['upload-file-service'];
@@ -12,6 +14,7 @@ internals.applyRoutes = function (server, next) {
     path: '/images/upload',
     config: {
       auth: 'firebase',
+      cors: DEFAULT_CORS,
       description: 'Upload image to firebase',
       notes: 'Upload image to firebase',
       tags: ['api'],

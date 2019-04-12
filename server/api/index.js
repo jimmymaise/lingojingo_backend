@@ -7,6 +7,7 @@ const Boom = require('boom');
 const Wreck = require('@hapi/wreck');
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 let esAddr = (process.env.ES_URL) ? process.env.ES_URL : `https://staging-sts.lingojingo.com/proxyES`
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 let proxyList = [
   'https://stag-api.lingojingo.com/proxy/',
@@ -22,6 +23,9 @@ internals.applyRoutes = function (server) {
   server.route({
     method: 'GET',
     path: '/',
+    config: {
+      cors: DEFAULT_CORS,
+    },
     handler: function (request) {
       return {
         message: 'Welcome to LingoJingo.',
@@ -33,7 +37,10 @@ internals.applyRoutes = function (server) {
   server.route({
     method: 'GET',
     path: '/healthz',
-    handler: function (request) {
+
+    config: {
+      cors: DEFAULT_CORS,
+    }, handler: function (request) {
       return {
         message: 'Welcome to LingoJingo.',
         serverTime: Date.now(),
@@ -53,7 +60,9 @@ internals.applyRoutes = function (server) {
     method: '*',
     path: '/proxyES/{p*}',
     config: {
-      auth: envAuth
+      auth: envAuth,
+      cors: DEFAULT_CORS,
+
     },
 
     handler: {
@@ -81,7 +90,8 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/version/{type}',
     config: {
-      auth: 'firebase'
+      auth: 'firebase',
+      cors: DEFAULT_CORS,
     },
     handler: async function (request) {
       const Version = require('../models/version');
@@ -115,7 +125,8 @@ internals.applyRoutes = function (server) {
     method: 'POST',
     path: '/translate',
     config: {
-      auth: 'firebase'
+      auth: 'firebase',
+      cors: DEFAULT_CORS,
     },
     handler: async function (request) {
       const translateText = require('../intergration/gtranslate/handler').translateText;
@@ -134,7 +145,8 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/syncES/{p*}',
     config: {
-      auth: 'firebase'
+      auth: 'firebase',
+      cors: DEFAULT_CORS,
     },
     handler: async function (request) {
       const Deck = require('../models/deck');

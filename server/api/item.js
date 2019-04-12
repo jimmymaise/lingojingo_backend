@@ -4,6 +4,7 @@ const Boom = require('boom');
 const internals = {};
 let get = require("lodash.get");
 const getClaims =require('../graphql/permission').getClaims
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 internals.applyRoutes = function (server, next) {
   const ItemService = server.plugins['item-service'];
@@ -44,6 +45,8 @@ internals.applyRoutes = function (server, next) {
       description: 'Batch crop image for item',
       notes: 'Batch crop image',
       tags: ['api'],
+      cors: DEFAULT_CORS,
+
     },
     handler: async (request) => {
 
@@ -66,6 +69,8 @@ internals.applyRoutes = function (server, next) {
       description: 'Add favorite for item',
       notes: 'Add favorite for item',
       tags: ['api'],
+      cors: DEFAULT_CORS,
+
     },
     handler: async (request) => {
 
@@ -83,6 +88,7 @@ internals.applyRoutes = function (server, next) {
     path: '/images/multi-crop',
     config: {
       auth: 'firebase',
+      cors: DEFAULT_CORS,
       description: 'crop folder images to xxx_images',
       notes: 'crop folder images to xxx_images',
       tags: ['api'],
@@ -106,6 +112,7 @@ internals.applyRoutes = function (server, next) {
       description: 'Add topic Study',
       notes: 'Batch crop image',
       tags: ['api'],
+      cors: DEFAULT_CORS,
     },
     handler: async (request) => {
 

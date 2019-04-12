@@ -3,6 +3,7 @@
 const Boom = require('boom');
 const Joi = require('joi');
 const Async = require('async');
+const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
 const internals = {};
 
@@ -24,6 +25,7 @@ internals.applyRoutes = function (server, next) {
       description: 'Add user activity',
       notes: 'Add user activity',
       tags: ['api'],
+      cors: DEFAULT_CORS,
       validate: {
         payload: {
           event: Joi.string().required(),
@@ -59,11 +61,9 @@ internals.applyRoutes = function (server, next) {
     config: {
       description: 'Get user activity',
       notes: 'Get user activity',
+      cors: DEFAULT_CORS,
       tags: ['api'],
       auth: 'firebase',
-      cors: {
-        additionalExposedHeaders: ['Date']
-      }
     },
     handler: async (request) => {
       try {
