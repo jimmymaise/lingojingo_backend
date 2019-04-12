@@ -8,7 +8,7 @@ const Config = require('./config');
 const {ApolloServer} = require('apollo-server-hapi');
 const firebaseAdmin = require('./server/utils/fb');
 const logger = require('./server/utils/logger.js').logger
-const {schemaWithMiddleware,MyErrorTrackingExtension} = require('./server/graphql/core')
+const {schemaWithMiddleware, MyErrorTrackingExtension} = require('./server/graphql/core')
 
 const StartServer = async () => {
   try {
@@ -43,7 +43,8 @@ const StartServer = async () => {
       route: {
         auth: 'firebase',
         cors: {
-          origin: ['*'],
+          origin: ['http://localhost:3200', 'http://localhost:3100', 'https://app.lingojingo.com',
+            'https://voca-memo.firebaseapp.com', 'https://lingojingoapp.firebaseapp.com','https://stag.lingojingo.com'],
           additionalHeaders: ['debug', 'x-tag']
         }
       }

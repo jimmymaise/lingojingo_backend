@@ -11,10 +11,9 @@ function onlyUnique(value, index, self) {
 let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
 function checkSecurity(request) {
-  if (request.headers['debug'] === Constant.BY_PASS_KEY) {
+  if (process.env.NODE_ENV === 'dev' || request.headers['debug'] === Constant.BY_PASS_KEY) {
     return request
   }
-
   let xTag = request.headers['x-tag']
   if (isNaN(xTag)) {
     let hashids = new Hashids('Lingo Jingo@Learning Vocabulary Online');
