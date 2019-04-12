@@ -11,12 +11,12 @@ function onlyUnique(value, index, self) {
 let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
 function checkSecurity(request) {
-  if (process.env.XTAG_DISABLE === true || request.headers['debug'] === Constant.BY_PASS_KEY) {
+  if (process.env.XTAG_DISABLE === true || request.headers['debug'] === process.env.XTAG_BY_PASS_KEY) {
     return request
   }
   let xTag = request.headers['x-tag']
   if (isNaN(xTag)) {
-    let hashids = new Hashids('Lingo Jingo@Learning Vocabulary Online');
+    let hashids = new Hashids(process.env.XTAG_HASH_KEY);
     xTag = hashids.decode(xTag)[0];
 
   } else {
