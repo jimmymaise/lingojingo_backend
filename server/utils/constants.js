@@ -49,8 +49,8 @@ REWARD_TYPE_NAME = {
 }
 
 DEFAULT_CORS = {
-  origin: ['http://localhost:3200', 'http://localhost:3100', 'https://app.lingojingo.com',
-    'https://voca-memo.firebaseapp.com', 'https://lingojingoapp.firebaseapp.com', 'https://stag.lingojingo.com'],
+  origin: process.env.NODE_ENV !== 'dev' ? ['https://app.lingojingo.com',
+    'https://voca-memo.firebaseapp.com', 'https://lingojingoapp.firebaseapp.com', 'https://stag.lingojingo.com'] : ['*'],
   additionalHeaders: ['debug', 'x-tag', 'Date']
 }
 
