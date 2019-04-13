@@ -90,7 +90,6 @@ internals.applyRoutes = function (server) {
     method: 'GET',
     path: '/version/{type}',
     config: {
-      auth: 'firebase',
       cors: DEFAULT_CORS,
     },
     handler: async function (request) {
