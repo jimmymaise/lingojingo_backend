@@ -36,7 +36,7 @@ const config = {
     $default: {
       mongodb: {
         uri: process.env.MONGO_URL,
-        db: process.env.MONGO_DB_NAME
+        db: process.env.MONGO_DB_NAME || 'vomemo'
       },
       autoIndex: false
     }
