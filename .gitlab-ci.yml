@@ -72,7 +72,7 @@ deploy_production:
     - docker rm $(docker ps -a -q)  || true
     - docker rmi $(docker images -a -q) || true
     - docker build -t my-docker-image .
-    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$PROD_ENV -e ES_URL=$PROD_ES_URL -e XTAG_TIME=$XTAG_TIME  -e MONGO_URL=$MONGO_PROD_URL -e FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
+    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$PROD_ENV -e ES_URL=$PROD_ES_URL -e XTAG_TIME=$XTAG_TIME  -e MONGO_URL=$MONGO_PROD_URL -e MONGO_URL=vomemo  -e FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
 
 deploy_production_new:
   stage: deploy
