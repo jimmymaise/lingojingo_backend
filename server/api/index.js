@@ -9,11 +9,7 @@ const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 let esAddr = (process.env.ES_URL) ? process.env.ES_URL : `https://staging-sts.lingojingo.com/proxyES`
 const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
 
-let proxyList = [
-  'https://stag-api.lingojingo.com/proxy/',
-  'https://api.lingojingo.com/proxy/',
-  'https://cors-anywhere.herokuapp.com/',
-  'https://cors.io/?',]
+let proxyList = require('../utils/constants').PROXY_LIST
 let usedProxies = []
 let usingProxy
 let notUsedProxies
@@ -234,7 +230,7 @@ internals.applyRoutes = function (server) {
           let headers = {}
           headers['x-requested-with'] = 'https://app.lingojingo.com'
           headers['origin'] = req.headers['origin'] || 'https://app.lingojingo.com'
-          headers['accept-language'] = req.headers['accept-language']
+          headers['accept-language'] = req.headers['accept-language']||'*'
           headers['user-agent'] = req.headers['user-agent']
 
 

@@ -54,6 +54,12 @@ DEFAULT_CORS = {
   additionalHeaders: ['debug', 'x-tag', 'Date']
 }
 
+PROXY_LIST = [
+  'https://stag-api.lingojingo.com/proxy/',
+  'https://api.lingojingo.com/proxy/',
+  'https://cors-anywhere.herokuapp.com/',
+  'https://cors.io/?',]
+
 module.exports = {
   EXAM,
   DEFAULT_CORS,
@@ -63,4 +69,5 @@ module.exports = {
   REWARD_TYPE_NAME,
   CACHE_CONTROL,
   XTAG_TIME_DEFAULT,
+  PROXY_LIST
 }
