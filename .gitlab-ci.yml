@@ -31,7 +31,7 @@ build:
   services:
     - docker:dind
   script:
-    - cloudbuild
+    - build
   only:
     - master
     - /^release\d+\.\d+\.\d+$/
