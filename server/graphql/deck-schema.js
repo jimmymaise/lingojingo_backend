@@ -79,9 +79,6 @@ const resolvers = {
       return await deckService.getDeck(context.request.auth.credentials.uid, args.id);
     },
     deckSearch: async (parent, args, context) => {
-      context['userInfo'] = await UserInfo.findOne({
-        firebaseUserId: context.request.auth.credentials.uid
-      });
       return await deckService.searchDeck(args);
 
     },

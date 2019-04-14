@@ -1,10 +1,16 @@
-const {rule, shield, and, or, not} = require('graphql-shield')
+const {rule, shield, and, or, not, allow, deny} = require('graphql-shield')
 
 const isAdmin = rule()(async (parent, args, ctx, info) => {
   let credentials = ctx.request.auth.credentials
   let claims = await getClaims(credentials)
   return (claims.groups || []).includes('ADMIN')
 })
+
+const isAuthenticated = rule()(async (parent, args, ctx, info) => {
+    return !!ctx.request.auth.credentials;
+  }
+)
+
 
 async function getClaims(credentials) {
   let claims = credentials.claims
@@ -30,7 +36,17 @@ const permissions = shield({
     updateOneTopic: isAdmin,
 
   },
-})
+  Query: {
+    deckSearch: allow,
+  },
+  Deck: {
+    description: allow,
+    name: allow
+  },
+  DeckPagination: allow
+
+
+}, {fallbackRule: isAuthenticated})
 
 
 module.exports = {

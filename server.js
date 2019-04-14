@@ -42,7 +42,10 @@ const StartServer = async () => {
     await server.applyMiddleware({
       app,
       route: {
-        auth: 'firebase',
+        auth: {
+          strategy: 'firebase',
+          mode: 'try'
+        },
         cors: DEFAULT_CORS
       }
     });
