@@ -43,7 +43,9 @@ const permissions = shield({
     description: allow,
     name: allow
   },
-  DeckPagination: allow
+  DeckPagination: allow,
+  PageInfo: allow,
+  PageItemInfo: allow
 
 
 }, {fallbackRule: isAuthenticated})
