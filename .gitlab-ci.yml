@@ -4,7 +4,7 @@ variables:
   PROJECT_NAME: sts
 
 stages:
-  #  - test
+  - test
   - build
   - deploy
   - add_version
@@ -25,16 +25,42 @@ stages:
 
 #Deploy for releasing to production
 
-build:
+test:
+  stage: test
+  script: echo "Running tests"
+  only:
+    - master
+
+
+
+build_staging:
   stage: build
   image: google/cloud-sdk
   services:
     - docker:dind
   script:
+    - config
     - build
+  environment:
+    name: staging
   only:
     - master
-    - /^release\d+\.\d+\.\d+$/
+
+build_production:
+  stage: build
+  image: google/cloud-sdk
+  services:
+    - docker:dind
+  script:
+    - config
+    - build
+  environment:
+    name: production
+  only:
+    - /^v\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+\.hotfix$/
+
+
 
 
 deploy_staging:
