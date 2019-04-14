@@ -80,7 +80,6 @@ deploy_production_new:
   script:
     - config
     - deploy
-  when: always
   environment:
     name: production
     url: https://$CI_ENVIRONMENT_SLUG-$PROJECT_NAME.$MY_DOMAIN
