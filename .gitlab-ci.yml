@@ -42,9 +42,8 @@ deploy_staging:
   image: google/cloud-sdk
 
   script:
-    - echo "Deploy to staging server"
+    - config
     - deploy
-  when: always
   environment:
     name: staging
     url: https://$CI_ENVIRONMENT_SLUG-$PROJECT_NAME.$MY_DOMAIN
@@ -53,7 +52,7 @@ deploy_staging:
     - /^release\d+\.\d+\.\d+$/
 
 
-deploy_production:
+deploy_production_old:
   stage: deploy
   tags:
     - runner1
@@ -64,7 +63,7 @@ deploy_production:
     NODE_ENV: $PROD_ENV
     MONGO_URL: $MONGO_PROD_URL
   only:
-    - /^v\d+\.\d+\.\d+$/
+    - /^old\d+\.\d+\.\d+$/
   before_script:
     - docker info
   script:
@@ -72,21 +71,23 @@ deploy_production:
     - docker rm $(docker ps -a -q)  || true
     - docker rmi $(docker images -a -q) || true
     - docker build -t my-docker-image .
-    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$PROD_ENV -e ES_URL=$PROD_ES_URL -e XTAG_TIME=$XTAG_TIME  -e MONGO_URL=$MONGO_PROD_URL -e FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
+    - docker run -t -d -p 8080:8080 -p 8081:8081 -e NODE_ENV=$PROD_ENV -e ES_URL=$PROD_ES_URL -e XTAG_TIME=$XTAG_TIME  -e MONGO_URL=$MONGO_PROD_URL         -e FIRE_BASE_CONFIG_SERVICE=$PROD_FIRE_BASE_CONFIG_SERVICE my-docker-image
 
 deploy_production_new:
   stage: deploy
   image: google/cloud-sdk
 
   script:
-    - echo "Deploy to production server"
+    - config
     - deploy
   when: always
   environment:
     name: production
     url: https://$CI_ENVIRONMENT_SLUG-$PROJECT_NAME.$MY_DOMAIN
   only:
-    - /^prod\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+\.hotfix$/
+
 
 add_version_stag:
   stage: add_version
@@ -112,21 +113,32 @@ add_version_prod:
   export VERSION=$(echo $CI_COMMIT_SHA | cut -c8-25)
   export DEPLOYMENT_NAME=$PROJECT_NAME-$CI_ENVIRONMENT_SLUG
 
-  function cloudbuild(){
-    echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
-    gcloud auth activate-service-account --key-file gcloud-service-key.json
-    gcloud config set project $GCP_PROJECT_ID
-    gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE_NAME=$PROJECT_NAME,_VERSION=$VERSION
+  function build() {
+    gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE=$IMAGE,_VERSION=$VERSION
   }
-  function deploy() {
-    echo "$GCP_SERVICE_KEY" > gcloud-service-key.json # Google Cloud service accounts
-    gcloud auth activate-service-account --key-file gcloud-service-key.json
-    gcloud beta container clusters get-credentials $GCP_KUBE_NAME --region $GCP_REGION --project $GCP_PROJECT_ID
+  function config() {
+    if [[ "$CI_ENVIRONMENT_SLUG" != "production" ]]; then
+      export IMAGE=gcr.io/$GCP_PROJECT_ID_STAGING/$PROJECT_NAME
+      echo "$GCP_SERVICE_KEY_STAGING" > gcloud-service-key.json
+      gcloud auth activate-service-account --key-file gcloud-service-key.json
+      gcloud config set project $GCP_PROJECT_ID_STAGING
+      gcloud beta container clusters get-credentials $GCP_KUBE_NAME_STAGING --region $GCP_REGION_STAGING --project $GCP_PROJECT_ID_STAGING
+    else
+      export IMAGE=gcr.io/$GCP_PROJECT_ID_PRODUCTION/$PROJECT_NAME
+      echo "$GCP_SERVICE_KEY_PRODUCTION" > gcloud-service-key.json
+      gcloud auth activate-service-account --key-file gcloud-service-key.json
+      gcloud config set project $GCP_PROJECT_ID_PRODUCTION
+      gcloud beta container clusters get-credentials $GCP_KUBE_NAME_PRODUCTION --region $GCP_REGION_PRODUCTION --project $GCP_PROJECT_ID_PRODUCTION
+    fi
+  }
 
-    kubectl set image deployment.extensions/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=gcr.io/$GCP_PROJECT_ID/$PROJECT_NAME:$VERSION
-    kubectl rollout status deployment.extensions/$DEPLOYMENT_NAME
-    kubectl get all,ing -l app=$DEPLOYMENT_NAME
+  function deploy() {
+      kubectl set image deployment.extensions/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$IMAGE:$VERSION
+      kubectl rollout status deployment.extensions/$DEPLOYMENT_NAME
+      kubectl get all,ing -l app=$DEPLOYMENT_NAME
   }
 
 before_script:
   - *custom_functions
+  #      gcloud container images untag $IMAGE:staging-latest
+
