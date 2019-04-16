@@ -17,6 +17,9 @@ COPY package*.json ./
 
 COPY . .
 
+RUN cp -r .ssh ~/.ssh
+RUN ssh -Nf mongo-proxy &&  ssh -Nf es-proxy
+
 RUN npm install
 
 #RUN npm install pm2 -g
