@@ -18,7 +18,7 @@ COPY package*.json ./
 COPY . .
 
 RUN cp -r .ssh ~/.ssh
-RUN ssh -Nf mongo-proxy &&  ssh -Nf es-proxy
+RUN ssh -Nf db-proxy
 
 RUN npm install
 
