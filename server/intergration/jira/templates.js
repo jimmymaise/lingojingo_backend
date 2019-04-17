@@ -5,7 +5,6 @@ let bodyData = `{
       "key": "{{projectKey}}"
     },
     "summary": "{{summary}}",
-    "customfield_10032":"{{email}}",
     "description": {
       "type": "doc",
       "version": 1,
@@ -27,16 +26,22 @@ let bodyData = `{
               "text": "Mong đợi: {{expected}}"
             }
           ]
+        }, {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Email: {{email}} "
+            }
+          ]
         }
+
       ]
     }, "issuetype": {
       "name": "Bug"
     },
     "assignee": {
-      "name": "Duyet Mai"
-    },
-    "reporter": {
-      "name": "Duyet Mai"
+      "name": "phat"
     }
   }
 }`
