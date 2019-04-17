@@ -1,5 +1,5 @@
 let JIRA_CONFIG = {
-  url: 'https://apmaso.atlassian.net/rest/api/3/',
+  url: 'https://lingojingo.atlassian.net/rest/api/3/',
   username: 'the@duyet.com',
   password: 'c8VBLbNuMVFHmy35HFdx3B68',
   projectKey: 'CS'
