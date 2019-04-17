@@ -33,10 +33,10 @@ let bodyData = `{
       "name": "Bug"
     },
     "assignee": {
-      "name": "theduyet"
+      "name": "Duyet Mai"
     },
     "reporter": {
-      "name": "theduyet"
+      "name": "Duyet Mai"
     }
   }
 }`
