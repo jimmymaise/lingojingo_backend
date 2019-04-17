@@ -1,7 +1,8 @@
 const jiraConfig = require('./setting').JIRA_CONFIG
 const bodyTemplate = require('./templates').bodyData
 const Mustache = require('mustache')
-const sentry = require('../../utils/logger').logger;
+const logger = require('../../utils/logger.js').logger
+
 
 const fs = require('fs')
 Mustache.escape = function (value) {
@@ -48,7 +49,13 @@ async function createJiraTicket(body) {
 
 
   let bodyData = Mustache.render(bodyTemplate, body);
-  bodyData = JSON.parse(bodyData)
+  try {
+    bodyData = JSON.parse(bodyData)
+  } catch (e) {
+    logger.error("cannot parse Data " + bodyData + e)
+    throw e
+
+  }
   let options = {
     method: 'POST',
     json: true,
