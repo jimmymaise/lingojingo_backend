@@ -67,7 +67,7 @@ async function createJiraTicket(body) {
 
   let resp = await baseRequest(options);
   if (!resp.body.key) {
-    throw Error("Cannot create ticket " + resp)
+    throw Error("Cannot create ticket " + JSON.stringify(resp))
   }
 
   return resp.body.key
