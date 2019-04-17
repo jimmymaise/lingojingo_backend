@@ -5,7 +5,7 @@ let bodyData = `{
       "key": "{{projectKey}}"
     },
     "summary": "{{summary}}",
-    "customfield_10046":{"value": "{{email}}"},
+    "customfield_10031":{{email}}",
     "description": {
       "type": "doc",
       "version": 1,
@@ -33,10 +33,10 @@ let bodyData = `{
       "name": "Bug"
     },
     "assignee": {
-      "name": "theduyet"
+      "name": "phat"
     },
     "reporter": {
-      "name": "theduyet"
+      "name": "duyet"
     }
   }
 }`
