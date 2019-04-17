@@ -163,7 +163,6 @@ add_version_prod:
       gcloud config set project $GCP_PROJECT_ID_PRODUCTION
       gcloud beta container clusters get-credentials $GCP_KUBE_NAME_PRODUCTION --region $GCP_REGION_PRODUCTION --project $GCP_PROJECT_ID_PRODUCTION
     fi
-    chmod 600 .ssh/private_key
   }
 
   function deploy() {

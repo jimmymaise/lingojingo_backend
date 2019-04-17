@@ -17,7 +17,7 @@ COPY package*.json ./
 
 COPY . .
 
-RUN cp -r .ssh ~/.ssh && ssh -Nf db-proxy
+RUN cp -r .ssh ~/.ssh && chmod 600 ~/.ssh/private_key && ssh -Nf db-proxy
 
 RUN npm install
 
