@@ -17,8 +17,6 @@ COPY package*.json ./
 
 COPY . .
 
-RUN cp -r .ssh ~/.ssh && chmod 600 ~/.ssh/private_key && ssh -Nf db-proxy
-
 RUN npm install
 
 #RUN npm install pm2 -g

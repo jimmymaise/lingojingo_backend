@@ -143,9 +143,6 @@ add_version_prod:
   }
   function config() {
     if [[ "$CI_ENVIRONMENT_SLUG" != "production" ]]; then
-      echo "$GCP_SSH_PRIVATE_KEY_STAGING" > .ssh/private_key
-      sed 's/_BASTION_HOST_/'"$GCP_BASTION_STAGING"'/g;' .ssh/config.txt > .ssh/config
-      ssh-keyscan -H $GCP_BASTION_STAGING >> .ssh/known_hosts
 
       export IMAGE=gcr.io/$GCP_PROJECT_ID_STAGING/$PROJECT_NAME
       echo "$GCP_SERVICE_KEY_STAGING" > gcloud-service-key.json
@@ -153,9 +150,6 @@ add_version_prod:
       gcloud config set project $GCP_PROJECT_ID_STAGING
       gcloud beta container clusters get-credentials $GCP_KUBE_NAME_STAGING --region $GCP_REGION_STAGING --project $GCP_PROJECT_ID_STAGING
     else
-      echo "$GCP_SSH_PRIVATE_KEY_PRODUCTION" > .ssh/private_key
-      sed 's/_BASTION_HOST_/'"$GCP_BASTION_PRODUCTION"'/g;' .ssh/config.txt > .ssh/config
-      ssh-keyscan -H $GCP_BASTION_PRODUCTION >> .ssh/known_hosts
 
       export IMAGE=gcr.io/$GCP_PROJECT_ID_PRODUCTION/$PROJECT_NAME
       echo "$GCP_SERVICE_KEY_PRODUCTION" > gcloud-service-key.json
