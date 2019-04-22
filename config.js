@@ -28,7 +28,7 @@ const config = {
     },
     dev: {
       mongodb: {
-        uri: 'mongodb://mongo_test:mongo_test%40123test@35.247.138.131:27017/mongo_test?readPreference=primary',
+        uri: 'mongodb://mongo_test:mongo_test%40123test@localhost:27017/mongo_test?readPreference=primary',
         db: 'mongo_test'
       },
       autoIndex: false
