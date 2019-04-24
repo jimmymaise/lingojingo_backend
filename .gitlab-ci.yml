@@ -1,4 +1,4 @@
-image: docker:latest
+image: google/cloud-sdk:latest
 variables:
   PIP_PROCESS_DEPENDENCY_LINKS: 1
   PROJECT_NAME: sts
@@ -35,7 +35,6 @@ test:
 
 build_staging:
   stage: build
-  image: google/cloud-sdk
   services:
     - docker:dind
   script:
@@ -48,7 +47,6 @@ build_staging:
 
 build_production:
   stage: build
-  image: google/cloud-sdk
   services:
     - docker:dind
   script:
@@ -65,8 +63,6 @@ build_production:
 
 deploy_staging:
   stage: deploy
-  image: google/cloud-sdk
-
   script:
     - config
     - deploy
