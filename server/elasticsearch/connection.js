@@ -8,7 +8,7 @@ let bodybuilder = require('bodybuilder')
 let es = new elasticsearch.Client({host: process.env.ES_URL})
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
-  es = new elasticsearch.Client({host: 'http://localhost:3200/proxyES'})
+  es = new elasticsearch.Client({host: 'http://localhost:9200'})
 
 }
 es['builder'] = bodybuilder
