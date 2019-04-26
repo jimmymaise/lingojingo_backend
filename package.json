@@ -22,7 +22,7 @@
     "confidence": "^3.0.2",
     "cors-anywhere": "^0.4.1",
     "elasticsearch": "^15.1.1",
-    "firebase-admin": "^5.1.0",
+    "firebase-admin": "^7.3.0",
     "glue": "^5.0.0",
     "graphql": "^14.1.1",
     "graphql-middleware": "^3.0.0",
