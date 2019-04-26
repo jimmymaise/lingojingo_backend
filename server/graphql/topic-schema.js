@@ -1,5 +1,6 @@
 const deckService = require('../services/deck.service');
 const topicService = require('../services/topic.service');
+const redis = require('../redis/connection').client;
 
 
 // The GraphQL schema in string form
@@ -52,7 +53,16 @@ const resolvers = {
   },
   Topic: {
     cardDetails: async (parent, args, context) => {
-      return await deckService.getListCardDetail(context.request.auth.credentials.uid, parent.cards);
+      let cardDetails = JSON.parse(await redis.hget('TOPIC_TO_CARDS', parent._id.toString()))
+      if (cardDetails) {
+        console.log("query from db for topic " + parent._id.toString())
+        return cardDetails
+      }
+
+      cardDetails = await deckService.getListCardDetail(context.request.auth.credentials.uid, parent.cards);
+      await redis.hset('TOPIC_TO_CARDS', parent._id.toString(), JSON.stringify(cardDetails))
+      return cardDetails
+
     }
   }
 };

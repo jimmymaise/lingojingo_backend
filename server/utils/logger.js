@@ -33,7 +33,7 @@ logger['requestToSentryLog'] = function (request, other_errors) {
       params: request.params,
       operationName:get(request, 'payload.operationName', null),
       timestamp: get(request, 'info.received', null),
-      id: request.info.id,
+      id: get(request, 'info.id', null),
       remoteAddress: get(request, 'info.remoteAddress', null),
       userInfo: request.auth,
       otherErrors: JSON.stringify(other_errors)

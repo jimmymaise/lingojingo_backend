@@ -2,6 +2,7 @@ const Constant = require('../utils/constants');
 const logger = require('../utils/logger.js').logger
 const {ApolloError} = require('apollo-server-hapi')
 let Hashids = require('hashids');
+const redis = require('../redis/connection').client;
 
 
 function onlyUnique(value, index, self) {
@@ -11,14 +12,25 @@ function onlyUnique(value, index, self) {
 let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
 
-
-function checkSecurity(request) {
-  if (process.env.XTAG_DISABLE === 'true' || request.headers['debug'] === process.env.XTAG_BY_PASS_KEY) {
+async function checkSecurity(request) {
+  if (process.env.XTAG_DISABLE === 'true' || request.headers['debug'] === (process.env.XTAG_BY_PASS_KEY || 'dev@')) {
     return request
   }
   let xTag = request.headers['x-tag']
+
+  if (await redis.hlen('X_TAG_KEYS')) {
+    if ((await redis.hget('X_TAG_KEYS', xTag))) {
+      throw SecQueryError
+    }
+  } else {
+    redis.hset('X_TAG_KEYS', 'default', 'true')
+    redis.expire('X_TAG_KEYS', parseInt(process.env.XTAG_TIME)*5)
+  }
+  await redis.hset('X_TAG_KEYS', xTag, 'true')
+
+
   if (isNaN(xTag)) {
-    let hashids = new Hashids(process.env.XTAG_HASH_KEY);
+    let hashids = new Hashids((process.env.XTAG_HASH_KEY || 'Lingo Jingo@Learning Vocabulary Online'));
     xTag = hashids.decode(xTag)[0];
 
   } else {

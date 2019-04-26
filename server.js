@@ -11,15 +11,18 @@ const firebaseAdmin = require('./server/utils/fb');
 const logger = require('./server/utils/logger.js').logger
 const {schemaWithMiddleware, MyErrorTrackingExtension} = require('./server/graphql/core')
 
+
+
 const StartServer = async () => {
   try {
     const server = new ApolloServer({
       schema: schemaWithMiddleware,
 
       extensions: [() => new MyErrorTrackingExtension()],
-      context: ({request}) => {
+      context: async ({request}) => {
+
         return {
-          request: checkSecurity(request),
+          request: await checkSecurity(request),
           trackErrors(errors) {
             if (errors) {
               let other_errors = _.cloneDeep(errors)

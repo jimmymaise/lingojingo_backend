@@ -1,5 +1,5 @@
 CACHE_CONTROL = 'public, max-age=30672000'
-XTAG_TIME_DEFAULT = 10
+XTAG_TIME_DEFAULT = 90
 EXAM = {
   TYPE: {
     TOPIC: 'TopicExam',
