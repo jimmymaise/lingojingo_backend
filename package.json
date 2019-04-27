@@ -19,6 +19,7 @@
     "bluebird": "^3.5.2",
     "bodybuilder": "^2.2.15",
     "boom": "^7.2.0",
+    "catbox-memory": "^4.0.1",
     "confidence": "^3.0.2",
     "cors-anywhere": "^0.4.1",
     "elasticsearch": "^15.1.1",
