@@ -12,6 +12,7 @@ internals.applyRoutes = function (server, next) {
     method: 'POST',
     path: '/global-notification',
     config: {
+      auth: 'firebase',
       cors: DEFAULT_CORS,
       description: 'Websocket send notification to global',
       notes: 'Websocket',
@@ -23,7 +24,7 @@ internals.applyRoutes = function (server, next) {
       }
     },
     handler: async (request) => {
-
+      console.log('Hlloe', request.payload)
       try {
         const socket = request.plugins['hapi-io'].socket;
         socket.broadcast.emit('create-user', 'hello');
