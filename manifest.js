@@ -74,6 +74,9 @@ const manifest = {
         }
       },
       {
+        plugin: require('hapi-io')
+      },
+      {
         plugin: './server/services/user-info.service'
       },
       {
@@ -135,6 +138,9 @@ const manifest = {
       },
       {
         plugin: './server/api/cloud-message'
+      },
+      {
+        plugin: './server/web-socket/global-notification'
       }
     ]
   }
