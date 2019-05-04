@@ -11,19 +11,6 @@ const firebaseAdmin = require('./server/utils/fb');
 const logger = require('./server/utils/logger.js').logger
 const {schemaWithMiddleware, MyErrorTrackingExtension} = require('./server/graphql/core')
 
-
-const xTagMiddleware = {
-  Query: {
-    hello: async (resolve, parent, args, context, info) => {
-      // You can you middleware to override arguments
-      const argsWithDefault = { name: 'Bob', ...args }
-      const result = await resolve(parent, argsWithDefault, context, info)
-      // Or change the returned values of resolvers
-      return result.replace(/Trump/g, 'beep')
-    },
-  },
-}
-
 const StartServer = async () => {
   try {
     const server = new ApolloServer({
