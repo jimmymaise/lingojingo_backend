@@ -9,7 +9,7 @@ function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
+  let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
 
 async function checkSecurity(request) {
@@ -20,6 +20,11 @@ async function checkSecurity(request) {
 
   if (await redis.hlen('X_TAG_KEYS')) {
     if ((await redis.hget('X_TAG_KEYS', xTag))) {
+      logger.error('Someone query data with REUSED x-tag', logger.requestToSentryLog(request, {
+        'x-tag-decoded': xTag,
+        'x-tag': request.headers['x-tag']
+
+      }))
       throw SecQueryError
     }
   } else {
@@ -48,7 +53,7 @@ async function checkSecurity(request) {
       return request
     }
   }
-  logger.error('Someone query data with invalid x-tag', logger.requestToSentryLog(request, {
+  logger.error('Someone query data with INVALID x-tag', logger.requestToSentryLog(request, {
     'diff': diff,
     'x-tag-decoded': xTag,
     'feTimeStampFromXTag': feTimeStamp,
