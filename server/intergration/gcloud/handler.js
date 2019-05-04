@@ -24,6 +24,15 @@ var _inArray = function (needle, haystack) {
   return false;
 }
 
+async function getImageUrl(filePath) {
+  const file = bucket.file(filePath)
+  let urls = await file.getSignedUrl({
+    action: 'read',
+    expires: '03-01-2500',
+  })
+  return urls[0]
+
+}
 
 function cropImage(path, dest) {
   const gcsSrcObject = bucket.file(path);
@@ -50,7 +59,7 @@ function cropImage(path, dest) {
   crop = imageMagick().crop("0x0+0+72");
   crop.on('error', function (e) {
     console.log(path + "//" + e)
-    logger.error("Cannot crop image "+path + "//" + e)
+    logger.error("Cannot crop image " + path + "//" + e)
     return
 
   })
@@ -170,7 +179,7 @@ cropImageFromFolder = async (path_folder, dest_folder) => {
     let dest = dest_folder + '/' + files[i]['name']
     let file = bucket.file(dest);
     let isFileExist = (await file.exists())[0]
-    if(isFileExist){
+    if (isFileExist) {
       continue
     }
     try {
@@ -190,5 +199,7 @@ module.exports.uploadFile = uploadFile;
 module.exports.saveToStorage = saveToStorage;
 module.exports.cropImage = cropImage;
 module.exports.cropImageFromFolder = cropImageFromFolder;
+module.exports.getImageUrl = getImageUrl;
+
 
 

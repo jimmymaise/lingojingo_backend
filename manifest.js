@@ -141,6 +141,9 @@ const manifest = {
       },
       {
         plugin: './server/web-socket/global-notification'
+      },
+      {
+        plugin: './server/api/image'
       }
     ]
   }
