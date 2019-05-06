@@ -17,6 +17,7 @@ async function checkSecurity(request) {
     return request
   }
   let xTag = request.headers['x-tag']
+  let isNewXtag = false
 
   if (await redis.hlen('X_TAG_KEYS')) {
     if ((await redis.hget('X_TAG_KEYS', xTag))) {
@@ -36,22 +37,32 @@ async function checkSecurity(request) {
 
   if (isNaN(xTag)) {
     let hashids = new Hashids((process.env.XTAG_HASH_KEY || 'Lingo Jingo@Learning Vocabulary Online'));
-    xTag = hashids.decode(xTag)[0];
-    if (xTag.toString().length === 13) {
-      xTag = (Math.floor(xTag / 1000))
+    if (xTag.startsWith("v2@")) {
+      xTag = xTag.split("v2@")[1]
+      isNewXtag = true
     }
-
+    xTag = hashids.decode(xTag)[0];
   } else {
     xTag = parseInt(request.headers['x-tag'], 10)
   }
 
-  let beTimeStamp = Math.floor(Date.now() / 1000)
+  let beTimeStamp
+  if (isNewXtag === true) {
+    beTimeStamp = Date.now()
+  } else {
+    beTimeStamp = Math.floor(Date.now() / 1000)
+  }
   let feTimeStamp = 0
 
   let diff
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
-    diff = Math.abs(beTimeStamp - feTimeStamp)
+
+    diff = beTimeStamp - feTimeStamp
+    if (isNewXtag === true) {
+      diff = Math.floor(diff / 1000)
+    }
+
     if (diff < parseInt(process.env.XTAG_TIME || Constant.XTAG_TIME_DEFAULT)) {
       return request
     }
