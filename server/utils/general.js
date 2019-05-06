@@ -47,21 +47,20 @@ async function checkSecurity(request) {
   }
 
   let beTimeStamp
-  if (isNewXtag === true) {
-    beTimeStamp = Date.now()
-  } else {
-    beTimeStamp = Math.floor(Date.now() / 1000)
-  }
+
   let feTimeStamp = 0
 
   let diff
   if (xTag) {
     feTimeStamp = ((xTag + 12345) / 2018) + 98765
-
-    diff = beTimeStamp - feTimeStamp
     if (isNewXtag === true) {
-      diff = Math.floor(diff / 1000)
+      beTimeStamp = Date.now()
+      diff = Math.floor((beTimeStamp - feTimeStamp) / 1000)
+    } else {
+      beTimeStamp = Math.floor(Date.now() / 1000)
+      diff = beTimeStamp - feTimeStamp
     }
+
 
     if (diff < parseInt(process.env.XTAG_TIME || Constant.XTAG_TIME_DEFAULT)) {
       return request
