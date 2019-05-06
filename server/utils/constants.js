@@ -55,8 +55,8 @@ DEFAULT_CORS = {
 }
 
 PROXY_LIST = [
-  'https://stag-api.lingojingo.com/proxy/',
-  'https://api.lingojingo.com/proxy/',
+  'https://staging-sts.lingojingo.com/proxy/',
+  'https://sts.lingojingo.com/proxy/',
   'https://cors-anywhere.herokuapp.com/',
   'https://cors.io/?',]
 
