@@ -9,7 +9,7 @@ function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-  let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
+let SecQueryError = new ApolloError('Some Error Happens', 'SecQueryError');
 
 
 async function checkSecurity(request) {
@@ -29,7 +29,7 @@ async function checkSecurity(request) {
     }
   } else {
     redis.hset('X_TAG_KEYS', 'default', 'true')
-    redis.expire('X_TAG_KEYS', parseInt(process.env.XTAG_TIME)*5)
+    redis.expire('X_TAG_KEYS', parseInt(process.env.XTAG_TIME) * 5)
   }
   await redis.hset('X_TAG_KEYS', xTag, 'true')
 
@@ -37,6 +37,9 @@ async function checkSecurity(request) {
   if (isNaN(xTag)) {
     let hashids = new Hashids((process.env.XTAG_HASH_KEY || 'Lingo Jingo@Learning Vocabulary Online'));
     xTag = hashids.decode(xTag)[0];
+    if (xTag.toString().length === 13) {
+      xTag = (Math.floor(xTag / 1000))
+    }
 
   } else {
     xTag = parseInt(request.headers['x-tag'], 10)
