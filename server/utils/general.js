@@ -22,15 +22,14 @@ async function checkSecurity(request) {
   if (await redis.hlen('X_TAG_KEYS')) {
     if ((await redis.hget('X_TAG_KEYS', xTag))) {
       logger.error('Someone query data with REUSED x-tag', logger.requestToSentryLog(request, {
-        'x-tag-decoded': xTag,
         'x-tag': request.headers['x-tag']
 
       }))
       throw SecQueryError
     }
   } else {
-    redis.hset('X_TAG_KEYS', 'default', 'true')
-    redis.expire('X_TAG_KEYS', parseInt(process.env.XTAG_TIME) * 5)
+    await redis.hset('X_TAG_KEYS', 'default', 'true')
+    await redis.expire('X_TAG_KEYS', parseInt(process.env.XTAG_TIME) * 5)
   }
   await redis.hset('X_TAG_KEYS', xTag, 'true')
 
