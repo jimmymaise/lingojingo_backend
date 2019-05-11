@@ -8,6 +8,7 @@ const Wreck = require('@hapi/wreck');
 const envAuth = process.env.NODE_ENV === 'production' ? 'firebase' : null
 let esAddr = (process.env.ES_URL) ? process.env.ES_URL : `https://staging-sts.lingojingo.com/proxyES`
 const DEFAULT_CORS = require('../utils/constants').DEFAULT_CORS
+let makeRequest = require('request-promise');
 
 let proxyList = require('../utils/constants').PROXY_LIST
 let usedProxies = []
@@ -117,6 +118,27 @@ internals.applyRoutes = function (server) {
   });
 
   server.route({
+    method: 'GET  ',
+    path: '/firebase /token',
+    handler: async function (request) {
+      let params = request.params
+      let options = {
+        method: 'POST',
+        json: true,
+        simple: false,
+        resolveWithFullResponse: true,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        url: `https://securetoken.googleapis.com/v1/token?key=${params.key}`,
+        body: `grant_type=${params.grant_type}&refresh_token=${params.refresh_token}`
+      };
+      return await makeRequest(options)
+
+
+    }
+  });
+
+
+  server.route({
     method: 'POST',
     path: '/translate',
     config: {
@@ -218,6 +240,28 @@ internals.applyRoutes = function (server) {
       }
     }
   });
+
+
+  server.route({
+    method: "GET",
+    path: "/proxy/{p*}",
+    handler: {
+      proxy: {
+        rejectUnauthorized: false,
+        mapUri: function (req) {
+
+
+          let headers = {}
+          headers['host'] = getLocation(req.params.p).hostname
+          headers['accept-language'] = req.headers['accept-language']
+          headers['user-agent'] = req.headers['user-agent']
+
+          return {'uri': req.url.path.split('/proxy/')[1], 'headers': headers}
+
+        }
+      }
+    }
+  });
   server.route({
     method: "GET",
     path: "/rotate-proxy/{p*}",
@@ -230,7 +274,7 @@ internals.applyRoutes = function (server) {
           let headers = {}
           headers['x-requested-with'] = 'https://app.lingojingo.com'
           headers['origin'] = req.headers['origin'] || 'https://app.lingojingo.com'
-          headers['accept-language'] = req.headers['accept-language']||'*'
+          headers['accept-language'] = req.headers['accept-language'] || '*'
           headers['user-agent'] = req.headers['user-agent']
 
 
