@@ -118,7 +118,7 @@ internals.applyRoutes = function (server) {
   });
 
   server.route({
-    method: 'GET  ',
+    method: 'GET',
     path: '/firebase/token',
     handler: async function (request) {
       let params = request.params
@@ -131,7 +131,9 @@ internals.applyRoutes = function (server) {
         url: `https://securetoken.googleapis.com/v1/token?key=${params.key}`,
         body: `grant_type=${params.grant_type}&refresh_token=${params.refresh_token}`
       };
-      return await makeRequest(options)
+      let result = await makeRequest(options)
+      return result
+
 
 
     }
