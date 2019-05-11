@@ -241,27 +241,7 @@ internals.applyRoutes = function (server) {
     }
   });
 
-
-  server.route({
-    method: "GET",
-    path: "/proxy/{p*}",
-    handler: {
-      proxy: {
-        rejectUnauthorized: false,
-        mapUri: function (req) {
-
-
-          let headers = {}
-          headers['host'] = getLocation(req.params.p).hostname
-          headers['accept-language'] = req.headers['accept-language']
-          headers['user-agent'] = req.headers['user-agent']
-
-          return {'uri': req.url.path.split('/proxy/')[1], 'headers': headers}
-
-        }
-      }
-    }
-  });
+  
   server.route({
     method: "GET",
     path: "/rotate-proxy/{p*}",
