@@ -120,8 +120,8 @@ internals.applyRoutes = function (server) {
   server.route({
     method: 'GET',
     path: '/firebase/token',
-    handler: async function (request) {
-      let params = request.params
+    handler: async function (request,h) {
+      let params = request.query
       let options = {
         method: 'POST',
         json: true,
@@ -132,7 +132,7 @@ internals.applyRoutes = function (server) {
         body: `grant_type=${params.grant_type}&refresh_token=${params.refresh_token}`
       };
       let result = await makeRequest(options)
-      return result
+      return h.response(result.body).code(result.statusCode)
 
 
 
