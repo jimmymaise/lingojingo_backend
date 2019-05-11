@@ -119,7 +119,7 @@ internals.applyRoutes = function (server) {
 
   server.route({
     method: 'GET  ',
-    path: '/firebase /token',
+    path: '/firebase/token',
     handler: async function (request) {
       let params = request.params
       let options = {
@@ -241,7 +241,7 @@ internals.applyRoutes = function (server) {
     }
   });
 
-  
+
   server.route({
     method: "GET",
     path: "/rotate-proxy/{p*}",
