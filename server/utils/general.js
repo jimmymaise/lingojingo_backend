@@ -4,7 +4,6 @@ const {ApolloError} = require('apollo-server-hapi')
 let Hashids = require('hashids');
 const redis = require('../redis/connection').client;
 
-
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
@@ -18,9 +17,12 @@ async function checkSecurity(request) {
   }
   let xTag = request.headers['x-tag']
   let isNewXtag = false
+  let currentTime = Date.now()
 
   if (await redis.hlen('X_TAG_KEYS')) {
-    if ((await redis.hget('X_TAG_KEYS', xTag))) {
+    let xTagTime = await redis.hget('X_TAG_KEYS', xTag)
+
+    if (xTagTime && Math.abs(currentTime - xTagTime) > 2000) {
       logger.error('Someone query data with REUSED x-tag', logger.requestToSentryLog(request, {
         'x-tag': request.headers['x-tag']
 
@@ -31,7 +33,7 @@ async function checkSecurity(request) {
     await redis.hset('X_TAG_KEYS', 'default', 'true')
     await redis.expire('X_TAG_KEYS', parseInt(process.env.XTAG_TIME) * 5)
   }
-  await redis.hset('X_TAG_KEYS', xTag, 'true')
+  await redis.hset('X_TAG_KEYS', xTag, currentTime)
 
 
   if (isNaN(xTag)) {
