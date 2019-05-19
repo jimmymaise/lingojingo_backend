@@ -10,6 +10,7 @@ const typeDefs = `
     _id: String,
     topic: String,
     description: String,
+    tags: [String],
     img: String,
     tag: String,
     deck: String,
@@ -24,6 +25,7 @@ const typeDefs = `
   input TopicInput {
     topic: String,
     description: String,
+    tags: [String],
     img: String,
     tag: String,
     deck: String,
