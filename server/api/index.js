@@ -144,7 +144,7 @@ internals.applyRoutes = function (server) {
     method: 'POST',
     path: '/translate',
     config: {
-      auth: 'firebase',
+      // auth: 'firebase',
       cors: DEFAULT_CORS,
     },
     handler: async function (request) {
