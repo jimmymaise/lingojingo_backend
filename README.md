@@ -8,7 +8,7 @@ The backend is built using Node.js and uses MongoDB as its database. It also uti
 
 ### Project Background
 
-This project was initiated as my side project while learning Node.js. It was also supported by a 20K$ credit from Google Cloud. Despite the effort and resources put into it, the project did not achieve its expected user retention rates. As a result, the project is now open-source, and contributions are welcome to help improve and evolve it.
+This project was initially built from 2018-2019 by myself, focusing on the backend, and one frontend developer. It was initiated as my side project while learning Node.js and was supported by a $20K credit from Google Cloud. Despite the effort and resources put into it, the project did not achieve its expected user retention rates. As a result, the project is now open-source, and contributions are welcome to help improve and evolve it.
 
 ## Prerequisites
 
